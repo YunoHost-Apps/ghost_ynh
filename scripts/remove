@@ -1,0 +1,7 @@
+#!/bin/bash
+
+domain=$(sudo yunohost app setting ghost domain)
+
+sudo userdel --remove ghostblog
+
+# final_path=/opt/yunohost/ghostblog

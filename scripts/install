@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# Retrieve arguments
+domain=$1
+path=$2
+is_public=$3
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a ghostblog
+if [[ ! $? -eq 0 ]]; then
+  exit 1
+fi
+
+echo "Install dependencies"
+sudo apt-get install nodejs-legacy npm -y
+
+echo "Download sources..."
+version=0.4.1
+echo "Downloading Ghost $version..."
+mkdir ../tmp
+sudo wget -O ../tmp/ghost-$version.zip "https://en.ghost.org/zip/ghost-$version.zip"
+unzip ../tmp/ghost-$version.zip -d ../tmp/ghost
+
+echo "Deploying source files..."
+final_path=/home/yunohost.app/ghostblog
+sudo mkdir -p $final_path
+sudo useradd -d $final_path ghostblog
+
+sudo cp -r ../tmp/ghost $final_path
+sudo chown -R ghostblog: $final_path
+
+echo "Install Ghost with NPM..."
+sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production" ghostblog
+
+echo "Install forever with NPM..."
+sudo su --shell /bin/bash --command "cd $final_path && npm --prefix=$final_path install -g forever" ghostblog
+
+echo "Deploying configuration"
+sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
+sed -i "s@YNH_LOCATION@$path@g" ../conf/config.js
+sed -i "s@YNH_MAIL@@g" ../conf/config.js
+sudo cp ../conf/config.js $final_path/ghost
+
+echo "Nginx configuration..."
+sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
+
+echo "Reloading Nginx..."
+sudo service nginx reload
+sudo yunohost app ssowatconf
+
+
+# sudo mkdir -p $final_path
+# sudo cp -a ../sources/* $final_path
+# sudo cp ../conf/settings.json $final_path
+# sudo cp ../conf/etherpad-lite /etc/init.d/
+# sudo chmod +x /etc/init.d/etherpad-lite
+# sudo update-rc.d etherpad-lite defaults
+# sudo mkdir /var/log/etherpad-lite/
+# sudo touch /var/log/etherpad-lite/etherpad-lite.log
+# sudo chown www-data /var/log/etherpad-lite/etherpad-lite.log
+# 
+# 
+# sudo $final_path/bin/installDeps.sh > /dev/null 2>&1
+# sudo npm install forever -g > /dev/null 2>&1
+# 
+# # Change variables in Wordpress configuration
+# sudo sed -i "s/yunouser/$db_user/g" $final_path/settings.json
+# sudo sed -i "s/yunopass/$db_pwd/g" $final_path/settings.json
+# sudo sed -i "s/yunobase/$db_user/g" $final_path/settings.json
+# sudo sed -i "s/KEY/$key/g" $final_path/settings.json
+# 
+# # Set permissions to roundcube directory
+# sudo chown -R www-data: $final_path
+# 
+# # Modify Nginx configuration file and copy it to Nginx conf directory
+# sed -i "s@PATHTOCHANGE@$path@g" ../conf/nginx.conf*
+# sed -i "s@ALIASTOCHANGE@$final_path/@g" ../conf/nginx.conf*
+# if [ $path != "/" ];
+# then
+# 	sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
+# else
+# 	sudo cp ../conf/nginx.conf-nosub /etc/nginx/conf.d/$domain.d/ghostblog.conf
+# fi
+# 
+# # Reload Nginx and regenerate SSOwat conf
+# sudo service nginx reload
+# if [ $is_public = "Yes" ];
+# then
+# 	sudo yunohost app setting ghostblog skipped_uris -v "/"
+# fi
+# sudo yunohost app ssowatconf
+# sudo service etherpad-lite start

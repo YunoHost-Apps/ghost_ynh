@@ -1,0 +1,49 @@
+{
+    "name": "Ghost",
+    "id": "ghostblog",
+    "description": {
+        "en": "Just a blogging platform"
+    },
+    "developer": {
+        "name": "Julien Malik",
+        "email": "julien.malik@paraiso.me",
+        "url": "https://ghost.org/"
+    },
+    "multi_instance": "false",
+    "arguments": {
+        "install" : [
+            {
+                "name": "domain",
+                "ask": {
+                    "en": "Choose a domain for Ghost"
+                },
+                "example": "domain.org"
+            },
+            {
+                "name": "path",
+                "ask": {
+                    "en": "Choose a path for Ghost"
+                },
+                "example": "/blog",
+                "default": "/blog"
+            },
+            {
+                "name": "public_site",
+                "ask": {
+                    "en": "Is it a public Ghost site ?"
+                },
+                "choices": ["Yes", "No"],
+                "default": "Yes"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Choose the Ghost administrator (must be an existing YunoHost user)"
+                },
+                "example": "homer"
+            }
+        ]
+    }
+}
+
+
