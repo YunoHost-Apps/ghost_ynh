@@ -17,7 +17,7 @@
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Ghost"
 NAME=ynh-app-ghostblog
-GHOST_ROOT=/home/yunohost.app/ghostblog/ghost
+GHOST_ROOT=YNH_FINALPATH/ghost
 GHOST_GROUP=ghostblog
 GHOST_USER=ghostblog
 DAEMON=/usr/bin/node

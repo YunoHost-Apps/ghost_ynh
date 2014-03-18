@@ -22,7 +22,7 @@ sudo wget -O ../tmp/ghost-$version.zip "https://en.ghost.org/zip/ghost-$version.
 unzip ../tmp/ghost-$version.zip -d ../tmp/ghost
 
 echo "Deploying source files..."
-final_path=/home/yunohost.app/ghostblog
+final_path=/var/www/ghostblog
 sudo mkdir -p $final_path
 sudo useradd -d $final_path ghostblog
 
@@ -46,6 +46,7 @@ sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
 echo "Init script..."
 sudo touch /var/log/ynh-app-ghostblog.log
 sudo chown ghostblog: /var/log/ynh-app-ghostblog.log
+sed -i "s@YNH_FINALPATH@$final_path@g" ../conf/init-script
 sudo cp ../conf/init-script /etc/init.d/ynh-app-ghostblog
 sudo chmod +x /etc/init.d/ynh-app-ghostblog
 sudo update-rc.d ynh-app-ghostblog defaults
