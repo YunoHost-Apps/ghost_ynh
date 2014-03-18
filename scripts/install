@@ -5,8 +5,6 @@ domain=$1
 path=$2
 is_public=$3
 
-# TODO : check if $path contains "ghost", refused by ghost
-
 # Check domain/path availability
 sudo yunohost app checkurl $domain$path -a ghostblog
 if [[ ! $? -eq 0 ]]; then
@@ -56,5 +54,3 @@ sudo service ynh-app-ghostblog start
 echo "Reloading Nginx..."
 sudo service nginx reload
 sudo yunohost app ssowatconf
-
-# TODO : logs, is_public, auto set up admin section, mail in config.js, add to ynh service

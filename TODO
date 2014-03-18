@@ -1,0 +1,8 @@
+* logs
+* is_public
+* auto set up admin section
+* mail in config.js : what's this ?
+* add to ynh service list
+* clean up install tree.
+* check if $path contains "ghost", refused by ghost
+
