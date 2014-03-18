@@ -52,5 +52,11 @@ sudo update-rc.d ynh-app-ghostblog defaults
 sudo service ynh-app-ghostblog start
 
 echo "Reloading Nginx..."
+if [ $is_public = "Yes" ];
+then
+  sudo yunohost app setting ghostblog unprotected_uris -v "/"
+fi
+sudo yunohost app setting ghostblog is_public -v $is_public
+
 sudo service nginx reload
 sudo yunohost app ssowatconf
