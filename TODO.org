@@ -3,7 +3,9 @@
 * TODO logs
 * TODO is_public
 * TODO auto set up admin section
-* TODO mail in config.js : what's this ?
+* DONE mail in config.js : what's this ?
+** mails are working
+** http://docs.ghost.org/usage/configuration/
 * BLOCKED add to ynh service list
 ** how do i do that ??
 * TODO reduce size of install tree
@@ -27,3 +29,7 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
 * TODO mysql instead of sqlite
+** http://docs.ghost.org/usage/configuration/
+* TODO change installation path
+* TODO change pid file path
+* TODO cleanup pid file
