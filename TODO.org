@@ -31,5 +31,6 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO mysql instead of sqlite
 ** http://docs.ghost.org/usage/configuration/
 * TODO change installation path
-* TODO change pid file path
-* TODO cleanup pid file
+* DONE change pid file path
+** let's stay with /var/run/yunohost/ghostblog for the moment
+* DONE cleanup pid file

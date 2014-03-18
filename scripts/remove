@@ -9,3 +9,5 @@ sudo update-rc.d ynh-app-ghostblog remove
 sudo rm /etc/init.d/ynh-app-ghostblog
 
 sudo rm -f /etc/nginx/conf.d/$domain.d/ghostblog.conf
+
+sudo rm -rf /var/run/yunohost/ghostblog
