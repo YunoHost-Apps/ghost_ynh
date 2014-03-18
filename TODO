@@ -7,3 +7,4 @@
 * check if path contains "ghost", refused by ghost
 * go multi-instance ?
 * use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
+* implement upgrade
