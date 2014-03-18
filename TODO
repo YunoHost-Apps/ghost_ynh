@@ -6,3 +6,4 @@
 * clean up install tree.
 * check if path contains "ghost", refused by ghost
 * go multi-instance ?
+* implement upgrade
