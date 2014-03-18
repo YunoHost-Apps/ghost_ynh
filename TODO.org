@@ -1,10 +1,29 @@
-* logs
-* is_public
-* auto set up admin section
-* mail in config.js : what's this ?
-* add to ynh service list
-* clean up install tree.
-* check if path contains "ghost", refused by ghost
-* go multi-instance ?
-* use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
-* implement upgrade
+#+STARTUP: indent
+#+TODO: TODO BLOCKED DONE
+* TODO logs
+* TODO is_public
+* TODO auto set up admin section
+* TODO mail in config.js : what's this ?
+* BLOCKED add to ynh service list
+** how do i do that ??
+* TODO reduce size of install tree
+admin@yunohost:/home/yunohost.app/ghostblog$ du -sh *
+50M	ghost
+
+admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
+4.0K	ghost/config.example.js
+4.0K	ghost/config.js
+176K	ghost/content
+4.5M	ghost/core
+36K	ghost/Gruntfile.js
+4.0K	ghost/index.js
+4.0K	ghost/LICENSE
+45M	ghost/node_modules
+4.0K	ghost/package.json
+8.0K	ghost/README.md
+
+* TODO check if path contains "ghost", refused by ghost
+* TODO go multi-instance ?
+* TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
+* TODO implement upgrade
+* TODO mysql instead of sqlite
