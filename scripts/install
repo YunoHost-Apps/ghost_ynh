@@ -31,9 +31,7 @@ sudo chown -R ghostblog: $final_path
 
 echo "Install Ghost with NPM..."
 sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production" ghostblog
-
-#echo "Install forever with NPM..."
-#sudo su --shell /bin/bash --command "cd $final_path && npm --prefix=$final_path install -g forever" ghostblog
+sudo rm -rf $final_path/tmp
 
 echo "Deploying configuration"
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
