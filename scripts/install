@@ -44,6 +44,8 @@ sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
 
 echo "Init script..."
+sudo touch /var/log/ynh-app-ghostblog.log
+sudo chown ghostblog: /var/log/ynh-app-ghostblog.log
 sudo cp ../conf/init-script /etc/init.d/ynh-app-ghostblog
 sudo chmod +x /etc/init.d/ynh-app-ghostblog
 sudo update-rc.d ynh-app-ghostblog defaults

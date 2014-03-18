@@ -16,7 +16,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Ghost"
-NAME=ghost
+NAME=ynh-app-ghostblog
 GHOST_ROOT=/home/yunohost.app/ghostblog/ghost
 GHOST_GROUP=ghostblog
 GHOST_USER=ghostblog
@@ -24,6 +24,7 @@ DAEMON=/usr/bin/node
 DAEMON_ARGS="$GHOST_ROOT/index.js"
 PIDFILE=/var/run/yunohost/ghostblog/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
+LOGFILE="/var/log/$NAME.log"
 export NODE_ENV=production
 
 # Exit if the package is not installed
@@ -58,9 +59,10 @@ do_start()
         --chuid $GHOST_USER:$GHOST_GROUP --chdir $GHOST_ROOT --background \
         --pidfile $PIDFILE --make-pidfile --exec $DAEMON --test > /dev/null \
         || return 1
+        
     start-stop-daemon --start --quiet \
         --chuid $GHOST_USER:$GHOST_GROUP --chdir $GHOST_ROOT --background \
-        --pidfile $PIDFILE  --make-pidfile --exec $DAEMON -- $DAEMON_ARGS \
+        --pidfile $PIDFILE  --make-pidfile --exec /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS >> $LOGFILE 2>&1" \
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
