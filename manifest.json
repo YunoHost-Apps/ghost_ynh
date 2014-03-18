@@ -34,13 +34,6 @@
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
-            },
-            {
-                "name": "admin",
-                "ask": {
-                    "en": "Choose the Ghost administrator (must be an existing YunoHost user)"
-                },
-                "example": "homer"
             }
         ]
     }
