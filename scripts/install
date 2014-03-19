@@ -32,8 +32,8 @@ sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --produ
 
 echo "Cleaning up install tree..."
 sudo rm -rf $final_path/.npm
-find $final_path -type d | grep test$ | xargs sudo rm -rf
-find $final_path -type d | grep tests$ | xargs sudo rm -rf
+find $final_path -type d | grep "test$" | xargs sudo rm -rf
+find $final_path -type d | grep "tests$" | xargs sudo rm -rf
 sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
 
 echo "Deploying configuration..."

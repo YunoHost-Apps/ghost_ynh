@@ -8,7 +8,7 @@
 ** http://docs.ghost.org/usage/configuration/
 * DONE add to ynh service list
 ** how do i do that ??
-* TODO reduce size of install tree
+* DONE reduce size of install tree
 admin@yunohost:/home/yunohost.app/ghostblog$ du -sh *
 50M	ghost
 
