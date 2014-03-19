@@ -38,6 +38,8 @@ sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
 sed -i "s@YNH_LOCATION@$path@g" ../conf/config.js
 sed -i "s@YNH_MAIL@@g" ../conf/config.js
 sudo cp ../conf/config.js $final_path/ghost
+sudo chown ghostblog: $final_path/ghost/config.js
+sudo chmod 644 $final_path/ghost/config.js
 
 echo "Nginx configuration..."
 sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
