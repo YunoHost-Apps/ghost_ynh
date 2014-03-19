@@ -54,15 +54,15 @@ sudo yunohost app setting ghostblog is_public -v $is_public
 
 echo "Init script..."
 logfile=/var/log/ghostblog.log
-sudo touch /var/log/ynh-app-ghostblog.log
-sudo chown ghostblog: /var/log/ynh-app-ghostblog.log
+sudo touch /var/log/ynh-ghostblog.log
+sudo chown ghostblog: /var/log/ynh-ghostblog.log
 sed -i "s@YNH_FINALPATH@$final_path@g" ../conf/init-script
 sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/init-script
-sudo cp ../conf/init-script /etc/init.d/ynh-app-ghostblog
-sudo chmod +x /etc/init.d/ynh-app-ghostblog
-sudo update-rc.d ynh-app-ghostblog defaults
-sudo service ynh-app-ghostblog start
-sudo yunohost app service ynh-app-ghostblog -l $logfile
+sudo cp ../conf/init-script /etc/init.d/ynh-ghostblog
+sudo chmod +x /etc/init.d/ynh-ghostblog
+sudo update-rc.d ynh-ghostblog defaults
+sudo service ynh-ghostblog start
+sudo yunohost app service ynh-ghostblog -l $logfile
 
 echo "Reloading Nginx..."
 

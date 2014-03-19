@@ -4,10 +4,10 @@ domain=$(sudo yunohost app setting ghostblog domain)
 
 sudo userdel --remove ghostblog
 
-sudo service ynh-app-ghostblog stop
-sudo update-rc.d ynh-app-ghostblog remove
-sudo rm /etc/init.d/ynh-app-ghostblog
-sudo yunohost app service -R ynh-app-ghostblog
+sudo service ynh-ghostblog stop
+sudo update-rc.d ynh-ghostblog remove
+sudo rm /etc/init.d/ynh-ghostblog
+sudo yunohost app service -R ynh-ghostblog
 
 sudo rm -f /etc/nginx/conf.d/$domain.d/ghostblog.conf
 

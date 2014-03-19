@@ -16,7 +16,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Ghost"
-NAME=ynh-app-ghostblog
+NAME=ynh-ghost
 GHOST_ROOT=YNH_FINALPATH/ghost
 GHOST_GROUP=ghostblog
 GHOST_USER=ghostblog
