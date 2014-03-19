@@ -24,7 +24,7 @@ DAEMON=/usr/bin/node
 DAEMON_ARGS="$GHOST_ROOT/index.js"
 PIDFILE=/var/run/yunohost/ghostblog/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
-LOGFILE="/var/log/$NAME.log"
+LOGFILE="YNH_LOGFILE"
 export NODE_ENV=production
 
 # Exit if the package is not installed

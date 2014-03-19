@@ -6,7 +6,7 @@
 * DONE mail in config.js : what's this ?
 ** mails are working
 ** http://docs.ghost.org/usage/configuration/
-* BLOCKED add to ynh service list
+* DONE add to ynh service list
 ** how do i do that ??
 * TODO reduce size of install tree
 admin@yunohost:/home/yunohost.app/ghostblog$ du -sh *

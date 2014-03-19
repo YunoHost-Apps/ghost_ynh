@@ -46,13 +46,16 @@ sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
 sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
 
 echo "Init script..."
+logfile=/var/log/ghostblog.log
 sudo touch /var/log/ynh-app-ghostblog.log
 sudo chown ghostblog: /var/log/ynh-app-ghostblog.log
 sed -i "s@YNH_FINALPATH@$final_path@g" ../conf/init-script
+sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/init-script
 sudo cp ../conf/init-script /etc/init.d/ynh-app-ghostblog
 sudo chmod +x /etc/init.d/ynh-app-ghostblog
 sudo update-rc.d ynh-app-ghostblog defaults
 sudo service ynh-app-ghostblog start
+sudo yunohost app service ynh-app-ghostblog -l $logfile
 
 echo "Reloading Nginx..."
 if [ $is_public = "Yes" ];
