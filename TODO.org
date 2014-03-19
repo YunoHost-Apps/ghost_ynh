@@ -1,6 +1,7 @@
 #+STARTUP: indent
 #+TODO: TODO BLOCKED DONE
 * DONE logs
+* TODO logrotate config
 * DONE is_public
 * TODO auto set up admin section
 * DONE mail in config.js : what's this ?
