@@ -1,9 +1,10 @@
 YNH_LOGFILE
 {
-        rotate 5
         weekly
-        nomissingok
+        missingok
+        rotate 12
         notifempty
         compress
+        delaycompress
         copytruncate
 }
