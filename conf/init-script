@@ -16,7 +16,7 @@
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
 PATH=/sbin:/usr/sbin:/bin:/usr/bin
 DESC="Ghost"
-NAME=ynh-ghost
+NAME=ynh-ghostblog
 GHOST_ROOT=YNH_FINALPATH/ghost
 GHOST_GROUP=ghostblog
 GHOST_USER=ghostblog
@@ -67,7 +67,7 @@ do_start()
         || return 2
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
-    # on this one.  As a last resort, sleep for some time.
+    # on this one.  As a last resort, sleep for some dime.
 }
 
 #
