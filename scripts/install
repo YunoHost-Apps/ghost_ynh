@@ -64,6 +64,9 @@ sudo update-rc.d ynh-ghostblog defaults
 sudo service ynh-ghostblog start
 sudo yunohost app service ynh-ghostblog -l $logfile
 
+sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/logrotate
+sudo cp ../conf/logrotate /etc/logrotate.d/ynh-ghostblog
+
 echo "Reloading Nginx..."
 
 sudo service nginx reload

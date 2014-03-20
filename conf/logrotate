@@ -1,0 +1,9 @@
+YNH_LOGFILE
+{
+        rotate 5
+        weekly
+        nomissingok
+        notifempty
+        compress
+        copytruncate
+}
