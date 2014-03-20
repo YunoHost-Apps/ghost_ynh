@@ -35,6 +35,7 @@ sudo rm -rf $final_path/.npm
 find $final_path -type d | grep "test$" | xargs sudo rm -rf
 find $final_path -type d | grep "tests$" | xargs sudo rm -rf
 sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
+sudo rm -rf $final_path/tmp
 
 echo "Deploying configuration..."
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
@@ -53,9 +54,9 @@ fi
 sudo yunohost app setting ghostblog is_public -v $is_public
 
 echo "Init script..."
-logfile=/var/log/ghostblog.log
-sudo touch /var/log/ynh-ghostblog.log
-sudo chown ghostblog: /var/log/ynh-ghostblog.log
+logfile=/var/log/ynh-ghostblog.log
+sudo touch $logfile
+sudo chown ghostblog: $logfile
 sed -i "s@YNH_FINALPATH@$final_path@g" ../conf/init-script
 sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/init-script
 sudo cp ../conf/init-script /etc/init.d/ynh-ghostblog
