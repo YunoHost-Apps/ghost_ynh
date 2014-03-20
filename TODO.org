@@ -35,3 +35,5 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * DONE change pid file path
 ** let's stay with /var/run/yunohost/ghostblog for the moment
 * DONE cleanup pid file
+* TODO change theme police to avoid google requests
+* TODO check password length (>=8)
