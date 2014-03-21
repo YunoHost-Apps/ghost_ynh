@@ -11,5 +11,11 @@ sudo rm -f /var/log/ghostblog.log
 sudo rm -rf /var/run/yunohost/ghostblog
 sudo rm -f /etc/logrotate.d/ynh-ghostblog
 
+db_user=ghostblog
+db_name=ghostblog
+root_pwd=$(sudo cat /etc/yunohost/mysql)
+
+mysql -u root -p$root_pwd -e "DROP DATABASE $db_name ; DROP USER $db_user@localhost ;"
+
 # remove user so that it does not hold resource
 sudo userdel --remove ghostblog

@@ -3,7 +3,8 @@
 * DONE logs
 * DONE logrotate config
 * DONE is_public
-* TODO auto set up admin section
+* BLOCKED auto set up admin section
+** curl call seems ok but I get a 403 (XSRF ?)
 * DONE mail in config.js : what's this ?
 ** mails are working
 ** http://docs.ghost.org/usage/configuration/
@@ -35,5 +36,10 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * DONE change pid file path
 ** let's stay with /var/run/yunohost/ghostblog for the moment
 * DONE cleanup pid file
-* TODO change theme police to avoid google requests
+* TODO download theme police, install locally to avoid google requests
+** download theme police
+//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400"
+** install locally in themes/casper/assets/fonts ?
+** modify assets/css ?
+** modify default.hbs
 * TODO check password length (>=8)

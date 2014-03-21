@@ -37,10 +37,20 @@ find $final_path -type d | grep "tests$" | xargs sudo rm -rf
 sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
 sudo rm -rf $final_path/tmp
 
+echo "Setting up database..."
+db_name=ghostblog
+db_user=ghostblog
+db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
+sudo yunohost app initdb $db_user -d $db_name -p $db_pwd
+sudo yunohost app setting ghostblog mysqlpwd -v $db_pwd
+
 echo "Deploying configuration..."
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
 sed -i "s@YNH_LOCATION@$path@g" ../conf/config.js
 sed -i "s@YNH_MAIL@@g" ../conf/config.js
+sed -i "s@YNH_DBNAME@$db_name@g" ../conf/config.js
+sed -i "s@YNH_DBUSER@$db_user@g" ../conf/config.js
+sed -i "s@YNH_DBPWD@$db_pwd@g" ../conf/config.js
 sudo cp ../conf/config.js $final_path/ghost
 sudo chown ghostblog: $final_path/ghost/config.js
 sudo chmod 644 $final_path/ghost/config.js

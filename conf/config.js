@@ -8,12 +8,22 @@ config = {
     production: {
         url: 'http://YNH_DOMAINYNH_LOCATION',
         mail: {YNH_MAIL},
+//         database: {
+//             client: 'sqlite3',
+//             connection: {
+//                 filename: path.join(__dirname, '/content/data/ghost.db')
+//             },
+//             debug: false
+//         },
         database: {
-            client: 'sqlite3',
-            connection: {
-                filename: path.join(__dirname, '/content/data/ghost.db')
-            },
-            debug: false
+          client: 'mysql',
+          connection: {
+            host     : 'localhost',
+            user     : 'YNH_DBUSER',
+            password : 'YNH_DBPWD',
+            database : 'YNH_DBNAME',
+            charset  : 'utf8'
+          }
         },
         server: {
             // Host to be passed to node's `net.Server#listen()`
