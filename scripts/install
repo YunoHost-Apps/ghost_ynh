@@ -47,7 +47,6 @@ sudo yunohost app setting ghostblog mysqlpwd -v $db_pwd
 echo "Deploying configuration..."
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
 sed -i "s@YNH_LOCATION@$path@g" ../conf/config.js
-sed -i "s@YNH_MAIL@@g" ../conf/config.js
 sed -i "s@YNH_DBNAME@$db_name@g" ../conf/config.js
 sed -i "s@YNH_DBUSER@$db_user@g" ../conf/config.js
 sed -i "s@YNH_DBPWD@$db_pwd@g" ../conf/config.js
