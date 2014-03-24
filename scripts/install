@@ -7,9 +7,9 @@ is_public=$3
 admin=$4
 password=$5
 
-# Check domain/path availability
-sudo yunohost app checkurl $domain$path -a ghostblog
-if [[ ! $? -eq 0 ]]; then
+# '/ghost' is refused by the application itself. This is used as the route to the admin section
+if [[ "$path" = "/ghost" ]]; then
+    echo "Error : the path cannot be '/ghost', please choose another location"
     exit 1
 fi
 
@@ -17,6 +17,18 @@ fi
 sudo yunohost user list | python ../conf/user_list.py | grep "^$admin$" >/dev/null
 if [[ ! $? -eq 0 ]]; then
     echo "Error : the chosen admin user does not exist"
+    exit 1
+fi
+
+# 'password' must be >= 8 characters
+if [[ $(expr length $password) -lt "8" ]]; then
+    echo "Error : the password must be >= 8 characters"
+    exit 1
+fi
+
+# Check domain/path availability
+sudo yunohost app checkurl $domain$path -a ghostblog
+if [[ ! $? -eq 0 ]]; then
     exit 1
 fi
 

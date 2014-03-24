@@ -3,7 +3,7 @@
 * DONE logs
 * DONE logrotate config
 * DONE is_public
-* BLOCKED auto set up admin section
+* DONE auto set up admin section
 ** curl call seems ok but I get a 403 (XSRF ?)
 * DONE mail in config.js : what's this ?
 ** mails are working
@@ -26,20 +26,20 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 4.0K	ghost/package.json
 8.0K	ghost/README.md
 
-* TODO check if path contains "ghost", refused by ghost
-* TODO go multi-instance ?
-* TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
-* TODO implement upgrade
+* DONE check if path contains "ghost", refused by ghost
 * DONE mysql instead of sqlite
 ** http://docs.ghost.org/usage/configuration/
 * DONE change installation path
 * DONE change pid file path
 ** let's stay with /var/run/yunohost/ghostblog for the moment
 * DONE cleanup pid file
+* DONE check password length (>=8)
 * TODO download theme police, install locally to avoid google requests
 ** download theme police
 //fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400"
 ** install locally in themes/casper/assets/fonts ?
 ** modify assets/css ?
 ** modify default.hbs
-* TODO check password length (>=8)
+* TODO go multi-instance ?
+* TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
+* TODO implement upgrade
