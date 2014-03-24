@@ -34,6 +34,19 @@
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
+            },
+            {
+                "name": "admin",
+                "ask": {
+                    "en": "Admin user (must be an existing Yunohost user login)"
+                },
+                "default": "homer"
+            },
+            {
+                "name": "password",
+                "ask": {
+                    "en": "Admin user password"
+                }
             }
         ]
     }
