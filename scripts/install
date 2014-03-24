@@ -87,15 +87,23 @@ echo "Setting up logrotate configuration..."
 sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/logrotate
 sudo cp ../conf/logrotate /etc/logrotate.d/ynh-ghostblog
 
-echo "Registering admin..."
-admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
-admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
-curl -kL -X POST https://$domain$path/ghost/signup --data-urlencode "name=$admin_name&email=$admin_mail&password=$password" > /dev/null 2>&1
-sudo yunohost app setting ghostblog admin -v $admin
-sudo yunohost app setting ghostblog password -v $password
-
 echo "Reloading Nginx..."
 sudo service nginx reload
 sudo yunohost app ssowatconf
+
+echo "Registering admin..."
+admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
+admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
+curl -kL -X GET https://$domain$path/ghost/signup --cookie-jar cookie.txt > signup_get
+csrf_token=$(cat signup_get | egrep csrf-param | egrep "content=\".+\"" -o | egrep "\".+\"" -o | cut -d '"' -f 2)
+curl -kL -X POST https://$domain$path/ghost/signup/ \
+  --cookie cookie.txt  --header "X-CSRF-Token: $csrf_token" \
+  --data-urlencode "name=$admin_name" \
+  --data-urlencode "email=$admin_mail" \
+  --data-urlencode "password=$password" \
+  > /dev/null 2>&1
+sudo yunohost app setting ghostblog admin -v $admin
+sudo yunohost app setting ghostblog password -v $password
+
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
