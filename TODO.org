@@ -30,7 +30,7 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO go multi-instance ?
 * TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
-* TODO mysql instead of sqlite
+* DONE mysql instead of sqlite
 ** http://docs.ghost.org/usage/configuration/
 * DONE change installation path
 * DONE change pid file path
