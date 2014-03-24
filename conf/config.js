@@ -7,14 +7,15 @@ var path = require('path'),
 config = {
     production: {
         url: 'http://YNH_DOMAINYNH_LOCATION',
-        mail: {YNH_MAIL},
-//         database: {
-//             client: 'sqlite3',
-//             connection: {
-//                 filename: path.join(__dirname, '/content/data/ghost.db')
-//             },
-//             debug: false
-//         },
+        
+        mail: {
+          transport: 'SMTP',
+          options : {
+            host : 'localhost',
+            port : '25'
+          }
+        },
+
         database: {
           client: 'mysql',
           connection: {
@@ -25,6 +26,7 @@ config = {
             charset  : 'utf8'
           }
         },
+        
         server: {
             // Host to be passed to node's `net.Server#listen()`
             host: '0.0.0.0',
