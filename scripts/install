@@ -90,7 +90,7 @@ sudo cp ../conf/logrotate /etc/logrotate.d/ynh-ghostblog
 echo "Registering admin..."
 admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
 admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
-curl -kL -X POST https://$domain$path/ghost/signup --data-url-encode "name=$admin_name&email=$admin_mail&password=$password" > /dev/null 2>&1
+curl -kL -X POST https://$domain$path/ghost/signup --data-urlencode "name=$admin_name&email=$admin_mail&password=$password" > /dev/null 2>&1
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
 
