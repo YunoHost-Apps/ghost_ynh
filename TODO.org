@@ -41,7 +41,7 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 ** modify assets/css ?
 ** modify default.hbs
 * TODO go multi-instance ?
-* TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
+* DONE use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
 * DONE if public, block access to admin section via sso
 * DONE support installation on root of subdomain
