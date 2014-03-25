@@ -49,7 +49,7 @@ sudo cp -r ../tmp/ghost $final_path
 sudo chown -R ghostblog: $final_path
 
 echo "Install Ghost with NPM..."
-sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production" ghostblog
+sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.eu" ghostblog
 
 echo "Cleaning up install tree..."
 sudo rm -rf $final_path/.npm
@@ -104,18 +104,25 @@ sudo service nginx reload
 sudo yunohost app ssowatconf
 
 echo "Registering admin..."
+# echo "127.0.0.1 $domain #ynhghost" | sudo tee -a /etc/hosts
 admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
 admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
 curl -kL -X GET https://$domain$path/ghost/signup --cookie-jar cookie.txt > signup_get
+#echo "signup_get"
+#cat signup_get
 csrf_token=$(cat signup_get | egrep csrf-param | egrep "content=\".+\"" -o | egrep "\".+\"" -o | cut -d '"' -f 2)
+#echo "csrf_token"
+#echo $csrf_token
+#echo "POST"
 curl -kL -X POST https://$domain$path/ghost/signup/ \
   --cookie cookie.txt  --header "X-CSRF-Token: $csrf_token" \
   --data-urlencode "name=$admin_name" \
   --data-urlencode "email=$admin_mail" \
-  --data-urlencode "password=$password" \
-  > /dev/null 2>&1
+  --data-urlencode "password=$password"
+#echo "done curl"
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
 
+sudo sed -i '/ynhghost/d' /etc/hosts
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
