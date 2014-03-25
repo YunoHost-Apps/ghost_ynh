@@ -43,9 +43,8 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO go multi-instance ?
 * TODO use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
-* TODO if public, block access to admin section via sso
+* DONE if public, block access to admin section via sso
 * DONE support installation on root of subdomain
-* TODO test non-public install
-* TODO translate manifest
+* DONE test non-public install
+* DONE translate manifest
 * DONE aptitude update
-* TODO test raspberry
