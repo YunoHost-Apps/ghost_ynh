@@ -2,7 +2,8 @@
     "name": "Ghost",
     "id": "ghostblog",
     "description": {
-        "en": "Just a blogging platform"
+        "en": "Just a blogging platform",
+        "fr": "Plateforme de blogging"
     },
     "developer": {
         "name": "Julien Malik",
@@ -15,14 +16,16 @@
             {
                 "name": "domain",
                 "ask": {
-                    "en": "Choose a domain for Ghost"
+                    "en": "Choose a domain for Ghost",
+                    "fr": "Choisissez un domaine pour Ghost"
                 },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "ask": {
-                    "en": "Choose a path for Ghost"
+                    "en": "Choose a path for Ghost",
+                    "fr": "Choisissez un path pour Ghost"
                 },
                 "example": "/blog",
                 "default": "/blog"
@@ -30,7 +33,8 @@
             {
                 "name": "public_site",
                 "ask": {
-                    "en": "Is it a public Ghost site ?"
+                    "en": "Is it a public Ghost site ?",
+                    "fr": "Est-ce un site public ?"
                 },
                 "choices": ["Yes", "No"],
                 "default": "Yes"
@@ -38,14 +42,16 @@
             {
                 "name": "admin",
                 "ask": {
-                    "en": "Admin user (must be an existing Yunohost user login)"
+                    "en": "Admin user (must be an existing Yunohost user login)",
+                    "fr": "Administrateur du site (doit être un utilisateur Yunohost existant)"
                 },
                 "default": "homer"
             },
             {
                 "name": "password",
                 "ask": {
-                    "en": "Admin user password"
+                    "en": "Admin user password",
+                    "fr": "Mot de passe de l'administrateur"
                 }
             }
         ]
