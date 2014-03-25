@@ -33,6 +33,7 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 echo "Install dependencies..."
+sudo apt-get update
 sudo apt-get install nodejs-legacy npm -y
 
 version=0.4.1

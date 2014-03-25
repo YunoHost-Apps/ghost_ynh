@@ -47,5 +47,5 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO support installation on root of subdomain
 * TODO test non-public install
 * TODO translate manifest
-* TODO aptitude update
+* DONE aptitude update
 * TODO test raspberry
