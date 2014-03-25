@@ -76,13 +76,6 @@ sudo cp ../conf/config.js $final_path/ghost
 sudo chown ghostblog: $final_path/ghost/config.js
 sudo chmod 644 $final_path/ghost/config.js
 
-echo "Nginx configuration..."
-sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
-if [ $is_public = "Yes" ]; then
-  sudo yunohost app setting ghostblog unprotected_uris -v "/"
-fi
-sudo yunohost app setting ghostblog is_public -v $is_public
 
 echo "Init script..."
 logfile=/var/log/ynh-ghostblog.log
@@ -100,7 +93,12 @@ echo "Setting up logrotate configuration..."
 sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/logrotate
 sudo cp ../conf/logrotate /etc/logrotate.d/ynh-ghostblog
 
-echo "Reloading Nginx..."
+echo "Nginx configuration (sso disabled)..."
+sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
+sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
+sudo yunohost app setting ghostblog skipped_uris -v "/"
+
+echo "Reloading Nginx (sso disabled)..."
 sudo service nginx reload
 sudo yunohost app ssowatconf
 
@@ -119,5 +117,23 @@ curl -kL -X POST https://$domain$path/ghost/signup/ \
   > /dev/null 2>&1
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
+
+echo "Nginx configuration (sso enabled)..."
+# clean up previous settings
+sudo yunohost app setting ghostblog skipped_uris -d
+
+if [ $is_public = "Yes" ]; then
+  # The main site is accessible from anyone
+  sudo yunohost app setting ghostblog skipped_uris -v "/"
+  # The admin section is accessible only to Yunohost users
+  sudo yunohost app setting ghostblog protected_uris -v "/ghost"
+fi
+sudo yunohost app setting ghostblog is_public -v $is_public
+
+echo "Reloading Nginx (sso enabled)..."
+sudo service nginx reload
+sudo yunohost app ssowatconf
+
+
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
