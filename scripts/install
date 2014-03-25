@@ -123,6 +123,6 @@ curl -kL -X POST https://$domain$path/ghost/signup/ \
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
 
-sudo sed -i '/ynhghost/d' /etc/hosts
+#sudo sed -i '/ynhghost/d' /etc/hosts
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
