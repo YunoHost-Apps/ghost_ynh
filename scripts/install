@@ -134,6 +134,4 @@ echo "Reloading Nginx (sso enabled)..."
 sudo service nginx reload
 sudo yunohost app ssowatconf
 
-
-
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
