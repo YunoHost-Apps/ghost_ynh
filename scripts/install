@@ -68,7 +68,7 @@ sudo yunohost app setting ghostblog mysqlpwd -v $db_pwd
 
 echo "Deploying configuration..."
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
-sed -i "s@YNH_LOCATION@$path@g" ../conf/config.js
+sed -i "s@YNH_LOCATION@${path%/}@g" ../conf/config.js
 sed -i "s@YNH_DBNAME@$db_name@g" ../conf/config.js
 sed -i "s@YNH_DBUSER@$db_user@g" ../conf/config.js
 sed -i "s@YNH_DBPWD@$db_pwd@g" ../conf/config.js
@@ -106,10 +106,10 @@ echo "Registering admin..."
 sleep 5
 admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
 admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
-curl -kL -X GET https://$domain$path/ghost/signup --cookie-jar cookie.txt > signup_get
+curl -kL -X GET https://$domain${path%/}/ghost/signup --cookie-jar cookie.txt > signup_get
 sleep 5
 csrf_token=$(cat signup_get | egrep csrf-param | egrep "content=\".+\"" -o | egrep "\".+\"" -o | cut -d '"' -f 2)
-curl -kL -X POST https://$domain$path/ghost/signup/ \
+curl -kL -X POST https://$domain${path%/}/ghost/signup/ \
   --cookie cookie.txt  --header "X-CSRF-Token: $csrf_token" \
   --data-urlencode "name=$admin_name" \
   --data-urlencode "email=$admin_mail" \
