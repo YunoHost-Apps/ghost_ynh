@@ -47,11 +47,12 @@ final_path=/var/www/ghostblog
 sudo mkdir -p $final_path
 sudo useradd -d $final_path ghostblog
 sudo cp -r ../tmp/ghost $final_path
-sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
+#sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
 sudo chown -R ghostblog: $final_path
 
 echo "Install Ghost with NPM..."
-sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.eu" ghostblog
+#sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.eu" ghostblog
+sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.org" ghostblog
 
 echo "Cleaning up install tree..."
 sudo rm -rf $final_path/.npm
