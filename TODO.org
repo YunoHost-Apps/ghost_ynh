@@ -37,9 +37,56 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * TODO download theme police, install locally to avoid google requests
 ** download theme police
 //fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400"
+
+--> 
+
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Noto Serif'), local('NotoSerif'), url(https://themes.googleusercontent.com/static/fonts/notoserif/v2/eCpfeMZI7q4jLksXVRWPQxsxEYwM7FgeyaSgU71cLG0.woff) format('woff');
+}
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Noto Serif Bold'), local('NotoSerif-Bold'), url(https://themes.googleusercontent.com/static/fonts/notoserif/v2/lJAvZoKA5NttpPc9yc6lPQFhaRv2pGgT5Kf0An0s4MM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Noto Serif Italic'), local('NotoSerif-Italic'), url(https://themes.googleusercontent.com/static/fonts/notoserif/v2/HQXBIwLHsOJCNEQeX9kNz3hCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v8/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+
+wget de tous ces fichiers dans content/themes/casper/assets/fonts
+
+core/client/assets/fonts
+/core/server/views/default.hbs
 ** install locally in themes/casper/assets/fonts ?
 ** modify assets/css ?
 ** modify default.hbs
+** 
+** also in core
+*** add client/assets/fonts/OpenSans*
+*** add client/assets/css/fonts.css
+*** admin@yunohost:/var/www/ghostblog/ghost/core$ grep -rn fonts.google *
+server/views/user-error.hbs:19:		<link rel="stylesheet" type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700'>
+server/views/default.hbs:30:    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700">
+*** 
+* TODO get rid of ghost.org call
 * TODO go multi-instance ?
 * DONE use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
@@ -48,3 +95,6 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 * DONE test non-public install
 * DONE translate manifest
 * DONE aptitude update
+* TODO service ynh-ghostblog restart FAIL
+* DONE move to ghost 0.4.2
+* TODO expose main site on http, admin on https
