@@ -98,4 +98,4 @@ server/views/default.hbs:30:    <link rel="stylesheet" type="text/css" href="//f
 * DONE aptitude update
 * DONE service ynh-ghostblog restart FAIL
 * DONE move to ghost 0.4.2
-* TODO expose main site on http, admin on https
+* DONE expose main site on http, admin on https
