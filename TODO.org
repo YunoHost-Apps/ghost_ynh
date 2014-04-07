@@ -86,7 +86,8 @@ core/client/assets/fonts
 server/views/user-error.hbs:19:		<link rel="stylesheet" type='text/css' href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700'>
 server/views/default.hbs:30:    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans:400,300,700">
 *** 
-* TODO get rid of ghost.org call
+* DONE get rid of ghost.org call
+** this is in the default blog post, the icon used in the site are taken from the icons.woff font
 * TODO go multi-instance ?
 * DONE use shrink to fix dependencies version. cf. https://www.npmjs.org/doc/shrinkwrap.html
 * TODO implement upgrade
