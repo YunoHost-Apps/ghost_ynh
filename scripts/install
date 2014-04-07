@@ -50,7 +50,7 @@ sudo cp -r ../tmp/ghost $final_path
 sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
 sudo chown -R ghostblog: $final_path
 
-echo "Install Ghost with NPM..."
+echo "Installing Ghost with NPM..."
 #sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.eu" ghostblog
 sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.org" ghostblog
 
@@ -60,6 +60,17 @@ find $final_path -type d | grep "test$" | xargs sudo rm -rf
 find $final_path -type d | grep "tests$" | xargs sudo rm -rf
 sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
 sudo rm -rf $final_path/tmp
+
+echo "Patching sources to remove calls to googleapi..."
+# patches to core
+sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/user-error.hbs
+sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/default.hbs
+cp ../patches/core/fonts.css $final_path/ghost/core/client/assets/css
+cp ../patches/core/*.woff $final_path/ghost/core/client/assets/fonts
+# patches to casper theme
+sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/content/themes/casper/default.hbs
+cp ../patches/theme/fonts.css $final_path/ghost/content/themes/casper/assets/css
+cp ../patches/theme/*.woff $final_path/ghost/content/themes/casper/assets/fonts
 
 echo "Setting up database..."
 db_name=ghostblog
@@ -78,8 +89,7 @@ sudo cp ../conf/config.js $final_path/ghost
 sudo chown ghostblog: $final_path/ghost/config.js
 sudo chmod 644 $final_path/ghost/config.js
 
-
-echo "Init script..."
+echo "Setting up init script..."
 logfile=/var/log/ynh-ghostblog.log
 sudo touch $logfile
 sudo chown ghostblog: $logfile
@@ -123,7 +133,6 @@ sudo yunohost app setting ghostblog password -v $password
 echo "Nginx configuration (sso enabled)..."
 # clean up previous settings
 sudo yunohost app setting ghostblog skipped_uris -d
-
 if [ $is_public = "Yes" ]; then
   # The main site is accessible from anyone
   sudo yunohost app setting ghostblog skipped_uris -v "/"
