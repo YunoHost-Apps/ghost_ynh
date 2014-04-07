@@ -34,7 +34,7 @@ admin@yunohost:/home/yunohost.app/ghostblog$ du -sh ghost/*
 ** let's stay with /var/run/yunohost/ghostblog for the moment
 * DONE cleanup pid file
 * DONE check password length (>=8)
-* TODO download theme police, install locally to avoid google requests
+* DONE download theme police, install locally to avoid google requests
 ** download theme police
 //fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400"
 
