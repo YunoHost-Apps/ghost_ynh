@@ -50,8 +50,8 @@
             {
                 "name": "password",
                 "ask": {
-                    "en": "Admin user password",
-                    "fr": "Mot de passe de l'administrateur"
+                    "en": "Admin user password (8 characters minimum)",
+                    "fr": "Mot de passe de l'administrateur (8 caractères minimum)"
                 }
             }
         ]
