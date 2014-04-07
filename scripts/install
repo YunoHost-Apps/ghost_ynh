@@ -71,7 +71,7 @@ sudo cp ../patches/core/*.woff $final_path/ghost/core/client/assets/fonts
 sudo sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/content/themes/casper/default.hbs
 sudo cp ../patches/theme/fonts.css $final_path/ghost/content/themes/casper/assets/css
 sudo cp ../patches/theme/*.woff $final_path/ghost/content/themes/casper/assets/fonts
-sudo chown -R ghostblog:ghostblog $final_path/ghost
+sudo chown -R ghostblog: $final_path/ghost
 
 echo "Setting up database..."
 db_name=ghostblog
