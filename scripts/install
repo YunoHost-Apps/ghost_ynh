@@ -14,7 +14,7 @@ if [[ "$path" = "/ghost" ]]; then
 fi
 
 # Check that admin user is an existing account
-sudo yunohost user list | python ../conf/user_list.py | grep "^$admin$" >/dev/null
+sudo yunohost user list --json | grep -q "\"username\": \"$admin\""
 if [[ ! $? -eq 0 ]]; then
     echo "Error : the chosen admin user does not exist"
     exit 1
