@@ -124,8 +124,8 @@ sudo yunohost app ssowatconf
 
 echo "Registering admin..."
 sleep 5
-admin_name=$(sudo yunohost user list | python ../conf/user_getname.py $admin)
-admin_mail=$(sudo yunohost user list | python ../conf/user_getmail.py $admin)
+admin_name=$(sudo yunohost user list --json | python ../conf/user_getname.py $admin)
+admin_mail=$(sudo yunohost user list --json | python ../conf/user_getmail.py $admin)
 curl -kL -X GET https://$domain${path%/}/ghost/signup --cookie-jar cookie.txt > signup_get
 sleep 5
 csrf_token=$(cat signup_get | egrep csrf-param | egrep "content=\".+\"" -o | egrep "\".+\"" -o | cut -d '"' -f 2)
