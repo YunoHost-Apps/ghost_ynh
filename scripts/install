@@ -66,14 +66,14 @@ echo "Patching sources to remove calls to googleapis..."
 sudo cp $final_path/ghost/core/server/views/user-error.hbs $final_path/ghost/core/server/views/user-error.hbs.orig
 sudo cp $final_path/ghost/core/server/views/default.hbs $final_path/ghost/core/server/views/default.hbs.orig
 sudo cp $final_path/ghost/core/client/assets/css/fonts.css $final_path/ghost/core/client/assets/css/fonts.css.orig
-sudo sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/user-error.hbs
-sudo sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/default.hbs
+sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/user-error.hbs
+sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/default.hbs
 sudo cp ../patches/core/fonts.css $final_path/ghost/core/client/assets/css
 sudo cp ../patches/core/*.woff $final_path/ghost/core/client/assets/fonts
 # patches to casper theme
 sudo cp $final_path/ghost/content/themes/casper/default.hbs $final_path/ghost/content/themes/casper/default.hbs.orig
 sudo cp $final_path/ghost/content/themes/casper/assets/css/fonts.css $final_path/ghost/content/themes/casper/assets/css/fonts.css.orig
-sudo sed -i '/googleapis/c\    <link rel="stylesheet" type='text/css' href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/content/themes/casper/default.hbs
+sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css"}}">' $final_path/ghost/content/themes/casper/default.hbs
 sudo cp ../patches/theme/fonts.css $final_path/ghost/content/themes/casper/assets/css
 sudo cp ../patches/theme/*.woff $final_path/ghost/content/themes/casper/assets/fonts
 
