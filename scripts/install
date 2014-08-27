@@ -3,9 +3,8 @@
 # Retrieve arguments
 domain=$1
 path=$2
-is_public=$3
-admin=$4
-password=$5
+admin=$3
+password=$4
 
 # '/ghost' is refused by the application itself. This is used as the route to the admin section
 if [[ "$path" = "/ghost" ]]; then
@@ -36,7 +35,7 @@ echo "Install dependencies..."
 sudo apt-get update
 sudo apt-get install nodejs-legacy npm -y
 
-version=0.4.2
+version=0.5.0
 echo "Downloading Ghost $version..."
 mkdir ../tmp
 sudo wget -O ../tmp/ghost-$version.zip "https://en.ghost.org/zip/ghost-$version.zip"
@@ -47,7 +46,7 @@ final_path=/var/www/ghostblog
 sudo mkdir -p $final_path
 sudo useradd -d $final_path ghostblog
 sudo cp -r ../tmp/ghost $final_path
-sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
+#sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
 sudo chown -R ghostblog: $final_path
 
 echo "Installing Ghost with NPM..."
@@ -123,34 +122,20 @@ sudo service nginx reload
 sudo yunohost app ssowatconf
 
 echo "Registering admin..."
-sleep 5
+sleep 10
 admin_name=$(sudo yunohost user list --json | python ../conf/user_getname.py $admin)
 admin_mail=$(sudo yunohost user list --json | python ../conf/user_getmail.py $admin)
-curl -kL -X GET https://$domain${path%/}/ghost/signup --cookie-jar cookie.txt > signup_get
-sleep 5
-csrf_token=$(cat signup_get | egrep csrf-param | egrep "content=\".+\"" -o | egrep "\".+\"" -o | cut -d '"' -f 2)
-curl -kL -X POST https://$domain${path%/}/ghost/signup/ \
-  --cookie cookie.txt  --header "X-CSRF-Token: $csrf_token" \
-  --data-urlencode "name=$admin_name" \
-  --data-urlencode "email=$admin_mail" \
-  --data-urlencode "password=$password" \
-  > /dev/null 2>&1
+
+# first round initialize
+curl -kL -X GET http://localhost:2368${path%/}/ghost
+
+# setup admin details
+curl -kL -X POST http://localhost:2368${path%/}/ghost/api/v0.1/authentication/setup/ \
+  --data-urlencode "setup[0][name]=$admin_name" \
+  --data-urlencode "setup[0][email]=$admin_mail" \
+  --data-urlencode "setup[0][password]=$password" \
+  --data-urlencode "setup[0][blogTitle]=My Yunohost blog"
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
-
-echo "Nginx configuration (sso enabled)..."
-# clean up previous settings
-sudo yunohost app setting ghostblog skipped_uris -d
-if [ $is_public = "Yes" ]; then
-  # The main site is accessible from anyone
-  sudo yunohost app setting ghostblog skipped_uris -v "/"
-  # The admin section is accessible only to Yunohost users
-  sudo yunohost app setting ghostblog protected_uris -v "/ghost"
-fi
-sudo yunohost app setting ghostblog is_public -v $is_public
-
-echo "Reloading Nginx (sso enabled)..."
-sudo service nginx reload
-sudo yunohost app ssowatconf
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
