@@ -31,15 +31,6 @@
                 "default": "/blog"
             },
             {
-                "name": "public_site",
-                "ask": {
-                    "en": "Is it a public Ghost site ?",
-                    "fr": "Est-ce un site public ?"
-                },
-                "choices": ["Yes", "No"],
-                "default": "Yes"
-            },
-            {
                 "name": "admin",
                 "ask": {
                     "en": "Admin user (must be an existing Yunohost user login)",

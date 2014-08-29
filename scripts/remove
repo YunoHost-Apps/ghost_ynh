@@ -7,7 +7,7 @@ sudo update-rc.d ynh-ghostblog remove
 sudo rm /etc/init.d/ynh-ghostblog
 sudo yunohost service remove ynh-ghostblog
 sudo rm -f /etc/nginx/conf.d/$domain.d/ghostblog.conf
-sudo rm -f /var/log/ghostblog.log
+sudo rm -f /var/log/ynh-ghostblog.log*
 sudo rm -rf /var/run/yunohost/ghostblog
 sudo rm -f /etc/logrotate.d/ynh-ghostblog
 

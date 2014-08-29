@@ -127,14 +127,16 @@ admin_name=$(sudo yunohost user list --json | python ../conf/user_getname.py $ad
 admin_mail=$(sudo yunohost user list --json | python ../conf/user_getmail.py $admin)
 
 # first round initialize
-curl -kL -X GET http://localhost:2368${path%/}/ghost
+curl -kL -X GET http://127.0.0.1:2368${path%/}
+curl -kL -X GET http://127.0.0.1:2368${path%/}
 
 # setup admin details
-curl -kL -X POST http://localhost:2368${path%/}/ghost/api/v0.1/authentication/setup/ \
+curl -kL -X POST http://127.0.0.1:2368${path%/}/ghost/api/v0.1/authentication/setup/ \
   --data-urlencode "setup[0][name]=$admin_name" \
   --data-urlencode "setup[0][email]=$admin_mail" \
   --data-urlencode "setup[0][password]=$password" \
   --data-urlencode "setup[0][blogTitle]=My Yunohost blog"
+
 sudo yunohost app setting ghostblog admin -v $admin
 sudo yunohost app setting ghostblog password -v $password
 
