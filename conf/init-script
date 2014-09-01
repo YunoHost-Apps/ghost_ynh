@@ -68,6 +68,25 @@ do_start()
     # Add code here, if necessary, that waits for the process to be ready
     # to handle requests from services started subsequently which depend
     # on this one.  As a last resort, sleep for some dime.
+
+    ghost_http_request_result=1
+    ghost_path=$(yunohost app setting ghostblog path)
+    count=0
+    max_count=60
+    while [ "$ghost_http_request_result" != "0" ]
+    do
+      [ "$VERBOSE" != no ] && log_action_cont_msg "."
+
+      if [ "$count" -ge $max_count ]; then
+        [ "$VERBOSE" != no ] && log_action_cont_msg "Timeout"
+        return 3
+      fi 
+
+      curl -kL -X GET http://localhost:2368${ghost_path} > /dev/null 2>&1
+      ghost_http_request_result=$?
+      sleep 1
+      count=$(expr $count + 1)
+    done
 }
 
 #
@@ -114,11 +133,11 @@ do_stop()
 
 case "$1" in
 start)
-        [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+        [ "$VERBOSE" != no ] && log_action_begin_msg "Starting $DESC" "$NAME"
         do_start
         case "$?" in
-                0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-                2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+                0|1) [ "$VERBOSE" != no ] && log_action_end_msg 0 ;;
+                2) [ "$VERBOSE" != no ] && log_action_end_msg 1 ;;
         esac
         ;;
 stop)
