@@ -47,12 +47,6 @@ sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{as
 sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/default.hbs
 sudo cp ../patches/core/fonts.css $final_path/ghost/core/client/assets/css
 sudo cp ../patches/core/*.woff $final_path/ghost/core/client/assets/fonts
-# patches to casper theme
-#sudo cp $final_path/ghost/content/themes/casper/default.hbs $final_path/ghost/content/themes/casper/default.hbs.orig
-#sudo cp $final_path/ghost/content/themes/casper/assets/css/fonts.css $final_path/ghost/content/themes/casper/assets/css/fonts.css.orig
-#sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css"}}">' $final_path/ghost/content/themes/casper/default.hbs
-#sudo cp ../patches/theme/fonts.css $final_path/ghost/content/themes/casper/assets/css
-#sudo cp ../patches/theme/*.woff $final_path/ghost/content/themes/casper/assets/fonts
 
 echo "Setting up permissions"
 sudo chown -R ghostblog: $final_path/ghost
@@ -61,9 +55,6 @@ echo "Setting up database..."
 db_name=ghostblog
 db_user=ghostblog
 db_pwd=$(sudo yunohost app setting ghostblog mysqlpwd)
-# db_pwd=$(dd if=/dev/urandom bs=1 count=200 2> /dev/null | tr -c -d '[A-Za-z0-9]' | sed -n 's/\(.\{24\}\).*/\1/p')
-# sudo yunohost app initdb $db_user -d $db_name -p $db_pwd
-# sudo yunohost app setting ghostblog mysqlpwd -v $db_pwd
 
 echo "Deploying configuration..."
 sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
@@ -100,17 +91,5 @@ sudo yunohost app setting ghostblog skipped_uris -v "/"
 echo "Reloading Nginx (sso disabled)..."
 sudo service nginx reload
 sudo yunohost app ssowatconf
-
-# echo "Registering admin..."
-# admin_name=$(sudo yunohost user list --json | python ../conf/user_getname.py $admin)
-# admin_mail=$(sudo yunohost user list --json | python ../conf/user_getmail.py $admin)
-# curl -kL -X POST http://localhost:2368${path%/}/ghost/api/v0.1/authentication/setup/ \
-#   --data-urlencode "setup[0][name]=$admin_name" \
-#   --data-urlencode "setup[0][email]=$admin_mail" \
-#   --data-urlencode "setup[0][password]=$password" \
-#   --data-urlencode "setup[0][blogTitle]=My Yunohost blog"
-# 
-# sudo yunohost app setting ghostblog admin -v $admin
-# sudo yunohost app setting ghostblog password -v $password
 
 echo "Success ! You can go to https://$domain$path/ghost to write your posts"
