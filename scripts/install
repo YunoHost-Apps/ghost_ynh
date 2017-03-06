@@ -35,10 +35,10 @@ echo "Install dependencies..."
 sudo apt-get update
 sudo apt-get install nodejs-legacy npm -y
 
-version=0.5.1
+version=0.11.7
 echo "Downloading Ghost $version..."
 mkdir ../tmp
-sudo wget -O ../tmp/ghost-$version.zip "https://en.ghost.org/zip/ghost-$version.zip"
+sudo wget -O ../tmp/ghost-$version.zip "https://github.com/TryGhost/Ghost/releases/download/$version/Ghost-$version.zip"
 
 echo "Deploying source files..."
 unzip ../tmp/ghost-$version.zip -d ../tmp/ghost
