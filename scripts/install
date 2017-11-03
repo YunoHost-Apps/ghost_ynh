@@ -20,7 +20,7 @@ if [[ ! $? -eq 0 ]]; then
 fi
 
 # 'password' must be >= 8 characters
-if [[ $(expr length $password) -lt "8" ]]; then
+if [[ $(expr length "$password") -lt "8" ]]; then
     echo "Error : the password must be >= 8 characters"
     exit 1
 fi
