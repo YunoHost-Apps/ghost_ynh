@@ -41,11 +41,6 @@ if [ -z $db_name ]; then
 	ynh_app_setting_set $app db_name $db_name
 fi
 
-# If final_path doesn't exist, create it
-if [ -z $final_path ]; then
-	final_path=/var/www/$app
-	ynh_app_setting_set $app final_path $final_path
-fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
@@ -77,9 +72,15 @@ path_url=$(ynh_normalize_url_path $path_url)
 tmpdir="$(mktemp -d)"
 # Backup the content folder to the temp dir
 cp -ar "$final_path/content" "$tmpdir"
-sudo rm -R "$tmpdir"
 
-# Download, check integrity, uncompress and patch the source from app.src
+
+# Download, uncompress and patch the source 
+sudo rm -R "$final_path"
+# If final_path doesn't exist, create it
+if [ -z $final_path ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set $app final_path $final_path
+fi
 tmpdir1="$(mktemp -d)"
 sudo wget -O "$tmpdir1/ghost.zip" "https://ghost.org/zip/ghost-latest.zip"
 unzip "$tmpdir1/ghost.zip" -d "$final_path"
@@ -87,6 +88,7 @@ sudo rm -R "$tmpdir1/ghost.zip"
 
 # copy content folder back to the final_path
 sudo cp -ar "$tmpdir/content" "${final_path}"
+sudo rm -R "$tmpdir"
 
 #=================================================
 # SPECIFIC SETUP
