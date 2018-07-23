@@ -1,5 +1,5 @@
 {
-    "url": "https://__DOMAIN__/__PATH__",
+    "url": "https://__DOMAIN____PATH__",
     "server": {
         "host": "127.0.0.1",
         "port": __PORT__
