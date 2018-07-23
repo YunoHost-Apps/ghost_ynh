@@ -1,0 +1,29 @@
+{
+    "url": "https://__DOMAIN__/__PATH__",
+    "server": {
+        "host": "127.0.0.1",
+        "port": __PORT__
+    },
+    "database": {
+        "client": "mysql",
+        "connection": {
+            "host"     : "127.0.0.1",
+            "user"     : "__DBNAME__",
+            "password" : "__DBPWD__",
+            "database" : "__DBNAME__"
+        }
+    },
+    "auth": {
+        "type": "password"
+    },
+    "paths": {
+        "contentPath": "content/"
+    },
+    "logging": {
+        "level": "info",
+        "rotation": {
+            "enabled": true
+        },
+        "transports": ["file", "stdout"]
+    }
+}

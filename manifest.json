@@ -1,16 +1,27 @@
 {
     "name": "Ghost",
-    "id": "ghostblog",
+    "id": "ghost",
+    "packaging_format": 1,
     "description": {
         "en": "Just a blogging platform",
         "fr": "Plateforme de blogging"
     },
+    "version": "1.0",
+    "url": "https://ghost.org/",
+    "license": "free",
     "developer": {
         "name": "Julien Malik",
-        "email": "julien.malik@paraiso.me",
-        "url": "https://ghost.org/"
+        "email": "julien.malik@paraiso.me"
     },
-    "multi_instance": "false",
+   "requirements": {
+        "yunohost": ">= 2.7.2"
+    },
+    "multi_instance": true,
+    "services": [
+        "nginx",
+        "nodjs",
+        "mysql"
+    ],
     "arguments": {
         "install" : [
             {
@@ -31,19 +42,13 @@
                 "default": "/blog"
             },
             {
-                "name": "admin",
+                "name": "is_public",
+                "type": "boolean",
                 "ask": {
-                    "en": "Admin user (must be an existing Yunohost user login)",
-                    "fr": "Administrateur du site (doit être un utilisateur Yunohost existant)"
+                    "en": "Is it a public application?",
+                    "fr": "Est-ce une application publique ?"
                 },
-                "default": "homer"
-            },
-            {
-                "name": "password",
-                "ask": {
-                    "en": "Admin user password (8 characters minimum)",
-                    "fr": "Mot de passe de l'administrateur (8 caractères minimum)"
-                }
+                "default": true
             }
         ]
     }
