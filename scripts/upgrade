@@ -116,6 +116,13 @@ ynh_replace_string "__DBNAME__" "$db_name"     "$final_path/config.production.js
 ynh_replace_string "__DBPWD__"  "$db_pwd"      "$final_path/config.production.json"
 ynh_replace_string "__PORT__"   "$port"        "$final_path/config.production.json"
 
+# Migrate tables in database
+(
+	cd "$final_path"
+NODE_ENV=production knex-migrator init
+
+)
+
 
 #=================================================
 # NGINX CONFIGURATION
