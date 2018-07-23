@@ -76,8 +76,8 @@ path_url=$(ynh_normalize_url_path $path_url)
 # Create a temporary directory
 tmpdir="$(mktemp -d)"
 # Backup the content folder to the temp dir
-cp -ar "$final_path/ghost/content" "$tmpdir"
-sudo rm -R "$tmpdir/ghost.zip"
+cp -ar "$final_path/content" "$tmpdir"
+sudo rm -R "$tmpdir"
 
 # Download, check integrity, uncompress and patch the source from app.src
 tmpdir1="$(mktemp -d)"
