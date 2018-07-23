@@ -82,7 +82,7 @@ sudo rm -R "$tmpdir/ghost.zip"
 # Download, check integrity, uncompress and patch the source from app.src
 tmpdir1="$(mktemp -d)"
 sudo wget -O "$tmpdir1/ghost.zip" "https://ghost.org/zip/ghost-latest.zip"
-unzip "$tmpdir1/ghost.zip" -d "$final_path/."
+unzip "$tmpdir1/ghost.zip" -d "$final_path"
 sudo rm -R "$tmpdir1/ghost.zip"
 
 # copy content folder back to the final_path

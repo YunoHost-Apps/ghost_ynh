@@ -103,7 +103,7 @@ ynh_app_setting_set $app final_path $final_path
 # Download, check integrity, uncompress and patch the source from app.src
 tmpdir="$(mktemp -d)"
 sudo wget -O "$tmpdir/ghost.zip" "https://ghost.org/zip/ghost-latest.zip"
-unzip "$tmpdir/ghost.zip" -d "$final_path/."
+unzip "$tmpdir/ghost.zip" -d "$final_path"
 sudo rm -R "$tmpdir/ghost.zip"
 #=================================================
 # NGINX CONFIGURATION
