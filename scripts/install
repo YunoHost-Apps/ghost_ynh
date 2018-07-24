@@ -145,7 +145,7 @@ cp ../conf/config.production.json "$final_path/config.production.json"
 #=================================================
 
 ynh_replace_string "__DOMAIN__" "$domain"      "$final_path/config.production.json"
-ynh_replace_string "__PATH__"   "$path_url"     "$final_path/config.production.json"
+ynh_replace_string "__PATH__"   "$path_url"    "$final_path/config.production.json"
 ynh_replace_string "__DBNAME__" "$db_name"     "$final_path/config.production.json"
 ynh_replace_string "__DBPWD__"  "$db_pwd"      "$final_path/config.production.json"
 ynh_replace_string "__PORT__"   "$port"        "$final_path/config.production.json"
@@ -208,7 +208,7 @@ message=" $app was successfully installed :)
 
 Next step:
 
-Create admin account at https://$domain$path_urladmin
+Create admin account at https://$domain{$path_url}admin
 
 Happy blogging!
 
