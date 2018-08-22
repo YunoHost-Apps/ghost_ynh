@@ -1,95 +1,191 @@
 #!/bin/bash
 
-# Retrieve arguments
-domain=$(sudo yunohost app setting ghostblog domain)
-path=$(sudo yunohost app setting ghostblog path)
-path=${path%/}
-admin=$(sudo yunohost app setting ghostblog admin)
-password=$(sudo yunohost app setting ghostblog password)
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
 
-sudo service ynh-ghostblog stop
+source _common.sh
+source /usr/share/yunohost/helpers
 
-final_path=/var/www/ghostblog
+#=================================================
+# LOAD SETTINGS
+#=================================================
 
-version=0.5.1
-echo "Downloading Ghost $version..."
-mkdir ../tmp
-sudo wget -O ../tmp/ghost-$version.zip "https://en.ghost.org/zip/ghost-$version.zip"
-unzip ../tmp/ghost-$version.zip -d ../tmp/ghost
+app=$YNH_APP_INSTANCE_NAME
 
-echo "Saving content folder..."
-sudo cp -ar $final_path/ghost/content ../tmp
+domain=$(ynh_app_setting_get $app domain)
+path_url=$(ynh_app_setting_get $app path)
+is_public=$(ynh_app_setting_get $app is_public)
+final_path=$(ynh_app_setting_get $app final_path)
+port=$(ynh_app_setting_get $app port)
+db_name=$(ynh_app_setting_get $app db_name)
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
 
-echo "Deploying source files..."
-sudo rm -rf $final_path/ghost
-sudo cp -r ../tmp/ghost $final_path
-sudo cp -ar ../tmp/content $final_path/ghost
-#sudo cp ../conf/npm-shrinkwrap.json $final_path/ghost
-sudo chown -R ghostblog: $final_path
+# Fix is_public as a boolean value
+if [ "$is_public" = "Yes" ]; then
+	ynh_app_setting_set $app is_public 1
+	is_public=1
+elif [ "$is_public" = "No" ]; then
+	ynh_app_setting_set $app is_public 0
+	is_public=0
+fi
 
-echo "Installing Ghost with NPM..."
-#sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.eu" ghostblog
-sudo su --shell /bin/bash --command "cd $final_path/ghost && npm install --production --registry http://registry.npmjs.org" ghostblog
+# If db_name doesn't exist, create it
+if [ -z $db_name ]; then
+	db_name=$(ynh_sanitize_dbid $app)
+	ynh_app_setting_set $app db_name $db_name
+fi
 
-echo "Cleaning up install tree..."
-sudo rm -rf $final_path/.npm
-find $final_path -type d | grep "test$" | xargs sudo rm -rf
-find $final_path -type d | grep "tests$" | xargs sudo rm -rf
-sudo rm -rf $final_path/ghost/node_modules/sqlite3/build
-sudo rm -rf $final_path/tmp
 
-echo "Patching sources to remove calls to googleapis..."
-# patches to core
-sudo cp $final_path/ghost/core/server/views/user-error.hbs $final_path/ghost/core/server/views/user-error.hbs.orig
-sudo cp $final_path/ghost/core/server/views/default.hbs $final_path/ghost/core/server/views/default.hbs.orig
-sudo cp $final_path/ghost/core/client/assets/css/fonts.css $final_path/ghost/core/client/assets/css/fonts.css.orig
-sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/user-error.hbs
-sudo sed -i '/googleapis/c\    <link rel="stylesheet" type="text/css" href="{{asset "css/fonts.css" ghost="true"}}">' $final_path/ghost/core/server/views/default.hbs
-sudo cp ../patches/core/fonts.css $final_path/ghost/core/client/assets/css
-sudo cp ../patches/core/*.woff $final_path/ghost/core/client/assets/fonts
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
 
-echo "Setting up permissions"
-sudo chown -R ghostblog: $final_path/ghost
+# Backup the current version of the app
+ynh_backup_before_upgrade
+ynh_clean_setup () {
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
+}
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
-echo "Setting up database..."
-db_name=ghostblog
-db_user=ghostblog
-db_pwd=$(sudo yunohost app setting ghostblog mysqlpwd)
+#=================================================
+# CHECK THE PATH
+#=================================================
 
-echo "Deploying configuration..."
-sed -i "s@YNH_DOMAIN@$domain@g" ../conf/config.js
-sed -i "s@YNH_LOCATION@${path%/}@g" ../conf/config.js
-sed -i "s@YNH_DBNAME@$db_name@g" ../conf/config.js
-sed -i "s@YNH_DBUSER@$db_user@g" ../conf/config.js
-sed -i "s@YNH_DBPWD@$db_pwd@g" ../conf/config.js
-sudo cp ../conf/config.js $final_path/ghost
-sudo chown ghostblog: $final_path/ghost/config.js
-sudo chmod 644 $final_path/ghost/config.js
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
 
-echo "Setting up init script..."
-logfile=/var/log/ynh-ghostblog.log
-sudo touch $logfile
-sudo chown ghostblog: $logfile
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
 
-sed -i "s@YNH_FINALPATH@$final_path@g" ../conf/init-script
-sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/init-script
-sudo cp ../conf/init-script /etc/init.d/ynh-ghostblog
-sudo chmod +x /etc/init.d/ynh-ghostblog
-sudo update-rc.d ynh-ghostblog defaults
-sudo service ynh-ghostblog start
-sudo yunohost service add ynh-ghostblog -l $logfile
+# Create a temporary directory
+tmpdir="$(mktemp -d)"
+# Backup the content folder to the temp dir
+cp -ar "$final_path/content" "$tmpdir"
 
-echo "Setting up logrotate configuration..."
-sed -i "s@YNH_LOGFILE@$logfile@g" ../conf/logrotate
-sudo cp ../conf/logrotate /etc/logrotate.d/ynh-ghostblog
 
-echo "Nginx configuration (sso disabled)..."
-sed -i "s@YNH_LOCATION@$path@g" ../conf/nginx.conf
-sudo cp ../conf/nginx.conf /etc/nginx/conf.d/$domain.d/ghostblog.conf
-sudo yunohost app setting ghostblog skipped_uris -v "/"
+# Download, uncompress and patch the source 
+sudo rm -R "$final_path"
+# If final_path doesn't exist, create it
+if [ -z $final_path ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set $app final_path $final_path
+fi
+tmpdir1="$(mktemp -d)"
+sudo wget -O "$tmpdir1/ghost.zip" "https://ghost.org/zip/ghost-latest.zip"
+unzip "$tmpdir1/ghost.zip" -d "$final_path"
+sudo rm -R "$tmpdir1/ghost.zip"
 
-echo "Reloading Nginx (sso disabled)..."
-sudo service nginx reload
-sudo yunohost app ssowatconf
+# copy content folder back to the final_path
+sudo cp -ar "$tmpdir/content" "${final_path}"
+sudo rm -R "$tmpdir"
 
-echo "Success ! You can go to https://$domain$path/ghost to write your posts"
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+
+# Copy configuration file
+cp ../conf/config.production.json "$final_path/config.production.json"
+
+# Install the dependencies with yarn
+(
+	cd "$final_path"
+	yarn install 
+	yarn global add knex-migrator
+
+ 
+)
+
+#=================================================
+# MODIFY A CONFIG FILE
+#=================================================
+
+ynh_replace_string "__DOMAIN__" "$domain"      "$final_path/config.production.json"
+ynh_replace_string "__PATH__"   "$path_url"     "$final_path/config.production.json"
+ynh_replace_string "__DBNAME__" "$db_name"     "$final_path/config.production.json"
+ynh_replace_string "__DBPWD__"  "$db_pwd"      "$final_path/config.production.json"
+ynh_replace_string "__PORT__"   "$port"        "$final_path/config.production.json"
+
+# Migrate tables in database
+(
+	cd "$final_path"
+NODE_ENV=production knex-migrator init
+
+)
+
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+if [ "$path_url" != "/" ]
+then
+	ynh_replace_string "^#sub_path_only" "" "/etc/nginx/conf.d/$domain.d/$app.conf"
+fi
+ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+
+# Create a system user
+ynh_system_user_create $app
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+
+# Verify the checksum and backup the file if it's different
+ynh_backup_if_checksum_is_different "$final_path/config.production.json"
+# Recalculate and store the config file checksum into the app settings
+ynh_store_file_checksum "$final_path/config.production.json"
+
+#=================================================
+# SETUP SYSTEMD
+#=================================================
+
+# Create a dedicated systemd config
+ynh_add_systemd_config
+systemctl start "$app"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set right permissions for curl installation
+chown -R $app: $final_path
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+
+if [ $is_public -eq 0 ]
+then	# Remove the public access
+	ynh_app_setting_delete $app skipped_uris
+fi
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway
+	ynh_app_setting_set $app unprotected_uris "/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
