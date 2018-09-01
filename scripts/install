@@ -210,7 +210,7 @@ Next step:
 
 Create admin account at https://$domain{$path_url}admin
 
-Happy blogging!
+Happy Blogging!
 
 If you are facing any problem, please open an issue here: https://github.com/YunoHost-Apps/ghost_ynh/issues"
 
