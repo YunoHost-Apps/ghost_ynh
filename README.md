@@ -4,7 +4,7 @@
 [![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=ghost)<br><br>
 =======
 
-Shipped version: **1.24.9** <br><br>
+Shipped version: **2.1.0** <br><br>
 
 - [Yunohost project](https://yunohost.org)
 - [Ghost](https://ghost.org/)

@@ -1,4 +1,4 @@
-SOURCE_URL=https://github.com/TryGhost/Ghost/archive/1.24.9.zip
+SOURCE_URL=https://github.com/TryGhost/Ghost/releases/download/2.1.0/Ghost-2.1.0.zip
 SOURCE_SUM=f43d5ec409b690104356092e853459a97a412dca505466a4cbcb6e8e2c72e59c
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
