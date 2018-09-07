@@ -189,4 +189,4 @@ fi
 #=================================================
 
 systemctl reload nginx
-service restart "$app"
+service  "$app" restart
