@@ -91,6 +91,16 @@ sudo cp -ar "$tmpdir/content" "${final_path}"
 sudo rm -R "$tmpdir"
 
 #=================================================
+# CLOSE A PORT
+#=================================================
+
+if yunohost firewall list | grep -q "\- $port$"
+then
+	echo "Close port $port"
+	yunohost firewall disallow TCP $port 2>&1
+fi
+
+#=================================================
 # SPECIFIC SETUP
 #=================================================
 
