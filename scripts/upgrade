@@ -82,7 +82,7 @@ if [ -z $final_path ]; then
 	ynh_app_setting_set $app final_path $final_path
 fi
 tmpdir1="$(mktemp -d)"
-sudo wget -O "$tmpdir1/ghost.zip" "https://ghost.org/zip/ghost-latest.zip"
+sudo wget -O "$tmpdir1/ghost.zip" "https://github.com/TryGhost/Ghost/archive/master.zip"
 unzip "$tmpdir1/ghost.zip" -d "$final_path"
 sudo rm -R "$tmpdir1/ghost.zip"
 
