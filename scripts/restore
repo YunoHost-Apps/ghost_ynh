@@ -82,6 +82,7 @@ chown -R $app: $final_path
 
 # install nodejs
 ynh_install_nodejs 8
+ynh_use_nodejs
 
 # add yarn repo for Debian
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -

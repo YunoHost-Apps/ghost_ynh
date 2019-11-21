@@ -74,6 +74,7 @@ ynh_app_setting_set $app port $port
 
 # install nodejs
 ynh_install_nodejs 8
+ynh_use_nodejs
 
 # add yarn repo for Debian
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -174,6 +175,7 @@ chown -R $app: $final_path
 #=================================================
 
 # Create a dedicated systemd config
+ynh_replace_string --match_string="__NODEJS_PATH__" --replace_string="$nodejs_path" --target_file="../conf/systemd.service"
 ynh_add_systemd_config
 systemctl start "$app"
 

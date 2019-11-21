@@ -8,7 +8,7 @@ WorkingDirectory=__FINALPATH__
 User=__APP__
 Group=__APP__
 Environment="NODE_ENV=production"
-ExecStart=/usr/bin/node index.js run
+ExecStart=__NODEJS_PATH__/node index.js run
 Restart=always
 
 [Install]
