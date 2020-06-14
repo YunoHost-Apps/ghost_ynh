@@ -7,105 +7,98 @@
 #=================================================
 
 source _common.sh
+source ynh_add_config
+source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
 
 #=================================================
 # MANAGE SCRIPT FAILURE
 #=================================================
 
+ynh_clean_setup () {
+	ynh_clean_check_starting
+}
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
 
 #=================================================
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
+
 domain=$YNH_APP_ARG_DOMAIN
 path_url=$YNH_APP_ARG_PATH
 is_public=$YNH_APP_ARG_IS_PUBLIC
 
-# This is a multi-instance app, meaning it can be installed several times independently
-# The id of the app as stated in the manifest is available as $YNH_APP_ID
-# The instance number is available as $YNH_APP_INSTANCE_NUMBER (equals "1", "2", ...)
-# The app instance name is available as $YNH_APP_INSTANCE_NAME
-#    - the first time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample
-#    - the second time the app is installed, YNH_APP_INSTANCE_NAME = ynhexample__2
-#    - ynhexample__{N} for the subsequent installations, with N=3,4, ...
-# The app instance name is probably what you are interested the most, since this is
-# guaranteed to be unique. This is a good unique identifier to define installation path,
-# db names, ...
 app=$YNH_APP_INSTANCE_NAME
 
 #=================================================
 # CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
 #=================================================
+ynh_script_progression --message="Validating installation parameters..."
 
 final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die "This path already contains a folder"
+test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
 
-# Normalize the url path syntax
-path_url=$(ynh_normalize_url_path $path_url)
-
-# Check web path availability
-ynh_webpath_available $domain $path_url
 # Register (book) web path
-ynh_webpath_register $app $domain $path_url
+ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
 
 #=================================================
 # STORE SETTINGS FROM MANIFEST
 #=================================================
+ynh_script_progression --message="Storing installation settings..."
 
-ynh_app_setting_set $app domain $domain
-ynh_app_setting_set $app path $path_url
-ynh_app_setting_set $app is_public $is_public
+ynh_app_setting_set --app=$app --key=domain --value=$domain
+ynh_app_setting_set --app=$app --key=path --value=$path_url
+ynh_app_setting_set --app=$app --key=is_public --value=$is_public
 
 #=================================================
 # STANDARD MODIFICATIONS
 #=================================================
 # FIND AND OPEN A PORT
 #=================================================
+ynh_script_progression --message="Configuring firewall..."
 
-# Find a free port
-port=$(ynh_find_port 4010)
-ynh_app_setting_set $app port $port
+# Find an available port
+port=$(ynh_find_port --port=4010)
+ynh_app_setting_set --app=$app --key=port --value=$port
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Installing dependencies..."
 
-# install nodejs
-ynh_install_nodejs 8
+ynh_install_app_dependencies $pkg_dependencies
 
-# add yarn repo for Debian
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-ynh_package_update
+# Install Nodejs
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 
-ynh_install_app_dependencies mailutils yarn
-
+# Install Yarn
+ynh_install_extra_app_dependencies --repo="deb https://dl.yarnpkg.com/debian/ stable main" --package="yarn" --key="https://dl.yarnpkg.com/debian/pubkey.gpg"
 
 #=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
-# If your app uses a MySQL database, you can use these lines to bootstrap
-# a database, an associated user and save the password in app settings
+ynh_script_progression --message="Creating a MySQL database..."
 
-db_name=$(ynh_sanitize_dbid $app)
-ynh_app_setting_set $app db_name $db_name
-ynh_mysql_setup_db $db_name $db_name
+db_name=$(ynh_sanitize_dbid --db_name=$app)
+db_user=$db_name
+ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
+db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
+ynh_script_progression --message="Setting up source files..."
 
-ynh_app_setting_set $app final_path $final_path
+ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
-tmpdir="$(mktemp -d)"
-sudo wget -O "$tmpdir/ghost.zip" "https://github.com/TryGhost/Ghost/archive/master.zip"
-unzip "$tmpdir/ghost.zip" -d "$final_path"
-sudo rm -R "$tmpdir/ghost.zip"
+ynh_setup_source --dest_dir="$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Configuring nginx web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -118,68 +111,74 @@ ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
 #=================================================
 # CREATE DEDICATED USER
 #=================================================
+ynh_script_progression --message="Configuring system user..."
 
 # Create a system user
-ynh_system_user_create $app
+ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-
-# Copy configuration file
-cp ../conf/config.production.json "$final_path/config.production.json"
-
-# Install the dependencies with yarn
-(
-	cd "$final_path"
-	yarn install 
-	yarn global add knex-migrator
-
- 
-)
-
-#=================================================
 # MODIFY A CONFIG FILE
 #=================================================
+ynh_script_progression --message="Modifying a config file..."
 
-ynh_replace_string "__DOMAIN__" "$domain"      "$final_path/config.production.json"
-ynh_replace_string "__PATH__"   "$path_url"    "$final_path/config.production.json"
-ynh_replace_string "__DBNAME__" "$db_name"     "$final_path/config.production.json"
-ynh_replace_string "__DBPWD__"  "$db_pwd"      "$final_path/config.production.json"
-ynh_replace_string "__PORT__"   "$port"        "$final_path/config.production.json"
+ynh_add_config --origin="../conf/config.production.json" --destination="$final_path/config.production.json" --vars="db_name db_user db_pwd"
 
-# Create tables in database
-(
-	cd "$final_path"
-NODE_ENV=production knex-migrator init
+#==============================================
+# BUILD GHOST
+#==============================================
+ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
 
-)
+pushd "$final_path" || ynh_die
 
-#=================================================
-# STORE THE CHECKSUM OF THE CONFIG FILE
-#=================================================
+	ynh_use_nodejs
+	yarn install
+	yarn global add knex-migrator
+	NODE_ENV=production knex-migrator init
+	yarn global add grunt
+	NODE_ENV=production grunt symlink
+	NODE_ENV=production grunt init --force
 
-# Calculate and store the config file checksum into the app settings
-ynh_store_file_checksum "$final_path/config.production.json"
-
-#=================================================
-# SET WRITE PERMISSION 
-#=================================================
-
-# Set right permissions for curl install
-chown -R $app: $final_path
+popd || ynh_die
 
 #=================================================
 # SETUP SYSTEMD
 #=================================================
+ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
-systemctl start "$app"
+ynh_add_systemd_config --others_var="ynh_node_load_PATH ynh_node"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+ynh_script_progression --message="Securing files and directories..."
+
+# Set permissions to app files
+chown -R $app: $final_path
+
+#=================================================
+# INTEGRATE SERVICE IN YUNOHOST
+#=================================================
+ynh_script_progression --message="Integrating service in YunoHost..."
+
+yunohost service add $app --description "$app daemon for Ghost" --log_type "systemd"
+
+#=================================================
+# START SYSTEMD SERVICE
+#=================================================
+ynh_script_progression --message="Starting a systemd service..."
+
+# Start a systemd service
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Started ghost systemd service"
 
 #=================================================
 # SETUP SSOWAT
 #=================================================
+ynh_script_progression --message="Configuring SSOwat..."
 
 if [ $is_public -eq 0 ]
 then	# Remove the public access
@@ -188,30 +187,28 @@ fi
 # Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	# unprotected_uris allows SSO credentials to be passed anyway.
-	ynh_app_setting_set $app unprotected_uris "/"
+	ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_script_progression --message="Reloading nginx web server..."
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
 
 #=================================================
 # SEND A README FOR THE ADMIN
 #=================================================
+ynh_print_info --message="Sending a readme for the admin..."
 
-message=" $app was successfully installed :)
+ynh_replace_string --match_string="__DOMAIN__"    --replace_string="$domain"    --target_file="../conf/message"
+ynh_replace_string --match_string="__PATH_URL__"    --replace_string="$path_url"    --target_file="../conf/message"
 
-Next step:
+ynh_send_readme_to_admin --app_message="../conf/message"
 
-Create admin account at https://$domain{$path_url}admin
+#=================================================
+# END OF SCRIPT
+#=================================================
 
-Happy Blogging!
-
-If you are facing any problem, please open an issue here: https://github.com/YunoHost-Apps/ghost_ynh/issues"
-
-ynh_send_readme_to_admin "$message"
-
-
+ynh_script_progression --message="Installation of $app completed"
