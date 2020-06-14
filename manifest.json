@@ -19,7 +19,6 @@
     "multi_instance": true,
     "services": [
         "nginx",
-        "nodjs",
         "mysql"
     ],
     "arguments": {
