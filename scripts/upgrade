@@ -105,8 +105,11 @@ then
 	# Create a temporary directory
 	tmpdir="$(mktemp -d)"
 	
+		# Copy the admin saved settings from tmp directory to final path	
+	cp -ar "$final_path/config.production.json" "$tmpdir/config.production.json"	
+
 	# Backup the content folder to the temp dir
-	cp -ar "$final_path/content" "$tmpdir"
+	cp -ar "$final_path/content" "$tmpdir/content"
 
 	# Remove the app directory securely
 	ynh_secure_remove --file=$final_path
@@ -114,10 +117,10 @@ then
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir=$final_path
 	
-	#Copy the admin saved settings from tmp directory to final path	
-	cp -a  "$tmpdir/config.production.json" "$final_path/config.production.json"	
+	# Copy the admin saved settings from tmp directory to final path	
+	cp -ar "$tmpdir/config.production.json" "$final_path/config.production.json"	
 
-	# copy content folder back to the final_path
+	# Copy content folder back to the final_path
 	cp -ar "$tmpdir/content" "${final_path}"
 
 	# Remove the tmp directory securely
