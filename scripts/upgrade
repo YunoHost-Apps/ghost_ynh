@@ -230,7 +230,7 @@ yunohost service add $app --description "$app daemon for Ghost" --log_type "syst
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Started ghost systemd service"
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost boot"
 
 #=================================================
 # RELOAD NGINX
