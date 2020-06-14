@@ -9,7 +9,7 @@
     "version": "3.19.2~ynh1",
     "url": "https://ghost.org/",
     "license": "free",
-    "developer": {
+    "maintainer": {
         "name": "Julien Malik",
         "email": "julien.malik@paraiso.me"
     },
