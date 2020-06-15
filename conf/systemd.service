@@ -7,7 +7,7 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__FINALPATH__
-Environment="YNH_NODE_LOAD_PATH"
+Environment="__YNH_NODE_LOAD_PATH__"
 Environment="NODE_ENV=production"
 ExecStart=__YNH_NODE__ index.js run
 Restart=always
