@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Create a dedicated  config file
+# Create a dedicated config file
 #
 # usage: ynh_add_config [--origin="origin file"] [--destination="destination file"] [--vars="vars to replace"]
 # | arg: -o, --origin=     - Template config file to use (optionnal, ../conf/.env by default)
@@ -25,11 +25,18 @@
 #   __YNH_NODE_LOAD_PATH__    by $ynh_node_load_PATH
 #   __NODEJS_PATH__    by $nodejs_path
 #   __NODEJS_VERSION__    by $nodejs_version
+#   __DB_NAME__    by $db_name
+#   __DB_USER__    by $db_user
+#   __DB_PWD__    by $db_pwd
 #
 # And dynamic variables (from the last example) :
 #   __VAR_1__    by $var_1
 #   __VAR_2__    by $var_2
 #
+# The helper will verify the checksum and backup the destination file
+# if it's different before applying the new origin file.
+# And it will calculate and store a destination file checksum
+# into the app settings when configuraation is done.
 #
 ynh_add_config () {
     # Declare an array to define the options of this helper.
@@ -47,55 +54,7 @@ ynh_add_config () {
     ynh_backup_if_checksum_is_different --file="$destination"
     cp "$origin" "$destination"
 
-    #Replace usual YunoHost variables
-    if test -n "${path_url:-}"
-    then
-        # path_url_slash_less is path_url, or a blank value if path_url is only '/'
-        local path_url_slash_less=${path_url%/}
-        ynh_replace_string --match_string="__PATH__/" --replace_string="$path_url_slash_less/" --target_file="$destination"
-        ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="$destination"
-    fi
-    if test -n "${domain:-}"; then
-        ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$destination"
-    fi
-    if test -n "${port:-}"; then
-        ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$destination"
-    fi
-    if test -n "${app:-}"; then
-        ynh_replace_string --match_string="__NAME__" --replace_string="$app" --target_file="$destination"
-        ynh_replace_string --match_string="__NAMETOCHANGE__" --replace_string="$app" --target_file="$destination"
-        ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="$destination"
-        ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$destination"
-    fi
-    if test -n "${final_path:-}"; then
-        ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="$destination"
-    fi
-    if test -n "${YNH_PHP_VERSION:-}"; then
-        ynh_replace_string --match_string="__PHPVERSION__" --replace_string="$YNH_PHP_VERSION" --target_file="$destination"
-    fi
-    if test -n "${ynh_npm:-}"; then
-        ynh_replace_string --match_string="__YNH_NPM__" --replace_string="$ynh_npm" --target_file="$destination"
-    fi
-    if test -n "${ynh_node:-}"; then
-        ynh_replace_string --match_string="__YNH_NODE__" --replace_string="$ynh_node" --target_file="$destination"
-    fi
-    if test -n "${ynh_node_load_PATH:-}"; then
-        ynh_replace_string --match_string="__YNH_NODE_LOAD_PATH__" --replace_string="$ynh_node_load_PATH" --target_file="$destination"
-    fi
-    if test -n "${nodejs_path:-}"; then
-        ynh_replace_string --match_string="__NODEJS_PATH__" --replace_string="$nodejs_path" --target_file="$destination"
-    fi
-    if test -n "${nodejs_version:-}"; then
-        ynh_replace_string --match_string="__NODEJS_VERSION__" --replace_string="$nodejs_version" --target_file="$destination"
-    fi
-
-    # Replace all other variables given as arguments
-    for var_to_replace in $vars
-    do
-        # ${var_to_replace^^} make the content of the variable on upper-cases
-        # ${!var_to_replace} get the content of the variable named $var_to_replace 
-        ynh_replace_string --match_string="__${var_to_replace^^}__" --replace_string="${!var_to_replace}" --target_file="$destination"
-    done
+    ynh_replace_vars --file="$destination" --vars="$vars"
 
     ynh_store_file_checksum --file="$destination"
 }
@@ -124,4 +83,107 @@ ynh_remove_config () {
     then
         ynh_secure_remove --file="$file"
     fi
+}
+
+# Replace variables in a file
+#
+# usage: ynh_replace_vars --file="file" [--vars="vars to replace"]
+# | arg: -o, --file=     - Template config file to use
+# | arg: -v, --vars=  - List of variables to replace separated by a space. For example: 'var_1 var_2 ...'
+#
+# This will replace in the the following keywords with global variables
+# that should be defined before calling this helper :
+#   __PATH__      by  $path_url
+#   __DOMAIN__    by $domain
+#   __PORT__    by $port
+#   __NAME__    by $app
+#   __NAMETOCHANGE__    by $app
+#   __USER__    by $app
+#   __APP__    by $app
+#   __FINALPATH__    by $final_path
+#   __PHPVERSION__    by $YNH_PHP_VERSION
+#   __YNH_NPM__    by $ynh_npm
+#   __YNH_NODE__    by $ynh_node
+#   __YNH_NODE_LOAD_PATH__    by $ynh_node_load_PATH
+#   __NODEJS_PATH__    by $nodejs_path
+#   __NODEJS_VERSION__    by $nodejs_version
+#   __DB_NAME__    by $db_name
+#   __DB_USER__    by $db_user
+#   __DB_PWD__    by $db_pwd
+#
+# And dynamic variables (from the last example) :
+#   __VAR_1__    by $var_1
+#   __VAR_2__    by $var_2
+#
+#
+ynh_replace_vars () {
+    # Declare an array to define the options of this helper.
+    local legacy_args=fv
+    local -A args_array=( [f]=file= [v]=vars= )
+    local file
+    local vars
+    # Manage arguments with getopts
+    ynh_handle_getopts_args "$@"
+    local file="${file:-}"
+    local vars="${vars:-}"
+
+
+    #Replace usual YunoHost variables
+    if test -n "${path_url:-}"
+    then
+        # path_url_slash_less is path_url, or a blank value if path_url is only '/'
+        local path_url_slash_less=${path_url%/}
+        ynh_replace_string --match_string="__PATH__/" --replace_string="$path_url_slash_less/" --target_file="$file"
+        ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="$file"
+    fi
+    if test -n "${domain:-}"; then
+        ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$file"
+    fi
+    if test -n "${port:-}"; then
+        ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$file"
+    fi
+    if test -n "${app:-}"; then
+        ynh_replace_string --match_string="__NAME__" --replace_string="$app" --target_file="$file"
+        ynh_replace_string --match_string="__NAMETOCHANGE__" --replace_string="$app" --target_file="$file"
+        ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="$file"
+        ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$file"
+    fi
+    if test -n "${final_path:-}"; then
+        ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="$file"
+    fi
+    if test -n "${YNH_PHP_VERSION:-}"; then
+        ynh_replace_string --match_string="__PHPVERSION__" --replace_string="$YNH_PHP_VERSION" --target_file="$file"
+    fi
+    if test -n "${ynh_npm:-}"; then
+        ynh_replace_string --match_string="__YNH_NPM__" --replace_string="$ynh_npm" --target_file="$file"
+    fi
+    if test -n "${ynh_node:-}"; then
+        ynh_replace_string --match_string="__YNH_NODE__" --replace_string="$ynh_node" --target_file="$file"
+    fi
+    if test -n "${ynh_node_load_PATH:-}"; then
+        ynh_replace_string --match_string="__YNH_NODE_LOAD_PATH__" --replace_string="$ynh_node_load_PATH" --target_file="$file"
+    fi
+    if test -n "${nodejs_path:-}"; then
+        ynh_replace_string --match_string="__NODEJS_PATH__" --replace_string="$nodejs_path" --target_file="$file"
+    fi
+    if test -n "${nodejs_version:-}"; then
+        ynh_replace_string --match_string="__NODEJS_VERSION__" --replace_string="$nodejs_version" --target_file="$file"
+    fi
+    if test -n "${db_name:-}"; then
+        ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$file"
+    fi
+    if test -n "${db_user:-}"; then
+        ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$file"
+    fi
+    if test -n "${db_pwd:-}"; then
+        ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$file"
+    fi
+
+    # Replace all other variables given as arguments
+    for var_to_replace in $vars
+    do
+        # ${var_to_replace^^} make the content of the variable on upper-cases
+        # ${!var_to_replace} get the content of the variable named $var_to_replace 
+        ynh_replace_string --match_string="__${var_to_replace^^}__" --replace_string="${!var_to_replace}" --target_file="$file"
+    done
 }
