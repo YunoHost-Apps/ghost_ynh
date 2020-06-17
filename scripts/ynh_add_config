@@ -16,16 +16,16 @@
 # The helper will use the template $template to generate a config file
 # $destination by replacing the following keywords with global variables
 # that should be defined before calling this helper :
-#   __PATH__      by  $path_url
-#   __NAME__    by $app
+#   __PATH__             by  $path_url
+#   __NAME__            by $app
 #   __NAMETOCHANGE__    by $app
-#   __USER__    by $app
-#   __FINALPATH__    by $final_path
-#   __PHPVERSION__    by $YNH_PHP_VERSION
+#   __USER__            by $app
+#   __FINALPATH__       by $final_path
+#   __PHPVERSION__      by $YNH_PHP_VERSION
 #
 # And any dynamic variables that should be defined before calling this helper like:
-#   __DOMAIN__    by $domain
-#   __APP__    by $app
+#   __DOMAIN__   by $domain
+#   __APP__      by $app
 #   __VAR_1__    by $var_1
 #   __VAR_2__    by $var_2
 #
@@ -71,16 +71,16 @@ ynh_add_config () {
 #
 # The helper will replace the following keywords with global variables
 # that should be defined before calling this helper :
-#   __PATH__      by  $path_url
-#   __NAME__    by $app
+#   __PATH__             by  $path_url
+#   __NAME__            by $app
 #   __NAMETOCHANGE__    by $app
-#   __USER__    by $app
-#   __FINALPATH__    by $final_path
-#   __PHPVERSION__    by $YNH_PHP_VERSION
+#   __USER__            by $app
+#   __FINALPATH__       by $final_path
+#   __PHPVERSION__      by $YNH_PHP_VERSION
 #
 # And any dynamic variables that should be defined before calling this helper like:
-#   __DOMAIN__    by $domain
-#   __APP__    by $app
+#   __DOMAIN__   by $domain
+#   __APP__      by $app
 #   __VAR_1__    by $var_1
 #   __VAR_2__    by $var_2
 #
@@ -116,20 +116,22 @@ ynh_replace_vars () {
     # Replace othes variables
 
     # List other unique (__ __) variables in $file
-    local uniques_vars=( $(grep -o '__[^.]*__' $file | sort --unique | sed "s@__\([^.]*\)__@\L\1@g" ))
+    local uniques_vars=( $(grep -o '__[A-Z0-9]+__' $file | sort --unique | sed "s@__\([^.]*\)__@\L\1@g" ))
 
     # Do the replacement
     local delimit=@
     for one_var in "${uniques_vars[@]}"
     do
-        if test -n "${!one_var:-}"; then
-            match_string="__${one_var^^}__"
-            match_string=${match_string//${delimit}/"\\${delimit}"}
-            replace_string="${!one_var}"
-            replace_string=${replace_string//${delimit}/"\\${delimit}"}
-            sed --in-place "s${delimit}${match_string}${delimit}${replace_string}${delimit}g" "$file"
-        else
-            ynh_die --message="\$$one_var wasn't initialized when trying to replace __${one_var^^}__ in $file"
-        fi
+        # Validate that one_var is indeed defined
+        test -n "${!one_var:-}" || ynh_die --message="\$$one_var wasn't initialized when trying to replace __${one_var^^}__ in $file"
+        
+        # Escape delimiter in match/replace string
+        match_string="__${one_var^^}__"
+        match_string=${match_string//${delimit}/"\\${delimit}"}
+        replace_string="${!one_var}"
+        replace_string=${replace_string//${delimit}/"\\${delimit}"}
+        
+        # Actually replace (sed is used instead of ynh_replace_string to avoid triggering an epic amount of debug logs)
+        sed --in-place "s${delimit}${match_string}${delimit}${replace_string}${delimit}g" "$file"
     done
 }

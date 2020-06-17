@@ -168,7 +168,7 @@ ynh_system_user_create --username=$app
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-ynh_add_config --origin="../conf/config.production.json" --destination="$final_path/config.production.json" --vars="db_name db_user db_pwd"
+ynh_add_config --template="../conf/config.production.json" --destination="$final_path/config.production.json"
 
 #==============================================
 # BUILD GHOST
