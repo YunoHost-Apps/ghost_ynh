@@ -1,134 +1,99 @@
 #!/bin/bash
 
-# Create a dedicated config file
+# Create a dedicated config file from a template
 #
-# usage: ynh_add_config [--origin="origin file"] [--destination="destination file"] [--vars="vars to replace"]
-# | arg: -o, --origin=     - Template config file to use (optionnal, ../conf/.env by default)
-# | arg: -d, --destination=    - Destination of the config file (optionnal, $final_path/.env)
-# | arg: -v, --vars=  - List of variables to replace separated by a space. For example: 'var_1 var_2 ...'
+# examples: 
+#    ynh_add_config --template=".env" --destination="$final_path/.env"
+#    ynh_add_config --template="../conf/.env" --destination="$final_path/.env"
+#    ynh_add_config --template="/etc/nginx/sites-available/default" --destination="etc/nginx/sites-available/mydomain.conf"
 #
-# This will use the template $origin or ../conf/.env by default
-# to generate a config file $destination or $final_path/.env by default,
-# by replacing the following keywords with global variables
+# usage: ynh_add_config --template="template" --destination="destination"
+# | arg: -t, --template=     - Template config file to use
+# | arg: -d, --destination=    - Destination of the config file
+#
+# The template can be by default the name of a file in the conf directory
+# of a YunoHost Package, a relative path or an absolute path
+# The helper will use the template $template to generate a config file
+# $destination by replacing the following keywords with global variables
 # that should be defined before calling this helper :
 #   __PATH__      by  $path_url
-#   __DOMAIN__    by $domain
-#   __PORT__    by $port
 #   __NAME__    by $app
 #   __NAMETOCHANGE__    by $app
 #   __USER__    by $app
-#   __APP__    by $app
 #   __FINALPATH__    by $final_path
 #   __PHPVERSION__    by $YNH_PHP_VERSION
-#   __YNH_NPM__    by $ynh_npm
-#   __YNH_NODE__    by $ynh_node
-#   __YNH_NODE_LOAD_PATH__    by $ynh_node_load_PATH
-#   __NODEJS_PATH__    by $nodejs_path
-#   __NODEJS_VERSION__    by $nodejs_version
-#   __DB_NAME__    by $db_name
-#   __DB_USER__    by $db_user
-#   __DB_PWD__    by $db_pwd
 #
-# And dynamic variables (from the last example) :
+# And any dynamic variables that should be defined before calling this helper like:
+#   __DOMAIN__    by $domain
+#   __APP__    by $app
 #   __VAR_1__    by $var_1
 #   __VAR_2__    by $var_2
 #
 # The helper will verify the checksum and backup the destination file
-# if it's different before applying the new origin file.
-# And it will calculate and store a destination file checksum
-# into the app settings when configuraation is done.
+# if it's different before applying the new template.
+# And it will calculate and store the destination file checksum
+# into the app settings when configuration is done.
+#
 #
 ynh_add_config () {
     # Declare an array to define the options of this helper.
-    local legacy_args=odv
-    local -A args_array=( [o]=origin= [d]=destination= [v]=vars= )
-    local origin
+    local legacy_args=tdv
+    local -A args_array=( [t]=template= [d]=destination= )
+    local template
     local destination
-    local vars
     # Manage arguments with getopts
     ynh_handle_getopts_args "$@"
-    local origin="${origin:-"../conf/.env"}"
-    local destination="${destination:-"$final_path/.env"}"
-    local vars="${vars:-}"
+    local template_path
+
+    if [ -f "../conf/$template" ]; then
+        template_path="../conf/$template"
+    elif [ -f "../settings/conf/$template" ]; then
+        template_path="../settings/conf/$template"
+    elif [ -f "$template" ]; then
+        template_path=$template
+    else
+        ynh_die --message="The provided template $template doesn't exist"
+    fi
 
     ynh_backup_if_checksum_is_different --file="$destination"
-    cp "$origin" "$destination"
 
-    ynh_replace_vars --file="$destination" --vars="$vars"
+    cp "$template_path" "$destination"
+
+    ynh_replace_vars --file="$destination"
 
     ynh_store_file_checksum --file="$destination"
 }
 
-# Remove the dedicated config
-#
-# usage: ynh_remove_config [--file=file]
-# | arg: -f, --file=     - Config file to remove (optionnal, $final_path/.env)
-#
-#
-ynh_remove_config () {
-    # Declare an array to define the options of this helper.
-    local legacy_args=f
-    local -A args_array=( [f]=file= )
-    local file
-    # Manage arguments with getopts
-    ynh_handle_getopts_args "$@"
-    local service="${file:-}"
-
-    # The default behaviour is to use .env file.
-    if [ -n "$file" ]; then
-        file="final_path/.env"
-    fi
-
-    if [ -e "$file" ]
-    then
-        ynh_secure_remove --file="$file"
-    fi
-}
-
 # Replace variables in a file
 #
-# usage: ynh_replace_vars --file="file" [--vars="vars to replace"]
-# | arg: -o, --file=     - Template config file to use
-# | arg: -v, --vars=  - List of variables to replace separated by a space. For example: 'var_1 var_2 ...'
+# usage: ynh_replace_vars --file="file"
+# | arg: -f, --file=     - File where to replace variables
 #
-# This will replace in the the following keywords with global variables
+# The helper will replace the following keywords with global variables
 # that should be defined before calling this helper :
 #   __PATH__      by  $path_url
-#   __DOMAIN__    by $domain
-#   __PORT__    by $port
 #   __NAME__    by $app
 #   __NAMETOCHANGE__    by $app
 #   __USER__    by $app
-#   __APP__    by $app
 #   __FINALPATH__    by $final_path
 #   __PHPVERSION__    by $YNH_PHP_VERSION
-#   __YNH_NPM__    by $ynh_npm
-#   __YNH_NODE__    by $ynh_node
-#   __YNH_NODE_LOAD_PATH__    by $ynh_node_load_PATH
-#   __NODEJS_PATH__    by $nodejs_path
-#   __NODEJS_VERSION__    by $nodejs_version
-#   __DB_NAME__    by $db_name
-#   __DB_USER__    by $db_user
-#   __DB_PWD__    by $db_pwd
 #
-# And dynamic variables (from the last example) :
+# And any dynamic variables that should be defined before calling this helper like:
+#   __DOMAIN__    by $domain
+#   __APP__    by $app
 #   __VAR_1__    by $var_1
 #   __VAR_2__    by $var_2
 #
 #
 ynh_replace_vars () {
     # Declare an array to define the options of this helper.
-    local legacy_args=fv
-    local -A args_array=( [f]=file= [v]=vars= )
+    local legacy_args=f
+    local -A args_array=( [f]=file= )
     local file
-    local vars
     # Manage arguments with getopts
     ynh_handle_getopts_args "$@"
-    local file="${file:-}"
-    local vars="${vars:-}"
 
-
-    #Replace usual YunoHost variables
+    # Replace specific YunoHost variables
     if test -n "${path_url:-}"
     then
         # path_url_slash_less is path_url, or a blank value if path_url is only '/'
@@ -136,17 +101,10 @@ ynh_replace_vars () {
         ynh_replace_string --match_string="__PATH__/" --replace_string="$path_url_slash_less/" --target_file="$file"
         ynh_replace_string --match_string="__PATH__" --replace_string="$path_url" --target_file="$file"
     fi
-    if test -n "${domain:-}"; then
-        ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="$file"
-    fi
-    if test -n "${port:-}"; then
-        ynh_replace_string --match_string="__PORT__" --replace_string="$port" --target_file="$file"
-    fi
     if test -n "${app:-}"; then
         ynh_replace_string --match_string="__NAME__" --replace_string="$app" --target_file="$file"
         ynh_replace_string --match_string="__NAMETOCHANGE__" --replace_string="$app" --target_file="$file"
         ynh_replace_string --match_string="__USER__" --replace_string="$app" --target_file="$file"
-        ynh_replace_string --match_string="__APP__" --replace_string="$app" --target_file="$file"
     fi
     if test -n "${final_path:-}"; then
         ynh_replace_string --match_string="__FINALPATH__" --replace_string="$final_path" --target_file="$file"
@@ -154,36 +112,24 @@ ynh_replace_vars () {
     if test -n "${YNH_PHP_VERSION:-}"; then
         ynh_replace_string --match_string="__PHPVERSION__" --replace_string="$YNH_PHP_VERSION" --target_file="$file"
     fi
-    if test -n "${ynh_npm:-}"; then
-        ynh_replace_string --match_string="__YNH_NPM__" --replace_string="$ynh_npm" --target_file="$file"
-    fi
-    if test -n "${ynh_node:-}"; then
-        ynh_replace_string --match_string="__YNH_NODE__" --replace_string="$ynh_node" --target_file="$file"
-    fi
-    if test -n "${ynh_node_load_PATH:-}"; then
-        ynh_replace_string --match_string="__YNH_NODE_LOAD_PATH__" --replace_string="$ynh_node_load_PATH" --target_file="$file"
-    fi
-    if test -n "${nodejs_path:-}"; then
-        ynh_replace_string --match_string="__NODEJS_PATH__" --replace_string="$nodejs_path" --target_file="$file"
-    fi
-    if test -n "${nodejs_version:-}"; then
-        ynh_replace_string --match_string="__NODEJS_VERSION__" --replace_string="$nodejs_version" --target_file="$file"
-    fi
-    if test -n "${db_name:-}"; then
-        ynh_replace_string --match_string="__DB_NAME__" --replace_string="$db_name" --target_file="$file"
-    fi
-    if test -n "${db_user:-}"; then
-        ynh_replace_string --match_string="__DB_USER__" --replace_string="$db_user" --target_file="$file"
-    fi
-    if test -n "${db_pwd:-}"; then
-        ynh_replace_string --match_string="__DB_PWD__" --replace_string="$db_pwd" --target_file="$file"
-    fi
 
-    # Replace all other variables given as arguments
-    for var_to_replace in $vars
+    # Replace othes variables
+
+    # List other unique (__ __) variables in $file
+    local uniques_vars=( $(grep -o '__[^.]*__' $file | sort --unique | sed "s@__\([^.]*\)__@\L\1@g" ))
+
+    # Do the replacement
+    local delimit=@
+    for one_var in "${uniques_vars[@]}"
     do
-        # ${var_to_replace^^} make the content of the variable on upper-cases
-        # ${!var_to_replace} get the content of the variable named $var_to_replace 
-        ynh_replace_string --match_string="__${var_to_replace^^}__" --replace_string="${!var_to_replace}" --target_file="$file"
+        if test -n "${!one_var:-}"; then
+            match_string="__${one_var^^}__"
+            match_string=${match_string//${delimit}/"\\${delimit}"}
+            replace_string="${!one_var}"
+            replace_string=${replace_string//${delimit}/"\\${delimit}"}
+            sed --in-place "s${delimit}${match_string}${delimit}${replace_string}${delimit}g" "$file"
+        else
+            ynh_die --message="\$$one_var wasn't initialized when trying to replace __${one_var^^}__ in $file"
+        fi
     done
 }
