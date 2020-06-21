@@ -4,11 +4,12 @@ Documentation=https://docs.ghost.org
 
 [Service]
 Type=simple
-WorkingDirectory=__FINALPATH__
 User=__APP__
 Group=__APP__
+WorkingDirectory=__FINALPATH__
+Environment="__YNH_NODE_LOAD_PATH__"
 Environment="NODE_ENV=production"
-ExecStart=/usr/bin/node index.js run
+ExecStart=__YNH_NODE__ index.js run
 Restart=always
 
 [Install]

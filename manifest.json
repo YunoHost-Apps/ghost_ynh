@@ -6,26 +6,26 @@
         "en": "Just a blogging platform",
         "fr": "Plateforme de blogging"
     },
-    "version": "2.1.1",
+    "version": "3.19.2~ynh1",
     "url": "https://ghost.org/",
     "license": "free",
-    "developer": {
+    "maintainer": {
         "name": "Julien Malik",
         "email": "julien.malik@paraiso.me"
     },
    "requirements": {
-        "yunohost": ">= 2.7.2"
+        "yunohost": ">= 3.8.1"
     },
     "multi_instance": true,
     "services": [
         "nginx",
-        "nodjs",
         "mysql"
     ],
     "arguments": {
         "install" : [
             {
                 "name": "domain",
+                "type": "domain",
                 "ask": {
                     "en": "Choose a domain for Ghost",
                     "fr": "Choisissez un domaine pour Ghost"
@@ -34,9 +34,10 @@
             },
             {
                 "name": "path",
+                "type": "path",
                 "ask": {
                     "en": "Choose a path for Ghost",
-                    "fr": "Choisissez un path pour Ghost"
+                    "fr": "Choisissez un chemin pour Ghost"
                 },
                 "example": "/blog",
                 "default": "/blog"
@@ -53,5 +54,3 @@
         ]
     }
 }
-
-

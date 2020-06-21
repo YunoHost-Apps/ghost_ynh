@@ -1,0 +1,9 @@
+Ghost was successfully installed :)
+
+Next step:
+
+Create admin account at https://__DOMAIN____PATH_URL__/ghost
+
+Happy Blogging!
+
+If you are facing any problem, please open an issue here: https://github.com/YunoHost-Apps/ghost_ynh/issues
