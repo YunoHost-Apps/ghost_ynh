@@ -39,7 +39,7 @@
                     "en": "Choose a path for Ghost",
                     "fr": "Choisissez un chemin pour Ghost"
                 },
-                "example": "/blog",
+                "example": "/blog (do not use /ghost)",
                 "default": "/blog"
             },
             {
