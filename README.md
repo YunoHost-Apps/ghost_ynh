@@ -9,7 +9,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Ghost is a fully open source, adaptable platform for building and running a modern online publication.
 
-**Shipped version:** 3.38.2
+**Shipped version:** 3.40.2
 
 ## Screenshots
 
