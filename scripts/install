@@ -98,7 +98,7 @@ ynh_setup_source --dest_dir="$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..."
+ynh_script_progression --message="Configuring NGINX web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
@@ -128,7 +128,7 @@ ynh_add_config --template="../conf/config.production.json" --destination="$final
 #==============================================
 # BUILD GHOST
 #==============================================
-ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
+ynh_script_progression --message="Building $app... (this will take some time and resources!)"
 
 pushd "$final_path" || ynh_die
 
@@ -193,7 +193,7 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
