@@ -165,7 +165,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "$app daemon for Ghost" --log_type "systemd"
+yunohost service add $app --description "$app daemon for Ghost"
 
 #=================================================
 # START SYSTEMD SERVICE

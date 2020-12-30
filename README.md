@@ -1,7 +1,7 @@
-# Ghost blogging app for YunoHost
+# Ghost for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)  
-[![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=ghost)
+[![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
 > *This package allows you to install Ghost quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
@@ -61,8 +61,7 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
 ---
 
-Developer info
-----------------
+## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/ghost_ynh/tree/testing).
 
