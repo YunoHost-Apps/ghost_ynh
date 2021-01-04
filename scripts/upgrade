@@ -194,7 +194,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "$app daemon for Ghost"
+yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -202,21 +202,6 @@ yunohost service add $app --description "$app daemon for Ghost"
 ynh_script_progression --message="Starting a systemd service..."
 
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost boot"
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
-fi
 
 #=================================================
 # RELOAD NGINX

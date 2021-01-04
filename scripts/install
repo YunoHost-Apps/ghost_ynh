@@ -165,7 +165,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "$app daemon for Ghost"
+yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -180,14 +180,10 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --l
 #=================================================
 ynh_script_progression --message="Configuring SSOwat..."
 
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
+# Make app public if necessary or protect it
 if [ $is_public -eq 1 ]
 then
-	ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
+	ynh_permission_update --permission "main" --add "visitors"
 fi
 
 #=================================================
