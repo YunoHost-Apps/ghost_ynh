@@ -98,15 +98,10 @@ ynh_setup_source --dest_dir="$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..."
+ynh_script_progression --message="Configuring NGINX web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-if [ "$path_url" != "/" ]
-then
-	ynh_replace_string "^#sub_path_only" "" "/etc/nginx/conf.d/$domain.d/$app.conf"
-fi
-ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
 # CREATE DEDICATED USER
@@ -128,7 +123,7 @@ ynh_add_config --template="../conf/config.production.json" --destination="$final
 #==============================================
 # BUILD GHOST
 #==============================================
-ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=240
+ynh_script_progression --message="Building $app... (this will take some time and resources!)"
 
 pushd "$final_path" || ynh_die
 
@@ -165,7 +160,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "$app daemon for Ghost" --log_type "systemd"
+yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -180,20 +175,15 @@ ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --l
 #=================================================
 ynh_script_progression --message="Configuring SSOwat..."
 
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
 if [ $is_public -eq 1 ]
 then
-	ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
+	ynh_permission_update --permission="main" --add="visitors"
 fi
 
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 

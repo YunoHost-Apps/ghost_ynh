@@ -54,16 +54,6 @@ if [ -z "$db_name" ]; then
 fi
 
 #=================================================
-# CLOSE A PORT
-#=================================================
-
-if yunohost firewall list | grep -q "\- $port$"
-then
-	ynh_script_progression --message="Closing port $port..."
-	ynh_exec_warn_less yunohost firewall disallow TCP $port
-fi
-
-#=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
 ynh_script_progression --message="Backing up the app before upgrading (may take a while)..."
@@ -77,13 +67,6 @@ ynh_clean_setup () {
 }
 # Exit if an error occurs during the execution of the script
 ynh_abort_if_errors
-
-#=================================================
-# CHECK THE PATH
-#=================================================
-
-# Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # STANDARD UPGRADE STEPS
@@ -100,7 +83,7 @@ ynh_systemd_action --service_name=$app --action="stop" --log_path="/var/log/$app
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Upgrading source files..." --weight=160
+	ynh_script_progression --message="Upgrading source files..."
 
 	# Create a temporary directory
 	tmpdir="$(mktemp -d)"
@@ -130,15 +113,10 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..."
+ynh_script_progression --message="Upgrading NGINX web server configuration..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-if [ "$path_url" != "/" ]
-then
-	ynh_replace_string "^#sub_path_only" "" "/etc/nginx/conf.d/$domain.d/$app.conf"
-fi
-ynh_store_file_checksum "/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -175,7 +153,7 @@ ynh_add_config --template="../conf/config.production.json" --destination="$final
 #==============================================
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Building $app... (this will take some time and resources!)" --weight=160
+	ynh_script_progression --message="Building $app... (this will take some time and resources!)"
 
 	pushd "$final_path" || ynh_die
 		yarn install 
@@ -211,7 +189,7 @@ chown -R $app: $final_path
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description "$app daemon for Ghost" --log_type "systemd"
+yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -221,24 +199,9 @@ ynh_script_progression --message="Starting a systemd service..."
 ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost boot"
 
 #=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Upgrading SSOwat configuration..."
-
-if [ $is_public -eq 0 ]
-then	# Remove the public access
-	ynh_app_setting_delete $app skipped_uris
-fi
-# Make app public if necessary
-if [ $is_public -eq 1 ]
-then
-	ynh_app_setting_set --app=$app --key=skipped_uris --value="/"
-fi
-
-#=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..."
+ynh_script_progression --message="Reloading NGINX web server..."
 
 ynh_systemd_action --service_name=nginx --action=reload
 
