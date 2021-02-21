@@ -7,7 +7,7 @@
 # dependencies used by the app
 pkg_dependencies="mailutils"
 
-NODEJS_VERSION=10
+NODEJS_VERSION=14
 
 #=================================================
 # PERSONAL HELPERS

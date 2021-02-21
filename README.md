@@ -1,7 +1,7 @@
-# Ghost blogging app for YunoHost
+# Ghost for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)  
-[![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=ghost)
+[![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
 > *This package allows you to install Ghost quickly and simply on a YunoHost server.  
 If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
@@ -9,11 +9,11 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 ## Overview
 Ghost is a fully open source, adaptable platform for building and running a modern online publication.
 
-**Shipped version:** 3.38.2
+**Shipped version:** 3.40.5
 
 ## Screenshots
 
-![](https://ghost.org/static/ghost-admin-home-header-0c20f780aac8e98af7a56076ae8228b8.png)
+![](https://ghost.org/images/home/home-screenshot_hu41cb56656a4d54646913b3f720de164d_129780_2000x0_resize_box_2.png)
 
 ## Installation
 
@@ -34,12 +34,6 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
          $ sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh
  1. After installation create an **admin account** by visiting https://domain.tld/ghost
- 
-### Updating the Ghost app
- 1. Updatation of the app works, but it need more testing to check eveything works after upgrade. So its advised to backup before updating.
- 1. **App can be updated by YunoHost admin interface or with the following command:**
-          
-          $ sudo yunohost app upgrade -u https://github.com/YunoHost-Apps/ghost_ynh ghost
 
 ## Documentation
 
@@ -61,8 +55,7 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
 ---
 
-Developer info
-----------------
+## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/ghost_ynh/tree/testing).
 
