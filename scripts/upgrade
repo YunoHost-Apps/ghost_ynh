@@ -87,9 +87,9 @@ then
 
 	# Create a temporary directory
 	tmpdir="$(mktemp -d)"
-	
-	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$final_path/config.production.json" "$tmpdir/config.production.json"	
+
+	# Copy the admin saved settings from tmp directory to final path
+	cp -ar "$final_path/config.production.json" "$tmpdir/config.production.json"
 
 	# Backup the content folder to the temp dir
 	cp -ar "$final_path/content" "$tmpdir/content"
@@ -99,9 +99,13 @@ then
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir=$final_path
-	
-	# Copy the admin saved settings from tmp directory to final path	
-	cp -ar "$tmpdir/config.production.json" "$final_path/config.production.json"	
+
+	# Download, check integrity, uncompress and patch the source from admin.src
+	mkdir $final_path/core/client/Admin
+	ynh_setup_source --dest_dir="$final_path/core/client/Admin" --source_id="admin"
+
+	# Copy the admin saved settings from tmp directory to final path
+	cp -ar "$tmpdir/config.production.json" "$final_path/config.production.json"
 
 	# Copy content folder back to the final_path
 	cp -ar "$tmpdir/content" "${final_path}"
@@ -156,13 +160,13 @@ then
 	ynh_script_progression --message="Building $app... (this will take some time and resources!)"
 
 	pushd "$final_path" || ynh_die
-		yarn install 
+		yarn install
 		yarn global add knex-migrator
 		NODE_ENV=production knex-migrator init
 		yarn global add grunt
 		NODE_ENV=production grunt symlink
 		NODE_ENV=production grunt init --force
-		
+
 	popd || ynh_die
 fi
 
