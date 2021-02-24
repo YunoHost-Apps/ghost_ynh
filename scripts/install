@@ -95,7 +95,7 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 # Download, check integrity, uncompress and patch the source from admin.src
-mkdir $final_path/core/client/Admin
+mkdir -p $final_path/core/client/Admin
 ynh_setup_source --dest_dir="$final_path/core/client/Admin" --source_id="admin"
 
 #=================================================
