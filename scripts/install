@@ -183,6 +183,8 @@ then
 	ynh_permission_update --permission="main" --add="visitors"
 fi
 
+ynh_permission_create --permission="admin" --url="/ghost" --auth_header="false" --protected="true"
+
 #=================================================
 # RELOAD NGINX
 #=================================================
