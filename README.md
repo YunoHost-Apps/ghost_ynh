@@ -31,10 +31,12 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
 ### Installing the Ghost app
 
+ 0. Note - When making the install public, your ghost domain link must be accessed WHILE NOT signed into your yunohost session. It is recommended to use a incognito mode to sign in. The reason for this is because ghost has a feature that allows for a subscription based access for content. This means ghost allows for the admin user to setup other users (either other staff or paid/unpaid subscribers) to have the abilility to login outside of yunohost. 
+ 
  1. **App can be installed by YunoHost admin interface or by the following command:**
 
          $ sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh
- 1. After installation create an **admin account** by visiting https://domain.tld/ghost
+ 2. After installation create an **admin account** by visiting https://domain.tld/ghost/ghost. If you choose to name your ghost instance "blog" during yunohost setup process, then it would be https://domain.tld/blog/ghost. This will allow you to continue to setup your amdin account and configure your settings.
 
 ## Documentation
 
