@@ -31,7 +31,7 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
 ### Installing the Ghost app
 
- 0. Note - When making the install public, your ghost domain link must be accessed WHILE NOT signed into your yunohost session. It is recommended to use a incognito mode to sign in. The reason for this is because ghost has a feature that allows for a subscription based access for content. This means ghost allows for the admin user to setup other users (either other staff or paid/unpaid subscribers) to have the abilility to login outside of yunohost. 
+ 0. Note - When making the install public, your ghost domain link must be accessed WHILE NOT signed into your yunohost session. It is recommended to use a incognito mode to sign into your ghost admin account. If you make your install public, and try to login your ghost admin account while signed into your yunohost session, you will get a an authorized header error. The reason for this is because ghost has a feature that allows for a subscription based access for content. This means ghost allows for the admin user to setup other users (either other staff or paid/unpaid subscribers) to have the abilility to login outside of yunohost. 
  
  1. **App can be installed by YunoHost admin interface or by the following command:**
 
