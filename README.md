@@ -1,16 +1,15 @@
 # Ghost for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
-
+[![Integration level](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)  
 [![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
 > *This package allows you to install Ghost quickly and simply on a YunoHost server.
-If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/install) to learn how to install it.*
+If you don't have YunoHost, please consult [the guide](https://yunohost.org/install) to learn how to install it.*
 
 ## Overview
 Ghost is a fully open source, adaptable platform for building and running a modern online publication.
 
-**Shipped version:** 3.41.8
+**Shipped version:** 4.3.3
 
 ## Screenshots
 
@@ -44,8 +43,8 @@ Ghost is a fully open source, adaptable platform for building and running a mode
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/ghost%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/ghost%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/ghost/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/ghost.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/ghost.svg)](https://ci-apps-arm.yunohost.org/ci/apps/ghost/)
 
 ## Links
 
