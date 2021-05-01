@@ -36,7 +36,7 @@ Ghost is a fully open source, adaptable platform for building and running a mode
  1. **App can be installed by YunoHost admin interface or by the following command:**
 
          $ sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh
- 2. After installation create an **admin account** by visiting https://domain.tld/ghost/ghost. If you choose to name your ghost instance "blog" during yunohost setup process, then it would be https://domain.tld/blog/ghost. This will allow you to continue to setup your amdin account and configure your settings.
+ 2. After installation create an **admin account** by visiting `https://domain.tld/ghost/ghost`. If you choose to name your Ghost instance "blog" during YunoHost setup process, then it would be `https://domain.tld/blog/ghost`. This will allow you to continue to setup your admin account and configure your settings.
 
 ## Documentation
 
