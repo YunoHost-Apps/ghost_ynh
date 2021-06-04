@@ -8,13 +8,21 @@
     },
     "version": "4.3.3~ynh1",
     "url": "https://ghost.org/",
+    "upstream": {
+        "license": "MIT",
+        "website": "https://example.com",
+        "demo": "https://dispatch.khlieng.com/connect",
+        "admindoc": "https://yunohost.org/packaging_apps",
+        "userdoc": "https://yunohost.org/apps",
+        "code": "https://some.forge.com/example/example"
+    },
     "license": "MIT",
     "maintainer": {
         "name": "Julien Malik",
         "email": "julien.malik@paraiso.me"
     },
    "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.2.0"
     },
     "multi_instance": true,
     "services": [
