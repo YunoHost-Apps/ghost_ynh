@@ -6,15 +6,23 @@
         "en": "Just a blogging platform",
         "fr": "Plateforme de blogging"
     },
-    "version": "3.41.8~ynh1",
+    "version": "4.3.3~ynh1",
     "url": "https://ghost.org/",
+    "upstream": {
+        "license": "MIT",
+        "website": "https://example.com",
+        "demo": "https://dispatch.khlieng.com/connect",
+        "admindoc": "https://yunohost.org/packaging_apps",
+        "userdoc": "https://yunohost.org/apps",
+        "code": "https://some.forge.com/example/example"
+    },
     "license": "MIT",
     "maintainer": {
         "name": "Julien Malik",
         "email": "julien.malik@paraiso.me"
     },
    "requirements": {
-        "yunohost": ">= 3.8.1"
+        "yunohost": ">= 4.2.0"
     },
     "multi_instance": true,
     "services": [
@@ -26,29 +34,17 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for Ghost",
-                    "fr": "Choisissez un domaine pour Ghost"
-                },
                 "example": "domain.org"
             },
             {
                 "name": "path",
                 "type": "path",
-                "ask": {
-                    "en": "Choose a path for Ghost",
-                    "fr": "Choisissez un chemin pour Ghost"
-                },
                 "example": "/blog",
                 "default": "/blog"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "default": true
             }
         ]
