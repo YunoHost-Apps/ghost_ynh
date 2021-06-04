@@ -10,11 +10,9 @@
     "url": "https://ghost.org/",
     "upstream": {
         "license": "MIT",
-        "website": "https://example.com",
-        "demo": "https://dispatch.khlieng.com/connect",
-        "admindoc": "https://yunohost.org/packaging_apps",
-        "userdoc": "https://yunohost.org/apps",
-        "code": "https://some.forge.com/example/example"
+        "website": "https://ghost.org/",
+        "admindoc": "https://ghost.org/help/",
+        "code": "https://github.com/TryGhost/Ghost"
     },
     "license": "MIT",
     "maintainer": {
