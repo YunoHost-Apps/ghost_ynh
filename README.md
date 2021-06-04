@@ -19,7 +19,7 @@ Just a blogging platform
 
 **Shipped version:** 4.3.3~ynh1
 
-**Demo:** https://dispatch.khlieng.com/connect
+
 
 ## Screenshots
 
@@ -51,10 +51,9 @@ Just a blogging platform
 
 ## Documentation and resources
 
-* Official app website: https://example.com
-* Official user documentation: https://yunohost.org/apps
-* Official admin documentation: https://yunohost.org/packaging_apps
-* Upstream app code repository: https://some.forge.com/example/example
+* Official app website: https://ghost.org/
+* Official admin documentation: https://ghost.org/help/
+* Upstream app code repository: https://github.com/TryGhost/Ghost
 * YunoHost documentation for this app: https://yunohost.org/app_ghost
 * Report a bug: https://github.com/YunoHost-Apps/ghost_ynh/issues
 

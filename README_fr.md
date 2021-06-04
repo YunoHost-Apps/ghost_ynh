@@ -15,7 +15,7 @@ Plateforme de blogging
 
 **Version incluse :** 4.3.3~ynh1
 
-**Démo :** https://dispatch.khlieng.com/connect
+
 
 ## Captures d'écran
 
@@ -46,10 +46,9 @@ Plateforme de blogging
  2. Après l'installation, créez un **compte administrateur** en visitant `https://domain.tld/ghost/ghost`. Si vous choisissez de nommer votre instance Ghost "blog" pendant le processus d'installation de YunoHost, alors ce sera "https://domain.tld/blog/ghost". Cela vous permettra de continuer à configurer votre compte administrateur et à configurer vos paramètres. 
 ## Documentations et ressources
 
-* Site officiel de l'app : https://example.com
-* Documentation officielle utilisateur : https://yunohost.org/apps
-* Documentation officielle de l'admin : https://yunohost.org/packaging_apps
-* Dépôt de code officiel de l'app : https://some.forge.com/example/example
+* Site officiel de l'app : https://ghost.org/
+* Documentation officielle de l'admin : https://ghost.org/help/
+* Dépôt de code officiel de l'app : https://github.com/TryGhost/Ghost
 * Documentation YunoHost pour cette app : https://yunohost.org/app_ghost
 * Signaler un bug : https://github.com/YunoHost-Apps/ghost_ynh/issues
 
