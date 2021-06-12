@@ -6,7 +6,7 @@
         "en": "Just a blogging platform",
         "fr": "Plateforme de blogging"
     },
-    "version": "4.3.3~ynh1",
+    "version": "4.7.0~ynh1",
     "url": "https://ghost.org/",
     "upstream": {
         "license": "MIT",
