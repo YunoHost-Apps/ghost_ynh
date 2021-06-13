@@ -46,7 +46,7 @@
                 "default": true,
                 "help": {
                 "fr": "Si cochée, votre application sera publique"
-             },
+             }
             }
         ]
     }
