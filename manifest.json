@@ -36,7 +36,7 @@
             },
             {
                 "name": "path",
-                "type": "path",
+                "type": "path", 
                 "example": "/blog",
                 "default": "/blog"
             },
@@ -44,6 +44,9 @@
                 "name": "is_public",
                 "type": "boolean",
                 "default": true
+                "help": {
+                "fr": "Si cochée, votre application sera publique"
+             }
             }
         ]
     }
