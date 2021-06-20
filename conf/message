@@ -2,7 +2,7 @@ Ghost was successfully installed :)
 
 Next step:
 
-Create admin account at https://$domain$path_url/ghost
+Create admin account at https://__DOMAIN____PATH_URL__/ghost
 
 Happy Blogging!
 
