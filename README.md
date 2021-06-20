@@ -37,7 +37,7 @@ Just a blogging platform
         swapon /swapfile
         echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 
- 1. This app is multi-instance (you can have more than one Ghost blogging websites on a single YunoHost server)
+ 1. This app is multi-instance (you can have more then one Ghost blogging websites on a single YunoHost server)
 
 ### Installing the Ghost app
 
