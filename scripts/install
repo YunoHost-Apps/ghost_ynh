@@ -7,7 +7,6 @@
 #=================================================
 
 source _common.sh
-source ynh_send_readme_to_admin__2
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -85,6 +84,14 @@ ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
+
+# Create a system user
+ynh_system_user_create --username=$app
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..."
@@ -92,6 +99,7 @@ ynh_script_progression --message="Setting up source files..."
 ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
+
 # Download, check integrity, uncompress and patch the source from admin.src
 mkdir -p $final_path/core/client/Admin
 ynh_setup_source --dest_dir="$final_path/core/client/Admin" --source_id="admin"
@@ -103,14 +111,6 @@ ynh_script_progression --message="Configuring NGINX web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..."
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC SETUP
@@ -193,12 +193,19 @@ ynh_systemd_action --service_name=nginx --action=reload
 #=================================================
 # SEND A README FOR THE ADMIN
 #=================================================
-ynh_print_info --message="Sending a readme for the admin..."
+ynh_script_progression --message="Sending a readme for the admin..." --weight=1
 
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain" --target_file="../conf/message"
-ynh_replace_string --match_string="__PATH_URL__" --replace_string="$path_url" --target_file="../conf/message"
+message="Ghost was successfully installed :)
 
-ynh_send_readme_to_admin --app_message="../conf/message"
+Next step:
+
+Create admin account at https://$domain$path_url/ghost
+
+Happy Blogging!
+
+If you are facing any problem or want to improve this app, please open a new issue here: https://github.com/YunoHost-Apps/ghost_ynh/issues"
+
+ynh_send_readme_to_admin "$message"
 
 #=================================================
 # END OF SCRIPT
