@@ -43,10 +43,11 @@
             {
                 "name": "is_public",
                 "type": "boolean",
-                "default": true,
                 "help": {
-                "fr": "Si cochée, votre application sera publique"
-             }
+                    "en": "If enabled, Ghost will be accessible by people who do not have an account. This can be changed later via the webadmin.",
+                    "fr": "Si cette case est cochée, Ghost sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
+                },
+                "default": true
             }
         ]
     }
