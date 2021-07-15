@@ -13,7 +13,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Plateforme de blogging
 
-**Version incluse :** 4.7.0~ynh1
+**Version incluse :** 4.9.4~ynh1
 
 
 
