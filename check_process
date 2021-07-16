@@ -3,7 +3,6 @@
         domain="domain.tld"
         path="/path"
         is_public=1
-
     ; Checks
 		pkg_linter=1
 		setup_sub_dir=1
@@ -23,4 +22,3 @@ Notification=none
 ;;; Upgrade options
 	; commit=198004df76b0b3ef22a6dfe1b9a2738af62f0786
 		name=4.3.3
-

@@ -59,9 +59,13 @@ ynh_send_readme_to_admin() {
 
 	local mail_subject="☁️🆈🅽🅷☁️: \`$app\` has important message for you"
 
-	local mail_message="This is an automated message from your beloved YunoHost server. Specific information for $app.
-$app_message"
-
+	local mail_message="This is an automated message from your beloved YunoHost server.
+Specific information for the application $app.
+$app_message
+---
+Automatic diagnosis data from YunoHost
+$(yunohost tools diagnosis | grep -B 100 "services:" | sed '/services:/d')"
+	
 	# Define binary to use for mail command
 	if [ -e /usr/bin/bsd-mailx ]
 	then

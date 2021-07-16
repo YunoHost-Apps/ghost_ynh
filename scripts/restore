@@ -54,19 +54,19 @@ ynh_script_progression --message="Restoring the NGINX configuration..."
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
-# RESTORE THE APP MAIN DIR
-#=================================================
-ynh_script_progression --message="Restoring the app main directory..."
-
-ynh_restore_file --origin_path="$final_path"
-
-#=================================================
 # RECREATE THE DEDICATED USER
 #=================================================
 ynh_script_progression --message="Recreating the dedicated system user..."
 
 # Create the dedicated user (if not existing)
 ynh_system_user_create --username=$app
+
+#=================================================
+# RESTORE THE APP MAIN DIR
+#=================================================
+ynh_script_progression --message="Restoring the app main directory..."
+
+ynh_restore_file --origin_path="$final_path"
 
 #=================================================
 # RESTORE USER RIGHTS
