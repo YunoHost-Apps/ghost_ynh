@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Just a blogging platform
 
-**Shipped version:** 4.9.4~ynh1
+**Shipped version:** 4.16.0~ynh1
 
 
 
