@@ -53,6 +53,8 @@ echo "${#assets[@]} available asset(s)"
 
 # Here we use the $assets variable to get the resources published in the upstream release.
 
+count=0
+
 # Let's loop over the array of assets URLs
 for asset_url in ${assets[@]}; do
 
@@ -102,11 +104,18 @@ SOURCE_FILENAME=
 EOT
 echo "... conf/$src.src updated"
 
+count=$((count+1))
+
 else
 echo "... asset ignored"
 fi
 
 done
+
+if [ $count == 0 ]; then
+    echo "::warning ::None of the assets were processed."
+    exit 0
+fi
 
 #=================================================
 # SPECIFIC UPDATE STEPS
