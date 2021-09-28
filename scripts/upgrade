@@ -156,12 +156,12 @@ then
 	ynh_script_progression --message="Building $app... (this will take some time and resources!)"
 
 	pushd "$final_path" || ynh_die
-		yarn install
-		yarn global add knex-migrator
-		NODE_ENV=production knex-migrator init
-		yarn global add grunt
-		NODE_ENV=production grunt symlink
-		NODE_ENV=production grunt init --force
+		ynh_exec_warn_less yarn install
+		ynh_exec_warn_less yarn global add knex-migrator
+		ynh_exec_warn_less NODE_ENV=production knex-migrator init
+		ynh_exec_warn_less yarn global add grunt
+		ynh_exec_warn_less NODE_ENV=production grunt symlink
+		ynh_exec_warn_less NODE_ENV=production grunt init --force
 
 	popd || ynh_die
 fi
