@@ -31,11 +31,12 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain"
+                "type": "domain",
+                "example": "domain.org"
             },
             {
                 "name": "path",
-                "type": "path",
+                "type": "path", 
                 "example": "/blog",
                 "default": "/blog"
             },
