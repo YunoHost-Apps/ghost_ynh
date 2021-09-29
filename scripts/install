@@ -129,12 +129,12 @@ ynh_script_progression --message="Building $app... (this will take some time and
 pushd "$final_path" || ynh_die
 
 	ynh_use_nodejs
-	yarn install --non-interactive --silent
-	yarn global add knex-migrator
-	NODE_ENV=production knex-migrator init
-	yarn global add grunt-cli ember-cli
-	NODE_ENV=production grunt symlink
-	NODE_ENV=production grunt init --force
+	ynh_exec_warn_less yarn install --non-interactive --silent
+	ynh_exec_warn_less yarn global add knex-migrator
+	ynh_exec_warn_less NODE_ENV=production knex-migrator init
+	ynh_exec_warn_less yarn global add grunt-cli ember-cli
+	ynh_exec_warn_less NODE_ENV=production grunt symlink
+	ynh_exec_warn_less NODE_ENV=production grunt init --force
 
 popd || ynh_die
 
@@ -210,5 +210,5 @@ ynh_send_readme_to_admin "$message"
 #=================================================
 # END OF SCRIPT
 #=================================================
- 
+
 ynh_script_progression --message="Installation of $app completed"
