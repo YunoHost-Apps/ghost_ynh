@@ -210,5 +210,5 @@ ynh_send_readme_to_admin "$message"
 #=================================================
 # END OF SCRIPT
 #=================================================
- 
+
 ynh_script_progression --message="Installation of $app completed"
