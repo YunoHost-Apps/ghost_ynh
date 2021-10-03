@@ -21,7 +21,7 @@ version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.
 assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").assets[].browser_download_url ] | join(" ") | @sh' | tr -d "'"))
 
 admin_repo="TryGhost/Admin"
-assets+=("https://api.github.com/repos/TryGhost/Admin/zipball/$version")
+assets+=("https://github.com/TryGhost/Admin/archive/refs/tags/${version}.zip")
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
