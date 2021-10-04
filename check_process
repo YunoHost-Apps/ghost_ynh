@@ -11,10 +11,8 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		# 4.3.3
-		upgrade=1	from_commit=198004df76b0b3ef22a6dfe1b9a2738af62f0786
 		# 4.9.4
-                upgrade=1       from_commit=7a150ab29ee969f72dd7846539ae12ac1975165b
+        upgrade=1       from_commit=7a150ab29ee969f72dd7846539ae12ac1975165b
 		backup_restore=1
 		multi_instance=1
 		change_url=0
@@ -22,7 +20,5 @@
 Email=
 Notification=none
 ;;; Upgrade options
-	; commit=198004df76b0b3ef22a6dfe1b9a2738af62f0786
-		name=4.3.3
 	; commit=7a150ab29ee969f72dd7846539ae12ac1975165b
 		name=4.9.4

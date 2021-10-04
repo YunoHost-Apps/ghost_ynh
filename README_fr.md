@@ -11,7 +11,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ## Vue d'ensemble
 
-Plateforme de blogging
+Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
 **Version incluse :** 4.16.0~ynh1
 
