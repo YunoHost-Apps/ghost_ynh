@@ -70,7 +70,7 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=stop --log_path="/var/log/$app/$app.log"
+ynh_systemd_action --service_name=$app --action=stop
 
 #=================================================
 # CREATE DEDICATED USER
@@ -117,6 +117,10 @@ then
 	ynh_secure_remove --file="$tmpdir"
 fi
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -155,15 +159,15 @@ chown $app:$app "$final_path/config.production.json"
 
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
-	ynh_script_progression --message="Building $app... (this will take some time and resources!)"
+	ynh_script_progression --message="Building Ghost... (this will take some time and resources!)"
 
 	pushd "$final_path"
-		ynh_exec_warn_less yarn install
-		ynh_exec_warn_less yarn global add knex-migrator
-		ynh_exec_warn_less NODE_ENV=production knex-migrator init
-		ynh_exec_warn_less yarn global add grunt
-		ynh_exec_warn_less NODE_ENV=production grunt symlink
-		ynh_exec_warn_less NODE_ENV=production grunt init --force
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn install --non-interactive
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add knex-migrator
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/knex-migrator init
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add grunt-cli ember-cli
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/grunt symlink
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/grunt init --force
 	popd
 fi
 
@@ -197,7 +201,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=start --log_path=systemd --line_match="Ghost boot"
+ynh_systemd_action --service_name=$app --action=start
 
 #=================================================
 # RELOAD NGINX
