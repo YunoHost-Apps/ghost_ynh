@@ -73,6 +73,14 @@ ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 ynh_install_extra_app_dependencies --repo="deb https://dl.yarnpkg.com/debian/ stable main" --package="yarn" --key="https://dl.yarnpkg.com/debian/pubkey.gpg"
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..."
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Creating a MySQL database..."
@@ -81,15 +89,6 @@ db_name=$(ynh_sanitize_dbid --db_name=$app)
 db_user=$db_name
 ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
-db_pwd=$(ynh_app_setting_get --app=$app --key=mysqlpwd)
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..."
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -103,6 +102,10 @@ ynh_setup_source --dest_dir="$final_path"
 # Download, check integrity, uncompress and patch the source from admin.src
 mkdir -p $final_path/core/client/Admin
 ynh_setup_source --dest_dir="$final_path/core/client/Admin" --source_id="admin"
+
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # NGINX CONFIGURATION
@@ -120,23 +123,23 @@ ynh_add_nginx_config
 ynh_script_progression --message="Modifying a config file..."
 
 ynh_add_config --template="../conf/config.production.json" --destination="$final_path/config.production.json"
+chmod 400 "$final_path/config.production.json"
+chown $app:$app "$final_path/config.production.json"
 
 #==============================================
 # BUILD GHOST
 #==============================================
-ynh_script_progression --message="Building $app... (this will take some time and resources!)"
+ynh_script_progression --message="Building Ghost... (this will take some time and resources!)"
 
-pushd "$final_path" || ynh_die
-
+pushd "$final_path"
 	ynh_use_nodejs
-	ynh_exec_warn_less yarn install --non-interactive --silent
-	ynh_exec_warn_less yarn global add knex-migrator
-	ynh_exec_warn_less NODE_ENV=production knex-migrator init
-	ynh_exec_warn_less yarn global add grunt-cli ember-cli
-	ynh_exec_warn_less NODE_ENV=production grunt symlink
-	ynh_exec_warn_less NODE_ENV=production grunt init --force
-
-popd || ynh_die
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn install --non-interactive
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add knex-migrator
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/knex-migrator init
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add grunt-cli ember-cli
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/grunt symlink
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH NODE_ENV=production $final_path/node_modules/.bin/grunt init --force
+popd
 
 #=================================================
 # SETUP SYSTEMD
@@ -147,14 +150,12 @@ ynh_script_progression --message="Configuring a systemd service..."
  ynh_add_systemd_config
 
 #=================================================
-# GENERIC FINALIZATION
+# SETUP LOGROTATE
 #=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-ynh_script_progression --message="Securing files and directories..."
+ynh_script_progression --message="Configuring log rotation..."
 
-# Set permissions to app files
-chown -R $app: $final_path
+# Use logrotate to manage application logfile(s)
+ynh_use_logrotate
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
@@ -169,7 +170,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost boot"
+ynh_systemd_action --service_name=$app --action="start"
 
 #=================================================
 # SETUP SSOWAT
