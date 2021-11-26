@@ -6,7 +6,7 @@
         "en": "Publishing, memberships, subscriptions and newsletters platform",
         "fr": "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
     },
-    "version": "4.22.0~ynh1",
+    "version": "4.23.0~ynh1",
     "url": "https://ghost.org/",
     "upstream": {
         "license": "MIT",
@@ -20,7 +20,7 @@
         "email": "julien.malik@paraiso.me"
     },
     "requirements": {
-        "yunohost": ">= 4.2.0"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
