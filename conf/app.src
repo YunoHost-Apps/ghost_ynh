@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/TryGhost/Ghost/releases/download/v4.31.0/Ghost-4.31.0.zip
-SOURCE_SUM=462b52b6de0a9f7e97d477db94aa6f29598e82e353588c1b5d5f5e1385eb5301
+SOURCE_URL=https://github.com/TryGhost/Ghost/releases/download/v4.32.0/Ghost-4.32.0.zip
+SOURCE_SUM=1f3b5e376db24a1c564d7ba1dcbf80f430c660d6ee00269cd3aa53c9b2894096
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=false
