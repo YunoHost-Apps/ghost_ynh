@@ -147,7 +147,7 @@ popd
 ynh_script_progression --message="Configuring a systemd service..."
 
 # Create a dedicated systemd config
- ynh_add_systemd_config
+ynh_add_systemd_config
 
 #=================================================
 # SETUP LOGROTATE
@@ -170,7 +170,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start"
+ynh_systemd_action --service_name=$app --action="start" --line_match="Ghost booted" --timeout=60
 
 #=================================================
 # SETUP SSOWAT
