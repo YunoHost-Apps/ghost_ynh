@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/TryGhost/Admin/archive/refs/tags/v4.32.2.zip
-SOURCE_SUM=9f5323920f1f097c5ba65d8e2078572ef9c311029b315131e48bb3330af1d128
+SOURCE_URL=https://github.com/TryGhost/Admin/archive/refs/tags/v4.33.0.zip
+SOURCE_SUM=a13fffbed368cf1fa351bff66e8e92d445469530efe750dc76616729bfdd85c8
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=false
