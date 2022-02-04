@@ -7,10 +7,10 @@
     "database": {
         "client": "mysql",
         "connection": {
-            "host"     : "127.0.0.1",
-            "user"     : "__DB_USER__",
-            "password" : "__DB_PWD__",
-            "database" : "__DB_NAME__"
+            "socketPath" : "/run/mysqld/mysqld.sock",
+            "user"       : "__DB_USER__",
+            "password"   : "__DB_PWD__",
+            "database"   : "__DB_NAME__"
         }
     },
     "auth": {
