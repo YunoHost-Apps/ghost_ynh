@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Publishing, memberships, subscriptions and newsletters platform
 
-**Shipped version:** 4.32.1~ynh1
+**Shipped version:** 4.35.0~ynh1
 
 
 
@@ -30,14 +30,14 @@ Publishing, memberships, subscriptions and newsletters platform
 ## Installation
 
  1. No LDAP support.
- 1. You need more then **1GB** of ram. If you don't have it, please create a **swap memory**.
+ 1. You need more than **1GB** of ram. If you don't have it, please create a **swap memory**.
 
         dd if=/dev/zero of=/swapfile bs=1024 count=1048576
         mkswap /swapfile
         swapon /swapfile
         echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 
- 1. This app is multi-instance (you can have more then one Ghost blogging websites on a single YunoHost server)
+ 1. This app is multi-instance (you can have more than one Ghost blogging websites on a single YunoHost server)
 
 ### Installing the Ghost app
 
