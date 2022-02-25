@@ -91,7 +91,7 @@ then
 	# Create a temporary directory
 	tmpdir="$(mktemp -d)"
 
-	# Copy the admin saved settings from tmp directory to final path
+	# Copy the admin saved settings from final path to tmp directory
 	cp -ar "$final_path/config.production.json" "$tmpdir/config.production.json"
 
 	# Backup the content folder to the temp dir
