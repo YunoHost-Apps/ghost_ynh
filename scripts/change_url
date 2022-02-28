@@ -74,7 +74,7 @@ else
 	path=$old_path
 fi
 
-if [ $path =~ "\/ghost\/?" ]
+if [[ $path =~ "\/ghost\/?" ]]
 then
 	ynh_die --message="Sorry, Ghost does not support being installed on a path ending by /ghost"
 fi
