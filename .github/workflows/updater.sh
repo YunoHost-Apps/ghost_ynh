@@ -18,7 +18,7 @@ current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
 repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
 version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").assets[].browser_download_url ] | join(" ") | @sh' | tr -d "'"))
+assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").zipball_url ] | join(" ") | @sh' | tr -d "'"))
 
 admin_repo="TryGhost/Admin"
 assets+=("https://github.com/TryGhost/Admin/archive/refs/tags/${version}.zip")
@@ -67,7 +67,7 @@ echo "Handling asset at $asset_url"
 # Here we base the source file name upon a unique keyword in the assets url (admin vs. update)
 # Leave $src empty to ignore the asset
 case $asset_url in
-  *"Ghost-"*".zip")
+  *"/Ghost/"*)
     src="app"
     ;;
   *"/Admin/"*)
@@ -92,19 +92,12 @@ checksum=$(sha256sum "$tempdir/$filename" | head -c 64)
 # Delete temporary directory
 rm -rf $tempdir
 
-# Get extension
-if [[ $filename == *.tar.gz ]]; then
-  extension=tar.gz
-else
-  extension=${filename##*.}
-fi
-
 # Rewrite source file
 cat <<EOT > conf/$src.src
 SOURCE_URL=$asset_url
 SOURCE_SUM=$checksum
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=$extension
+SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=false
 EOT
 echo "... conf/$src.src updated"
@@ -117,8 +110,8 @@ fi
 
 done
 
-if [ $count == 0 ]; then
-    echo "::warning ::None of the assets were processed."
+if [ $count -lt 2 ]; then
+    echo "::warning ::Some assets were not processed."
     exit 0
 fi
 
