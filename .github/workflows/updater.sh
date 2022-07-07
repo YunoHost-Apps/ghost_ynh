@@ -31,7 +31,7 @@ assets+=("https://github.com/$admin_repo/archive/refs/tags/${version}.zip")
 # THEME
 theme_repo="TryGhost/Casper"
 theme_version=$(curl --silent "https://api.github.com/repos/$theme_repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets+=("https://github.com/$theme_repo/archive/refs/tags/${version}.zip")
+assets+=("https://github.com/$theme_repo/archive/refs/tags/${theme_version}.zip")
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
