@@ -14,14 +14,24 @@
 #=================================================
 
 # Fetching information
-current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
-repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
+
+current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
+
+# CORE
+# repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
+repo="TryGhost/Ghost"
 version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
 assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").zipball_url ] | join(" ") | @sh' | tr -d "'"))
 
+# ADMIN
 admin_repo="TryGhost/Admin"
-assets+=("https://github.com/TryGhost/Admin/archive/refs/tags/${version}.zip")
+assets+=("https://github.com/$admin_repo/archive/refs/tags/${version}.zip")
+
+# THEME
+theme_repo="TryGhost/Casper"
+theme_version=$(curl --silent "https://api.github.com/repos/$theme_repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
+assets+=("https://github.com/$theme_repo/archive/refs/tags/${version}.zip")
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
@@ -73,6 +83,9 @@ case $asset_url in
   *"/Admin/"*)
     src="admin"
     ;;
+  *"/Casper/"*)
+    src="casper"
+    ;;
   *)
     src=""
     ;;
@@ -98,7 +111,7 @@ SOURCE_URL=$asset_url
 SOURCE_SUM=$checksum
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
-SOURCE_IN_SUBDIR=false
+SOURCE_IN_SUBDIR=true
 EOT
 echo "... conf/$src.src updated"
 
@@ -134,4 +147,3 @@ echo "$(jq -s --indent 4 ".[] | .version = \"$version~ynh1\"" manifest.json)" > 
 # The Action will proceed only if the PROCEED environment variable is set to true
 echo "PROCEED=true" >> $GITHUB_ENV
 exit 0
-
