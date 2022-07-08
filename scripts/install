@@ -101,7 +101,7 @@ ynh_setup_source --dest_dir="$final_path"
 
 # Download, check integrity, uncompress and patch the source from admin.src
 mkdir -p $final_path/core/client/Admin
-ynh_setup_source --dest_dir="$final_path/core/client/Admin" --source_id="admin"
+ynh_setup_source --dest_dir="$final_path/core/admin" --source_id="admin"
 
 # Download, check integrity, uncompress and patch the source from casper.src
 mkdir -p $final_path/content/themes/casper
