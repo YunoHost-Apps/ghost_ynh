@@ -12,7 +12,8 @@
         "license": "MIT",
         "website": "https://ghost.org/",
         "admindoc": "https://ghost.org/help/",
-        "code": "https://github.com/TryGhost/Ghost"
+        "code": "https://github.com/TryGhost/Ghost",
+        "cpe": "cpe:2.3:a:ghost:ghost"
     },
     "license": "MIT",
     "maintainer": {
