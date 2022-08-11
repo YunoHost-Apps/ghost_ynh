@@ -99,13 +99,9 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
-# Download, check integrity, uncompress and patch the source from admin.src
-mkdir -p $final_path/core/client/Admin
-ynh_setup_source --dest_dir="$final_path/core/admin" --source_id="admin"
-
 # Download, check integrity, uncompress and patch the source from casper.src
-mkdir -p $final_path/content/themes/casper
-ynh_setup_source --dest_dir="$final_path/content/themes/casper" --source_id="casper"
+mkdir -p $final_path/ghost/core/content/themes/casper
+ynh_setup_source --dest_dir="$final_path/ghost/core/content/themes/casper" --source_id="casper"
 
 chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
@@ -126,9 +122,9 @@ ynh_add_nginx_config
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-ynh_add_config --template="../conf/config.production.json" --destination="$final_path/config.production.json"
-chmod 400 "$final_path/config.production.json"
-chown $app:$app "$final_path/config.production.json"
+ynh_add_config --template="../conf/config.production.json" --destination="$final_path/ghost/core/config.production.json"
+chmod 400 "$final_path/ghost/core/config.production.json"
+chown $app:$app "$final_path/ghost/core/config.production.json"
 
 #==============================================
 # BUILD GHOST
@@ -137,11 +133,8 @@ ynh_script_progression --message="Building Ghost... (this will take some time an
 
 pushd "$final_path"
 	ynh_use_nodejs
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn install --non-interactive
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add knex-migrator
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $final_path/node_modules/.bin/knex-migrator init
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $final_path/node_modules/.bin/grunt symlink
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH $final_path/node_modules/.bin/grunt init --force
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add knex-migrator ember-cli --dev --ignore-workspace-root-check --non-interactive
+	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn setup # catch-all command provided by Ghost that handles all the setup
 popd
 
 #=================================================

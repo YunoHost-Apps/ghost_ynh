@@ -124,9 +124,9 @@ fi
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-ynh_add_config --template="../conf/config.production.json" --destination="$final_path/config.production.json"
-chmod 400 "$final_path/config.production.json"
-chown $app:$app "$final_path/config.production.json"
+ynh_add_config --template="../conf/config.production.json" --destination="$final_path/ghost/core/config.production.json"
+chmod 400 "$final_path/ghost/core/config.production.json"
+chown $app:$app "$final_path/ghost/core/config.production.json"
 
 #=================================================
 # GENERIC FINALISATION
