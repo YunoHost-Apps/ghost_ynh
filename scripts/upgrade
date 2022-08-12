@@ -92,7 +92,7 @@ then
 	tmpdir="$(mktemp -d)"
 
 	# Copy the admin saved settings from final path to tmp directory
-	if [ -d "$final_path/config.production.json" ]
+	if [ -f "$final_path/config.production.json" ]
 	then
 		# Old versions of Ghost store it here
 		cp -ar "$final_path/config.production.json" "$tmpdir/config.production.json"
@@ -102,7 +102,7 @@ then
 	fi
 
 	# Backup the content folder to the temp dir
-	if [ -d "$final_path/config.production.json" ]
+	if [ -f "$final_path/config.production.json" ]
 	then
 		# Old versions of Ghost store it here
 		cp -ar "$final_path/content" "$tmpdir/content"
