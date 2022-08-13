@@ -176,6 +176,8 @@ then
 	ynh_script_progression --message="Building Ghost... (this will take some time and resources!)"
 
 	pushd "$final_path"
+		# Longer network timeouts for slow systems; see https://github.com/yarnpkg/yarn/issues/8242
+		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn config set network-timeout 600000
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn install --non-interactive
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn add knex-migrator ember-cli --dev --ignore-workspace-root-check --non-interactive
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH yarn setup
