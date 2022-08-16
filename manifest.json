@@ -6,13 +6,14 @@
         "en": "Publishing, memberships, subscriptions and newsletters platform",
         "fr": "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
     },
-    "version": "5.2.2~ynh1",
+    "version": "5.8.3~ynh1",
     "url": "https://ghost.org/",
     "upstream": {
         "license": "MIT",
         "website": "https://ghost.org/",
         "admindoc": "https://ghost.org/help/",
-        "code": "https://github.com/TryGhost/Ghost"
+        "code": "https://github.com/TryGhost/Ghost",
+        "cpe": "cpe:2.3:a:ghost:ghost"
     },
     "license": "MIT",
     "maintainer": {

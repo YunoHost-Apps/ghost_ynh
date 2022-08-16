@@ -9,7 +9,8 @@ Group=__APP__
 WorkingDirectory=__FINALPATH__
 Environment="__YNH_NODE_LOAD_PATH__"
 Environment="NODE_ENV=production"
-ExecStart=__YNH_NODE__ index.js run
+#ExecStart=__YNH_NODE__ core/index.js run
+ExecStart=yarn start
 Restart=always
 
 # Sandboxing options to harden security

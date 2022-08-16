@@ -14,14 +14,24 @@
 #=================================================
 
 # Fetching information
-current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
-repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
-version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").assets[].browser_download_url ] | join(" ") | @sh' | tr -d "'"))
 
+current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
+
+# CORE
+# repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
+repo="TryGhost/Ghost"
+version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
+assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").zipball_url ] | join(" ") | @sh' | tr -d "'"))
+
+# ADMIN
 admin_repo="TryGhost/Admin"
-assets+=("https://github.com/TryGhost/Admin/archive/refs/tags/${version}.zip")
+assets+=("https://github.com/$admin_repo/archive/refs/tags/${version}.zip")
+
+# THEME
+theme_repo="TryGhost/Casper"
+theme_version=$(curl --silent "https://api.github.com/repos/$theme_repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
+assets+=("https://github.com/$theme_repo/archive/refs/tags/${theme_version}.zip")
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
@@ -67,11 +77,14 @@ echo "Handling asset at $asset_url"
 # Here we base the source file name upon a unique keyword in the assets url (admin vs. update)
 # Leave $src empty to ignore the asset
 case $asset_url in
-  *"Ghost-"*".zip")
+  *"/Ghost/"*)
     src="app"
     ;;
   *"/Admin/"*)
     src="admin"
+    ;;
+  *"/Casper/"*)
+    src="casper"
     ;;
   *)
     src=""
@@ -92,20 +105,13 @@ checksum=$(sha256sum "$tempdir/$filename" | head -c 64)
 # Delete temporary directory
 rm -rf $tempdir
 
-# Get extension
-if [[ $filename == *.tar.gz ]]; then
-  extension=tar.gz
-else
-  extension=${filename##*.}
-fi
-
 # Rewrite source file
 cat <<EOT > conf/$src.src
 SOURCE_URL=$asset_url
 SOURCE_SUM=$checksum
 SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=$extension
-SOURCE_IN_SUBDIR=false
+SOURCE_FORMAT=zip
+SOURCE_IN_SUBDIR=true
 EOT
 echo "... conf/$src.src updated"
 
@@ -117,8 +123,8 @@ fi
 
 done
 
-if [ $count == 0 ]; then
-    echo "::warning ::None of the assets were processed."
+if [ $count -lt 2 ]; then
+    echo "::warning ::Some assets were not processed."
     exit 0
 fi
 
@@ -141,4 +147,3 @@ echo "$(jq -s --indent 4 ".[] | .version = \"$version~ynh1\"" manifest.json)" > 
 # The Action will proceed only if the PROCEED environment variable is set to true
 echo "PROCEED=true" >> $GITHUB_ENV
 exit 0
-
