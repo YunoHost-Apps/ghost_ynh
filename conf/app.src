@@ -1,5 +1,5 @@
-SOURCE_URL=https://api.github.com/repos/TryGhost/Ghost/zipball/v5.8.3
-SOURCE_SUM=557c39864483fff00beeb60e27d84915e184845c69db3be83dcd7a65f327d497
+SOURCE_URL=https://api.github.com/repos/TryGhost/Ghost/zipball/v5.12.2
+SOURCE_SUM=5e2b15dca7cf57b77703021d1590dbe28c2456e43b0b4443790c9a4d4df8fdd3
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=true
