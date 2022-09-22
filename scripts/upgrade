@@ -63,6 +63,11 @@ if ynh_legacy_permissions_exists; then
 	ynh_app_setting_delete --app=$app --key=is_public
 fi
 
+# Make the final_path a git repo if needed
+if [ ! -d "$final_path/.git" ]; then
+	git init "$final_path" -q
+fi
+
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
