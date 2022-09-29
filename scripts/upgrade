@@ -175,6 +175,11 @@ chown $app:$app "$final_path/.yarnrc.yml"
 # BUILD GHOST
 #==============================================
 
+# Make the final_path a git repo if needed
+if [ ! -d "$final_path/.git" ]; then
+	ynh_exec_as $app git init "$final_path" -q
+fi
+
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Building Ghost... (this will take some time and resources!)"
