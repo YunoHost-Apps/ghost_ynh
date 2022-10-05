@@ -17,7 +17,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
-**Version incluse :** 5.17.0~ynh1 *(:warning: Il s'agit de la branche `testing`. La [branche `master`](https://github.com/YunoHost-Apps/ghost_ynh/tree/master) utilisée dans le catalogue est actuellement en 5.16.2\~ynh1.)*
+**Version incluse :** 5.17.1~ynh1 *(:warning: Il s'agit de la branche `ci-auto-update-v5.17.1`. La [branche `master`](https://github.com/YunoHost-Apps/ghost_ynh/tree/master) utilisée dans le catalogue est actuellement en 5.17.0\~ynh1.)*
 
 
 ## Captures d'écran
