@@ -17,7 +17,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Publishing, memberships, subscriptions and newsletters platform
 
-**Shipped version:** 5.17.1~ynh1 *(:warning: This is the `ci-auto-update-v5.17.1` branch. The [`master` branch](https://github.com/YunoHost-Apps/ghost_ynh/tree/master) used in the catalog is currently on version 5.17.0\~ynh1.)*
+**Shipped version:** 5.17.1~ynh1 *(:warning: This is the `testing` branch. The [`master` branch](https://github.com/YunoHost-Apps/ghost_ynh/tree/master) used in the catalog is currently on version 5.17.0\~ynh1.)*
 
 
 ## Screenshots
