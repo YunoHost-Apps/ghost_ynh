@@ -108,6 +108,9 @@ chmod 750 "$final_path"
 chmod -R o-rwx "$final_path"
 chown -R $app:www-data "$final_path"
 
+# Patch https://github.com/YunoHost-Apps/ghost_ynh/issues/199
+ynh_replace_string --match_string=".whereRaw('posts.id" --replace_string=".whereRaw('\`posts\`.id" --target_file="$final_path/ghost/core/core/server/models/post.js"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
