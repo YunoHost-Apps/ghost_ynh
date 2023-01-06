@@ -17,7 +17,7 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
-**Version incluse :** 5.21.0~ynh1
+**Version incluse :** 5.26.4~ynh1
 
 ## Captures d'écran
 
@@ -46,6 +46,10 @@ Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
          `sudo yunohost installer l'application https://github.com/YunoHost-Apps/ghost_ynh`
 
  2. Après l'installation, créez un **compte administrateur** en visitant `https://domain.tld/ghost/ghost`. Si vous choisissez de nommer votre instance Ghost "blog" pendant le processus d'installation de YunoHost, alors ce sera "https://domain.tld/blog/ghost". Cela vous permettra de continuer à configurer votre compte administrateur et à configurer vos paramètres. 
+## :red_circle: Fonctions indésirables
+
+- **Arbitrary limitations**: Features arbitrary limitations. Please refer to the README.
+
 ## Documentations et ressources
 
 * Site officiel de l'app : <https://ghost.org/>
