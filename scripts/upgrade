@@ -193,9 +193,12 @@ then
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn install --non-interactive
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn add knex-migrator ember-cli --dev --ignore-workspace-root-check --non-interactive
 		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn setup
-        	pushd "ghost/admin"
+		pushd "ghost/admin"
 			ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn build --environment/production
 		popd
+
+		# Clean yarn cache (which takes a lot of disk space)
+		rm ./.cache/yarn/* -rf
 	popd
 fi
 
