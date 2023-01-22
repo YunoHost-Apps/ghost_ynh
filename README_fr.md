@@ -5,23 +5,23 @@ It shall NOT be edited by hand.
 
 # Ghost pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
 [![Installer Ghost avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Ghost rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Ghost rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
-**Version incluse :** 5.26.4~ynh1
+**Version incluse :** 5.31.0~ynh1
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Ghost](./doc/screenshots/screenshot.png)
+![Capture d’écran de Ghost](./doc/screenshots/screenshot.png)
 
 ## Avertissements / informations importantes
 
@@ -52,9 +52,9 @@ Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://ghost.org/>
-* Documentation officielle de l'admin : <https://ghost.org/help/>
-* Dépôt de code officiel de l'app : <https://github.com/TryGhost/Ghost>
+* Site officiel de l’app : <https://ghost.org/>
+* Documentation officielle de l’admin : <https://ghost.org/help/>
+* Dépôt de code officiel de l’app : <https://github.com/TryGhost/Ghost>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_ghost>
 * Signaler un bug : <https://github.com/YunoHost-Apps/ghost_ynh/issues>
 
@@ -70,4 +70,4 @@ ou
 sudo yunohost app upgrade ghost -u https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
