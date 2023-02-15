@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/TryGhost/Casper/archive/refs/tags/v5.4.4.zip
-SOURCE_SUM=2d8d7d622944844cee8a9d954cbc5d3123196e5214eedc91d586853bdeeb10ff
+SOURCE_URL=https://github.com/TryGhost/Casper/archive/refs/tags/v5.4.5.zip
+SOURCE_SUM=605c23e1f2847730622ab43d957e33bb5ec99b912a11c57a20fd6a0fdae9b186
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=zip
 SOURCE_IN_SUBDIR=true
