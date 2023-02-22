@@ -6,6 +6,7 @@ It shall NOT be edited by hand.
 # Ghost for YunoHost
 
 [![Integration level](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![Working status](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
+
 [![Install Ghost with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -17,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Publishing, memberships, subscriptions and newsletters platform
 
-**Shipped version:** 5.30.0~ynh1
+**Shipped version:** 5.35.1~ynh1
 
 ## Screenshots
 
