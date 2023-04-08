@@ -18,7 +18,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 Plateforme d'édition, d'adhésions, d'abonnements et de newsletters
 
-**Version incluse :** 5.41.0~ynh1
+**Version incluse :** 5.42.2~ynh1
 
 ## Captures d’écran
 
