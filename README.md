@@ -18,7 +18,7 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 Publishing, memberships, subscriptions and newsletters platform
 
-**Shipped version:** 5.44.0~ynh1
+**Shipped version:** 5.45.0~ynh1
 
 ## Screenshots
 
