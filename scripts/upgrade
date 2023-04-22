@@ -78,7 +78,7 @@ then
 	chown -R $app:www-data "$install_dir"
 
 	pushd $install_dir
-		ynh_exec_as $app $ynh_npm install ghost-cli@latest
+		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
 		ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 			--no-prompt --no-setup-systemd --no-start \
 			--dir ghost --no-setup-linux-user \
@@ -128,7 +128,7 @@ ynh_use_logrotate --logfile="$install_dir/ghost/content/logs" --non-append
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
 #=================================================
 # START SYSTEMD SERVICE

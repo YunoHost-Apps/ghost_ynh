@@ -32,7 +32,7 @@ chown -R $app:$app "$install_dir"
 
 pushd $install_dir
 	ynh_script_progression --message="Installing and configuring Ghost..."
-	ynh_exec_as $app $ynh_npm install ghost-cli@latest
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
 	ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \

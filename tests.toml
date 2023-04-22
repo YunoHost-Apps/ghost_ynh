@@ -1,0 +1,7 @@
+test_format = 1.0
+
+[default]
+
+    exclude = ["install.nourl"]
+
+    test_upgrade_from.7a150ab29ee969f72dd7846539ae12ac1975165b.name = "Upgrade from 4.9.4"

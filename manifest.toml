@@ -20,8 +20,8 @@ cpe = "cpe:2.3:a:ghost:ghost"
 yunohost = ">= 11.1.0"
 architectures = "all"
 multi_instance = true
-ldap = "false"
-sso = "false"
+ldap = false
+sso = false
 disk = "1G"
 ram.build = "2G"
 ram.runtime = "2G"
@@ -52,7 +52,7 @@ ram.runtime = "2G"
     [resources.ports]
 
     [resources.apt]
-    packages = "mailutils"
+    packages = "mailutils mariadb-server"
 
     [resources.database]
     type = "mysql"
