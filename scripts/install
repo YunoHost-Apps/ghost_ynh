@@ -9,14 +9,11 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-ynh_clean_setup () {
-	### Remove this function if there's nothing to clean before calling the remove script.
-	read -p "debug me"
-}
-
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
+ynh_script_progression --message="Installing NodeJS dependencies..."
+
 # Install Nodejs
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 
@@ -34,6 +31,7 @@ chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
 pushd $install_dir
+	ynh_script_progression --message="Installing and configuring Ghost..."
 	ynh_exec_as $app $ynh_npm install ghost-cli@latest
 	ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
