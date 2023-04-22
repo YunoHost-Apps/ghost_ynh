@@ -16,22 +16,11 @@
 # Fetching information
 # Some jq magic is needed, because the latest upstream release is not always the latest version (e.g. security patches for older versions)
 
-current_version=$(cat manifest.json | jq -j '.version|split("~")[0]')
+current_version=$(tomlq -t -s --indent 4 -r '.version|split("~")[0]' manifest.toml)
 
 # CORE
-# repo=$(cat manifest.json | jq -j '.upstream.code|split("https://github.com/")[1]')
-repo="TryGhost/Ghost"
+repo=$(tomlq -r '.upstream.code|split("https://github.com/")[1]' manifest.toml)
 version=$(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets=($(curl --silent "https://api.github.com/repos/$repo/releases" | jq -r '[ .[] | select(.tag_name=="'$version'").zipball_url ] | join(" ") | @sh' | tr -d "'"))
-
-# ADMIN
-admin_repo="TryGhost/Admin"
-assets+=("https://github.com/$admin_repo/archive/refs/tags/${version}.zip")
-
-# THEME
-theme_repo="TryGhost/Casper"
-theme_version=$(curl --silent "https://api.github.com/repos/$theme_repo/releases" | jq -r '.[] | select( .prerelease != true ) | .tag_name' | sort -V | tail -1)
-assets+=("https://github.com/$theme_repo/archive/refs/tags/${theme_version}.zip")
 
 # Later down the script, we assume the version has only digits and dots
 # Sometimes the release name starts with a "v", so let's filter it out.
@@ -57,90 +46,12 @@ elif git ls-remote -q --exit-code --heads https://github.com/$GITHUB_REPOSITORY.
     exit 0
 fi
 
-# Each release can hold multiple assets (e.g. binaries for different architectures, source code, etc.)
-echo "${#assets[@]} available asset(s)"
-
-#=================================================
-# UPDATE SOURCE FILES
-#=================================================
-
-# Here we use the $assets variable to get the resources published in the upstream release.
-
-count=0
-
-# Let's loop over the array of assets URLs
-for asset_url in ${assets[@]}; do
-
-echo "Handling asset at $asset_url"
-
-# Assign the asset to a source file in conf/ directory
-# Here we base the source file name upon a unique keyword in the assets url (admin vs. update)
-# Leave $src empty to ignore the asset
-case $asset_url in
-  *"/Ghost/"*)
-    src="app"
-    ;;
-  *"/Admin/"*)
-    src="admin"
-    ;;
-  *"/Casper/"*)
-    src="casper"
-    ;;
-  *)
-    src=""
-    ;;
-esac
-
-# If $src is not empty, let's process the asset
-if [ ! -z "$src" ]; then
-
-# Create the temporary directory
-tempdir="$(mktemp -d)"
-
-# Download sources and calculate checksum
-filename=${asset_url##*/}
-curl --silent -4 -L $asset_url -o "$tempdir/$filename"
-checksum=$(sha256sum "$tempdir/$filename" | head -c 64)
-
-# Delete temporary directory
-rm -rf $tempdir
-
-# Rewrite source file
-cat <<EOT > conf/$src.src
-SOURCE_URL=$asset_url
-SOURCE_SUM=$checksum
-SOURCE_SUM_PRG=sha256sum
-SOURCE_FORMAT=zip
-SOURCE_IN_SUBDIR=true
-EOT
-echo "... conf/$src.src updated"
-
-count=$((count+1))
-
-else
-echo "... asset ignored"
-fi
-
-done
-
-if [ $count -lt 2 ]; then
-    echo "::warning ::Some assets were not processed."
-    exit 0
-fi
-
-#=================================================
-# SPECIFIC UPDATE STEPS
-#=================================================
-
-# Any action on the app's source code can be done.
-# The GitHub Action workflow takes care of committing all changes after this script ends.
-
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
 
 # Replace new version in manifest
-echo "$(jq -s --indent 4 ".[] | .version = \"$version~ynh1\"" manifest.json)" > manifest.json
+echo "$(tomlq -t -r ".version = \"${version}~ynh1\"" manifest.toml)" > manifest.toml
 
 # No need to update the README, yunohost-bot takes care of it
 
