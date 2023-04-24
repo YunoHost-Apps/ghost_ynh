@@ -44,7 +44,7 @@ ynh_npm install --global npm@latest
 ynh_npm install --global yarn
 
 #=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
+# UPGRADE
 #=================================================
 
 # Up to v5.26.4~ynh1, we were downloading the source code and building the app by ourselves
@@ -94,6 +94,10 @@ then
 	ynh_secure_remove --file="$tmpdir"
 
 fi
+
+
+# Cleanup cache
+ynh_secure_remove --file="$install_dir/.cache/yarn"
 
 #=================================================
 # NGINX CONFIGURATION

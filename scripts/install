@@ -39,6 +39,9 @@ pushd $install_dir
 		--no-setup-nginx --no-setup-ssl --url http://$domain$path --port $port \
 		--db mysql --dbhost localhost --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
 		--mail SMTP --mailhost localhost --mailport 465
+
+	# Cleanup cache
+	ynh_secure_remove --file=".cache/yarn"
 popd
 
 #=================================================
@@ -85,4 +88,3 @@ ynh_systemd_action --service_name=$app --action="start" --line_match="Ghost boot
 #=================================================
 
 ynh_script_progression --message="Installation of $app completed"
-
