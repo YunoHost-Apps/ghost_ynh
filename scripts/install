@@ -10,106 +10,39 @@ source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# MANAGE SCRIPT FAILURE
-#=================================================
-
-ynh_clean_setup () {
-	ynh_clean_check_starting
-}
-# Exit if an error occurs during the execution of the script
-ynh_abort_if_errors
-
-#=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
-#=================================================
-
-domain=$YNH_APP_ARG_DOMAIN
-path_url=$YNH_APP_ARG_PATH
-is_public=$YNH_APP_ARG_IS_PUBLIC
-
-app=$YNH_APP_INSTANCE_NAME
-
-#=================================================
-# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
-#=================================================
-ynh_script_progression --message="Validating installation parameters..." --weight=1
-
-final_path=/var/www/$app
-test ! -e "$final_path" || ynh_die --message="This path already contains a folder"
-
-# Register (book) web path
-ynh_webpath_register --app=$app --domain=$domain --path_url=$path_url
-
-#=================================================
-# STORE SETTINGS FROM MANIFEST
-#=================================================
-ynh_script_progression --message="Storing installation settings..." --weight=1
-
-ynh_app_setting_set --app=$app --key=domain --value=$domain
-ynh_app_setting_set --app=$app --key=path --value=$path_url
-
-#=================================================
-# STANDARD MODIFICATIONS
-#=================================================
-# FIND AND OPEN A PORT
-#=================================================
-ynh_script_progression --message="Finding an available port..." --weight=1
-
-# Find an available port
-port=$(ynh_find_port --port=4010)
-ynh_app_setting_set --app=$app --key=port --value=$port
-
-#=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
+ynh_script_progression --message="Installing NodeJS dependencies..."
 
 # Install Nodejs
 ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
 
+# Upgrade NPM
+ynh_npm install --global npm@latest
+
 # Install Yarn
-ynh_install_extra_app_dependencies --repo="deb https://dl.yarnpkg.com/debian/ stable main" --package="yarn" --key="https://dl.yarnpkg.com/debian/pubkey.gpg"
+ynh_npm install --global yarn
 
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..."
+# Install Ghost-CLI
 
-# Create a system user
-ynh_system_user_create --username=$app --home_dir="$final_path"
+mkdir -p $install_dir/ghost
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:$app "$install_dir"
 
-#=================================================
-# CREATE A MYSQL DATABASE
-#=================================================
-ynh_script_progression --message="Creating a MySQL database..."
+pushd $install_dir
+	ynh_script_progression --message="Installing and configuring Ghost..."
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
+	ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
+		--no-prompt --no-setup-systemd --no-start \
+		--dir ghost --no-setup-linux-user \
+		--no-setup-nginx --no-setup-ssl --url http://$domain$path --port $port \
+		--db mysql --dbhost localhost --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
+		--mail SMTP --mailhost localhost --mailport 465
 
-db_name=$(ynh_sanitize_dbid --db_name=$app)
-db_user=$db_name
-ynh_app_setting_set --app=$app --key=db_name --value=$db_name
-ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
-
-#=================================================
-# DOWNLOAD, CHECK AND UNPACK SOURCE
-#=================================================
-ynh_script_progression --message="Setting up source files..."
-
-ynh_app_setting_set --app=$app --key=final_path --value=$final_path
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source --dest_dir="$final_path"
-
-# Download, check integrity, uncompress and patch the source from casper.src
-mkdir -p $final_path/ghost/core/content/themes/casper
-ynh_setup_source --dest_dir="$final_path/ghost/core/content/themes/casper" --source_id="casper"
-
-git init "$final_path" -q
-chmod 750 "$final_path"
-chmod -R o-rwx "$final_path"
-chown -R $app:www-data "$final_path"
-
-# Patch https://github.com/YunoHost-Apps/ghost_ynh/issues/199
-ynh_replace_string --match_string=".whereRaw('posts.id" --replace_string=".whereRaw('\`posts\`.id" --target_file="$final_path/ghost/core/core/server/models/post.js"
+	# Cleanup cache
+	ynh_secure_remove --file=".cache/yarn"
+popd
 
 #=================================================
 # NGINX CONFIGURATION
@@ -118,37 +51,6 @@ ynh_script_progression --message="Configuring NGINX web server..."
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
-
-#=================================================
-# SPECIFIC SETUP
-#=================================================
-# MODIFY A CONFIG FILE
-#=================================================
-ynh_script_progression --message="Modifying a config file..."
-
-ynh_add_config --template="../conf/config.production.json" --destination="$final_path/ghost/core/config.production.json"
-chmod 400 "$final_path/ghost/core/config.production.json"
-chown $app:$app "$final_path/ghost/core/config.production.json"
-
-touch "$final_path/.yarnrc.yml"
-chmod 400 "$final_path/.yarnrc.yml"
-chown $app:$app "$final_path/.yarnrc.yml"
-
-#==============================================
-# BUILD GHOST
-#==============================================
-ynh_script_progression --message="Building Ghost... (this will take some time and resources!)"
-
-pushd "$final_path"
-	ynh_use_nodejs
-	# Longer network timeouts for slow systems; see https://github.com/yarnpkg/yarn/issues/8242
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn config set network-timeout 600000
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn add knex-migrator ember-cli --dev --ignore-workspace-root-check --non-interactive
-	ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn setup # catch-all command provided by Ghost that handles all the setup
-	pushd "ghost/admin"
-		ynh_exec_warn_less ynh_exec_as $app $ynh_node_load_PATH HOME="$final_path" yarn build --environment/production # well, except for the admin
-	popd
-popd
 
 #=================================================
 # SETUP SYSTEMD
@@ -164,14 +66,14 @@ ynh_add_systemd_config
 ynh_script_progression --message="Configuring log rotation..."
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate
+ynh_use_logrotate --logfile="$install_dir/ghost/content/logs"
 
 #=================================================
 # INTEGRATE SERVICE IN YUNOHOST
 #=================================================
 ynh_script_progression --message="Integrating service in YunoHost..."
 
-yunohost service add $app --description="$app daemon for Ghost" --log="/var/log/$app/$app.log"
+yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
 #=================================================
 # START SYSTEMD SERVICE
@@ -180,42 +82,6 @@ ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
 ynh_systemd_action --service_name=$app --action="start" --line_match="Ghost booted" --timeout=60
-
-#=================================================
-# SETUP SSOWAT
-#=================================================
-ynh_script_progression --message="Configuring permissions..."
-
-if [ $is_public -eq 1 ]
-then
-	ynh_permission_update --permission="main" --add="visitors"
-fi
-
-ynh_permission_create --permission="admin" --url="/ghost" --allowed="visitors" --auth_header="false" --protected="true"
-
-#=================================================
-# RELOAD NGINX
-#=================================================
-ynh_script_progression --message="Reloading NGINX web server..."
-
-ynh_systemd_action --service_name=nginx --action=reload
-
-#=================================================
-# SEND A README FOR THE ADMIN
-#=================================================
-ynh_script_progression --message="Sending a readme for the admin..." --weight=1
-
-message="Ghost was successfully installed :)
-
-Next step:
-
-Create an admin account at https://$domain$path_url/ghost
-
-Happy Blogging!
-
-If you are facing any problem or want to improve this app, please open a new issue here: https://github.com/YunoHost-Apps/ghost_ynh/issues"
-
-ynh_send_readme_to_admin "$message"
 
 #=================================================
 # END OF SCRIPT

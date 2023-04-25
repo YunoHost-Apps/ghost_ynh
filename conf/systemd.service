@@ -1,16 +1,15 @@
 [Unit]
-Description=__APP__ systemd service 
-Documentation=https://docs.ghost.org
+Description=__APP__ systemd service
+Documentation=https://ghost.org/docs/
 
 [Service]
 Type=simple
 User=__APP__
 Group=__APP__
-WorkingDirectory=__FINALPATH__
+WorkingDirectory=__INSTALL_DIR__/ghost
 Environment="__YNH_NODE_LOAD_PATH__"
 Environment="NODE_ENV=production"
-#ExecStart=__YNH_NODE__ core/index.js run
-ExecStart=yarn start
+ExecStart=__YNH_NODE__ __INSTALL_DIR__/node_modules/ghost-cli/bin/ghost run
 Restart=always
 
 # Sandboxing options to harden security
