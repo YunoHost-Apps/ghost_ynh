@@ -79,7 +79,7 @@ then
 
 	pushd $install_dir
 		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
-		ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
+		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 			--no-prompt --no-setup-systemd --no-start \
 			--dir ghost --no-setup-linux-user \
 			--no-setup-nginx --no-setup-ssl --url http://$domain$path --port $port \
@@ -95,15 +95,24 @@ then
 
 else
 
-	# Upgrade Ghost CLI and Ghost itself
-        pushd $install_dir
-                ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
-                ynh_exec_as $app $ynh_node_load_PATH ./node_modules/ghost-cli/bin/ghost update $(ynh_app_upstream_version) \
+	# Upgrade Ghost CLI
+	pushd $install_dir
+		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
+	popd
+
+	# Upgrade Ghost itself
+	pushd $install_dir/ghost
+		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost update $(ynh_app_upstream_version) \
 			--no-prompt --no-auto-rollback --no-restart
-        popd
+	popd
 
 fi
 
+# Make sure the configuration is correct
+pushd $install_dir/ghost
+	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
+		--port $port --process local
+popd
 
 # Cleanup cache
 ynh_secure_remove --file="$install_dir/.cache/yarn"
