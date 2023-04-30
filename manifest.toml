@@ -22,9 +22,9 @@ architectures = "all"
 multi_instance = true
 ldap = false
 sso = false
-disk = "1G"
-ram.build = "2G"
-ram.runtime = "2G"
+disk = "500M"
+ram.build = "1G"
+ram.runtime = "1G"
 
 [install]
     [install.domain]
