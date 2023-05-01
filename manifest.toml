@@ -1,0 +1,58 @@
+packaging_format = 2
+
+id = "ghost"
+name = "Ghost"
+description.en = "Publishing, memberships, subscriptions and newsletters platform"
+description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
+
+version = "5.44.0~ynh1"
+
+maintainers = ["Julien Malik"]
+
+[upstream]
+license = "MIT"
+website = "https://ghost.org/"
+admindoc = "https://ghost.org/help/"
+code = "https://github.com/TryGhost/Ghost"
+cpe = "cpe:2.3:a:ghost:ghost"
+
+[integration]
+yunohost = ">= 11.1.0"
+architectures = "all"
+multi_instance = true
+ldap = false
+sso = false
+disk = "500M"
+ram.build = "1G"
+ram.runtime = "1G"
+
+[install]
+    [install.domain]
+    type = "domain"
+
+    [install.path]
+    type = "path"
+    default = "/blog"
+
+    [install.init_main_permission]
+    help.en = "If enabled, Ghost will be accessible by people who do not have an account. This can be changed later via the webadmin."
+    help.fr = "Si cette case est cochée, Ghost sera accessible aux personnes n’ayant pas de compte. Vous pourrez changer ceci plus tard via la webadmin."
+    type = "group"
+    default = "visitors"
+
+[resources]
+    [resources.system_user]
+
+    [resources.install_dir]
+
+    [resources.permissions]
+    main.url = "/"
+    main.auth_header = false
+
+    [resources.ports]
+
+    [resources.apt]
+    packages = "mailutils mariadb-server"
+
+    [resources.database]
+    type = "mysql"
