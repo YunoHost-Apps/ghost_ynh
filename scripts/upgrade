@@ -88,7 +88,7 @@ then
 	popd
 
 	# Copy content folder back to the install_dir
-	cp -ar "$tmpdir/content" "${install_dir}/ghost/core"
+	cp -ar "$tmpdir/content" "${install_dir}/ghost/content"
 
 	# Remove the tmp directory securely
 	ynh_secure_remove --file="$tmpdir"
