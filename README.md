@@ -5,15 +5,19 @@ It shall NOT be edited by hand.
 
 Sorry YNH im updating this to explain because this is shoddily slapped together and can probably be easily updated by the people over at https://github.com/YunoHost-Apps/ghost_ynh
 
-
+<details>sorry
 [ericAndre - Copy.webm](https://github.com/slbillups/ghost_ynh/assets/112226699/2542eecc-0955-4604-b6c4-0715733dbd26)
-
+</details>
 
 
 This is just a workaround for the latest ghost update since the last update by the ghost_ynh repo was 4 months ago.
 
 I tried updating manually by extracting the latest ghost update to /var/www/ghost/ghost/versions changing 2 lines of code(NODEJS_VER in common.sh and version = "5.59.1" in manifest.toml, thought it would just fail but the rest of their script did the work for me. So I added a little bit more to fetch the latest ghost install from the releases page/update manifest.toml+common.sh.
-
+<details>
+  <summary>Working update</summary>
 
 ![Untitled](https://github.com/slbillups/ghost_ynh/assets/112226699/413cf6d8-27ff-44f1-9897-d0f86140bd2d)
+
+
 ![Screenshot 2023-05-09 051950](https://github.com/slbillups/ghost_ynh/assets/112226699/ef9e0437-b0f5-408e-81bd-4499bf9fee40)
+</details>
