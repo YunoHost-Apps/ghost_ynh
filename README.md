@@ -5,7 +5,8 @@ It shall NOT be edited by hand.
 
 Sorry YNH im updating this to explain because this is shoddily slapped together and can probably be easily updated by the people over at https://github.com/YunoHost-Apps/ghost_ynh
 
-<details>sorry
+<details>
+  <summary>sorry</summary>
 [ericAndre - Copy.webm](https://github.com/slbillups/ghost_ynh/assets/112226699/2542eecc-0955-4604-b6c4-0715733dbd26)
 </details>
 
