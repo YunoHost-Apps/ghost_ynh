@@ -44,6 +44,24 @@ ynh_npm install --global npm@latest
 ynh_npm install --global yarn
 
 #=================================================
+# FETCH LATEST GHOST AND PLACE IN /versions/
+#=================================================
+
+# Define the new version
+NEW_VERSION="5.59.1"
+
+# Download the latest Ghost release
+wget -O ghost-$NEW_VERSION.zip https://github.com/TryGhost/Ghost/releases/download/$NEW_VERSION/Ghost-$NEW_VERSION.zip
+
+# Move and rename the downloaded release
+mv ghost-$NEW_VERSION.zip /var/www/ghost/ghost/versions/$NEW_VERSION.zip
+
+# Unzip the downloaded release
+unzip /var/www/ghost/ghost/versions/$NEW_VERSION.zip -d /var/www/ghost/ghost/versions/$NEW_VERSION
+
+# Update the version in manifest.toml (adjust the path as needed)
+sed -i "s/version = \".*\"/version = \"$NEW_VERSION\"/" ../manifest.toml
+
 # UPGRADE
 #=================================================
 
