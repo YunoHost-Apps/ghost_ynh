@@ -59,8 +59,10 @@ mv ghost-$NEW_VERSION.zip /var/www/ghost/ghost/versions/$NEW_VERSION.zip
 # Unzip the downloaded release
 unzip /var/www/ghost/ghost/versions/$NEW_VERSION.zip -d /var/www/ghost/ghost/versions/$NEW_VERSION
 
-# Update the version in manifest.toml (adjust the path as needed)
+# Update the version in manifest.toml and change the NodeJS ver
 sed -i "s/version = \".*\"/version = \"$NEW_VERSION\"/" ../manifest.toml
+
+sed -i "s/NODEJS_VERSION=.*$/NODEJS_VERSION=18/" _common.sh
 
 # UPGRADE
 #=================================================
