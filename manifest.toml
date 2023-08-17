@@ -7,7 +7,7 @@ description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsl
 
 version = "5.59.1"
 
-maintainers = ["Sean Billups"]
+maintainers = ["Julian Malik"]
 
 [upstream]
 license = "MIT"
