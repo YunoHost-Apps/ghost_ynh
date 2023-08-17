@@ -7,7 +7,8 @@ Sorry YNH im updating this to explain because this is shoddily slapped together 
 
 <details>
   <summary>sorry</summary>
-[ericAndre - Copy.webm](https://github.com/slbillups/ghost_ynh/assets/112226699/2542eecc-0955-4604-b6c4-0715733dbd26)
+  
+[Untitled](https://github.com/slbillups/ghost_ynh/assets/112226699/2542eecc-0955-4604-b6c4-0715733dbd26)
 </details>
 
 
