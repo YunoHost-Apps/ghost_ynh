@@ -16,7 +16,7 @@ code = "https://github.com/TryGhost/Ghost"
 cpe = "cpe:2.3:a:ghost:ghost"
 
 [integration]
-yunohost = ">= 11.1.0"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false

@@ -51,33 +51,18 @@ pushd $install_dir/ghost
 popd
 
 #=================================================
-# NGINX CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..."
-
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..."
-
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="$install_dir/ghost/content/logs"
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 

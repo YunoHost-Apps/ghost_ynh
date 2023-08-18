@@ -118,37 +118,18 @@ popd
 ynh_secure_remove --file="$install_dir/.cache/yarn"
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-#=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Upgrading systemd configuration..."
-
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
-
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --logfile="$install_dir/ghost/content/logs" --non-append
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
