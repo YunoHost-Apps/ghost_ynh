@@ -40,6 +40,13 @@ ram.runtime = "1G"
     default = "visitors"
 
 [resources]
+    [resources.sources.main]
+    # Unused source, only to trigger the autoupdater
+    prefetch = false
+    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v5.59.1.tar.gz"
+    sha256 = "0718612fbee2108b77f8f64be01fd7b65c2ca0aa9e3f96bfc092b424b4b253a6"
+    autoupdate.strategy = "latest_github_release"
+
     [resources.system_user]
     allow_email = true
 
