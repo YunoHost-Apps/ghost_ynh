@@ -5,8 +5,7 @@ name = "Ghost"
 description.en = "Publishing, memberships, subscriptions and newsletters platform"
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
-version = "5.44.0~ynh1"
-
+version = "5.59.1~ynh1"
 maintainers = ["Julien Malik"]
 
 [upstream]
@@ -15,9 +14,10 @@ website = "https://ghost.org/"
 admindoc = "https://ghost.org/help/"
 code = "https://github.com/TryGhost/Ghost"
 cpe = "cpe:2.3:a:ghost:ghost"
+fund = "https://opencollective.com/ghost"
 
 [integration]
-yunohost = ">= 11.1.0"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -41,7 +41,16 @@ ram.runtime = "1G"
     default = "visitors"
 
 [resources]
+    [resources.sources.main]
+    # Unused source, only to trigger the autoupdater
+    prefetch = false
+    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v5.59.1.tar.gz"
+    sha256 = "0718612fbee2108b77f8f64be01fd7b65c2ca0aa9e3f96bfc092b424b4b253a6"
+    autoupdate.strategy = "latest_github_release"
+
     [resources.system_user]
+    allow_email = true
+    mail_user = "noreply"
 
     [resources.install_dir]
 

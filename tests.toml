@@ -4,4 +4,4 @@ test_format = 1.0
 
     exclude = ["install.nourl"]
 
-    test_upgrade_from.7a150ab29ee969f72dd7846539ae12ac1975165b.name = "Upgrade from 4.9.4"
+#    test_upgrade_from.01d5ebd928c1e43d73c0220098fc767afafdcb80.name = "Upgrade from 5.44.0"

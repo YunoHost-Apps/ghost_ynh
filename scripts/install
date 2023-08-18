@@ -47,37 +47,23 @@ popd
 # Make sure the configuration is correct
 pushd $install_dir/ghost
         ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
-                --port $port --process local
+                --port $port --process local \
+                --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
 #=================================================
-# NGINX CONFIGURATION
+# SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring NGINX web server..."
+ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Configuring a systemd service..."
-
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Configuring log rotation..."
-
 # Use logrotate to manage application logfile(s)
 ynh_use_logrotate --logfile="$install_dir/ghost/content/logs"
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
@@ -87,7 +73,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="$install_
 ynh_script_progression --message="Starting a systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --line_match="Ghost booted" --timeout=60
+ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost booted" --timeout=60
 
 #=================================================
 # END OF SCRIPT

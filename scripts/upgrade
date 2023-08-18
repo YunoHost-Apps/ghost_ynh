@@ -29,7 +29,7 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=stop
+ynh_systemd_action --service_name=$app --action=stop --log_path="systemd" --line_match="Ghost has shut down" --timeout=60
 
 #=================================================
 # UPGRADE DEPENDENCIES
@@ -111,44 +111,26 @@ fi
 # Make sure the configuration is correct
 pushd $install_dir/ghost
 	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
-		--port $port --process local
+		--port $port --process local \
+                --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
 # Cleanup cache
 ynh_secure_remove --file="$install_dir/.cache/yarn"
 
 #=================================================
-# NGINX CONFIGURATION
+# REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading NGINX web server configuration..."
+ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config
 
-#=================================================
-# SPECIFIC UPGRADE
-#=================================================
-# SETUP SYSTEMD
-#=================================================
-ynh_script_progression --message="Upgrading systemd configuration..."
-
 # Create a dedicated systemd config
 ynh_add_systemd_config
 
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SETUP LOGROTATE
-#=================================================
-ynh_script_progression --message="Upgrading logrotate configuration..."
-
 # Use logrotate to manage app-specific logfile(s)
 ynh_use_logrotate --logfile="$install_dir/ghost/content/logs" --non-append
-
-#=================================================
-# INTEGRATE SERVICE IN YUNOHOST
-#=================================================
-ynh_script_progression --message="Integrating service in YunoHost..."
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
@@ -157,7 +139,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="$install_
 #=================================================
 ynh_script_progression --message="Starting a systemd service..."
 
-ynh_systemd_action --service_name=$app --action=start --line_match="Ghost booted" --timeout=60
+ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted" --timeout=60
 
 #=================================================
 # END OF SCRIPT
