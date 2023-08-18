@@ -47,7 +47,8 @@ popd
 # Make sure the configuration is correct
 pushd $install_dir/ghost
         ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
-                --port $port --process local
+                --port $port --process local \
+                --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
 #=================================================
