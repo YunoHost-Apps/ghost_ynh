@@ -25,7 +25,10 @@ if [ -z "$db_name" ]; then
 fi
 
 # Make sure the .config directory belongs to $app:$app
-if [[ $(stat -c "%U:%G" $install_dir/.config) != "$app:$app" ]]; then
+if [[ ! -d "$install_dir/.config" ]]; then
+	mkdir $install_dir/.config
+	chown $app:$app $install_dir/.config
+elif [[ $(stat -c "%U:%G" $install_dir/.config) != "$app:$app" ]]; then
 	chown -R $app:$app $install_dir/.config
 fi
 
