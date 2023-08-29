@@ -35,7 +35,6 @@ fi
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-# We stop the service first because the compatibility fixes might edit the configuration file of the app.
 ynh_script_progression --message="Stopping a systemd service..."
 
 ynh_systemd_action --service_name=$app --action=stop --log_path="systemd" --line_match="Ghost has shut down" --timeout=60
