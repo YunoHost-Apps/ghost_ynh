@@ -24,6 +24,14 @@ if [ -z "$db_name" ]; then
 	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 fi
 
+# Make sure the .config directory belongs to $app:$app
+if [[ ! -d "$install_dir/.config" ]]; then
+	mkdir $install_dir/.config
+	chown $app:$app $install_dir/.config
+elif [[ $(stat -c "%U:%G" $install_dir/.config) != "$app:$app" ]]; then
+	chown -R $app:$app $install_dir/.config
+fi
+
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
@@ -100,8 +108,10 @@ else
 		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
 	popd
 
-	# Upgrade Ghost itself
 	pushd $install_dir/ghost
+		# Make sure the app does not expect to manage its own process
+		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config --process local
+		# Upgrade Ghost itself
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost update $(ynh_app_upstream_version) \
 			--no-prompt --no-auto-rollback --no-restart
 	popd
