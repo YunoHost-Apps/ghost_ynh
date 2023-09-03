@@ -37,8 +37,8 @@ pushd $install_dir
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \
 		--no-setup-nginx --no-setup-ssl --url http://$domain$path --port $port \
-		--db mysql --dbhost localhost --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
-		--mail SMTP --mailhost localhost --mailport 465
+		--db mysql --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
+		--mail SMTP --mailhost 127.0.0.1 --mailport 465
 
 	# Cleanup cache
 	ynh_secure_remove --file=".cache/yarn"
