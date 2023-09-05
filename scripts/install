@@ -51,6 +51,15 @@ pushd $install_dir/ghost
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
+config_file=$install_dir/ghost/config.production.json
+cat <<< $(jq -r '.database.connection.host = "127.0.0.1"' $config_file) > $config_file
+cat <<< $(jq -r '.mail.options.host = "127.0.0.1"' $config_file) > $config_file
+cat <<< $(jq -r '.mail.options.ignoreTLS = true' $config_file) > $config_file
+
+if [ ! -s "$config_file" ]; then
+    ynh_die --message="Something went wrong while setting up the configuration file: it ended up empty."
+fi
+
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
