@@ -29,7 +29,7 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 ## :red_circle: Antifeatures
 
-- **Arbitrary limitations**: Features arbitrary limitations. Please refer to the README.
+- **Arbitrary limitations**: Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720
 
 ## Documentation and resources
 

@@ -16,6 +16,9 @@ code = "https://github.com/TryGhost/Ghost"
 cpe = "cpe:2.3:a:ghost:ghost"
 fund = "https://opencollective.com/ghost"
 
+[antifeatures]
+arbitrary-limitations.en = "Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720"
+
 [integration]
 yunohost = ">= 11.2"
 architectures = "all"
