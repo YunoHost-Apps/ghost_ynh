@@ -111,11 +111,9 @@ else
 	pushd $install_dir/ghost
 		# Make sure the app does not expect to manage its own process
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config --process local
-		# Make sure the app config runs on https
-		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config --url https://$domain$path
 		# Upgrade Ghost itself
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost update $(ynh_app_upstream_version) \
-			--no-prompt --no-auto-rollback --no-restart
+			--no-prompt --no-auto-rollback --no-restart --force
 	popd
 
 fi
@@ -124,6 +122,7 @@ fi
 pushd $install_dir/ghost
 	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
 		--port $port --process local \
+		--url https://$domain$path \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
