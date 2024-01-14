@@ -37,7 +37,7 @@ ynh_change_url_nginx_config
 #=================================================
 ynh_script_progression --message="Modifying a config file..."
 
-echo "$(jq -r --arg YNH_APP_NEW_DOMAIN $YNH_APP_NEW_DOMAIN --arg YNH_APP_NEW_PATH $YNH_APP_NEW_PATH ".url = \"http://$YNH_APP_NEW_DOMAIN$YNH_APP_NEW_PATH\"" $install_dir/ghost/config.production.json)" > $install_dir/ghost/config.production.json
+echo "$(jq -r --arg YNH_APP_NEW_DOMAIN $YNH_APP_NEW_DOMAIN --arg YNH_APP_NEW_PATH $YNH_APP_NEW_PATH ".url = \"https://$YNH_APP_NEW_DOMAIN$YNH_APP_NEW_PATH\"" $install_dir/ghost/config.production.json)" > $install_dir/ghost/config.production.json
 
 #=================================================
 # GENERIC FINALISATION

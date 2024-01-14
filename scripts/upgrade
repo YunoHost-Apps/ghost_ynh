@@ -90,7 +90,7 @@ then
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 			--no-prompt --no-setup-systemd --no-start \
 			--dir ghost --no-setup-linux-user \
-			--no-setup-nginx --no-setup-ssl --url http://$domain$path --port $port \
+			--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
 			--db mysql --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
 			--mail SMTP --mailhost 127.0.0.1 --mailport 465
 	popd
@@ -113,7 +113,7 @@ else
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config --process local
 		# Upgrade Ghost itself
 		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost update $(ynh_app_upstream_version) \
-			--no-prompt --no-auto-rollback --no-restart
+			--no-prompt --no-auto-rollback --no-restart --force
 	popd
 
 fi
@@ -122,6 +122,7 @@ fi
 pushd $install_dir/ghost
 	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
 		--port $port --process local \
+		--url https://$domain$path \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
 
