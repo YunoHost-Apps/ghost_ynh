@@ -20,8 +20,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
-
-**Shipped version:** 5.80.0~ynh1
+**Shipped version:** 5.80.3~ynh1
 
 ## Screenshots
 
@@ -33,11 +32,11 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 ## Documentation and resources
 
-* Official app website: <https://ghost.org/>
-* Official admin documentation: <https://ghost.org/help/>
-* Upstream app code repository: <https://github.com/TryGhost/Ghost>
-* YunoHost Store: <https://apps.yunohost.org/app/ghost>
-* Report a bug: <https://github.com/YunoHost-Apps/ghost_ynh/issues>
+- Official app website: <https://ghost.org/>
+- Official admin documentation: <https://ghost.org/help/>
+- Upstream app code repository: <https://github.com/TryGhost/Ghost>
+- YunoHost Store: <https://apps.yunohost.org/app/ghost>
+- Report a bug: <https://github.com/YunoHost-Apps/ghost_ynh/issues>
 
 ## Developer info
 
@@ -45,7 +44,7 @@ Please send your pull request to the [testing branch](https://github.com/YunoHos
 
 To try the testing branch, please proceed like that.
 
-``` bash
+```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade ghost -u https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
