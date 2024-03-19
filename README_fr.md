@@ -20,24 +20,23 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
-
-**Version incluse :** 5.80.0~ynh1
+**Version incluse :** 5.80.4~ynh1
 
 ## Captures d’écran
 
 ![Capture d’écran de Ghost](./doc/screenshots/screenshot.png)
 
-## :red_circle: Fonctions indésirables
+## :red_circle: Anti-fonctionnalités
 
-- **Arbitrary limitations**: Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720
+- **Limitations arbitraires** : Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720
 
 ## Documentations et ressources
 
-* Site officiel de l’app : <https://ghost.org/>
-* Documentation officielle de l’admin : <https://ghost.org/help/>
-* Dépôt de code officiel de l’app : <https://github.com/TryGhost/Ghost>
-* YunoHost Store: <https://apps.yunohost.org/app/ghost>
-* Signaler un bug : <https://github.com/YunoHost-Apps/ghost_ynh/issues>
+- Site officiel de l’app : <https://ghost.org/>
+- Documentation officielle de l’admin : <https://ghost.org/help/>
+- Dépôt de code officiel de l’app : <https://github.com/TryGhost/Ghost>
+- YunoHost Store : <https://apps.yunohost.org/app/ghost>
+- Signaler un bug : <https://github.com/YunoHost-Apps/ghost_ynh/issues>
 
 ## Informations pour les développeurs
 
@@ -45,7 +44,7 @@ Merci de faire vos pull request sur la [branche testing](https://github.com/Yuno
 
 Pour essayer la branche testing, procédez comme suit.
 
-``` bash
+```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
 ou
 sudo yunohost app upgrade ghost -u https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
