@@ -21,13 +21,13 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Versión proporcionada:** 5.82.4~ynh1
+**Versión proporcionada:** 5.82.8~ynh1
 
 ## Capturas de pantalla
 
 ![Captura de pantalla de Ghost](./doc/screenshots/screenshot.png)
 
-## :red_circle: Caraterísticas cuestionables
+## :red_circle: Debes considerar
 
 - **Arbitrary limitations**: Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720
 
