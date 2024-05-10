@@ -3,7 +3,7 @@
 请勿手动编辑。
 -->
 
-# YunoHost 的 Ghost
+# YunoHost 上的 Ghost
 
 [![集成程度](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![工作状态](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
 
@@ -21,7 +21,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**分发版本：** 5.82.4~ynh1
+**分发版本：** 5.82.8~ynh1
 
 ## 截图
 
