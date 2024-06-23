@@ -27,7 +27,7 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 ![Captura de Ghost](./doc/screenshots/screenshot.png)
 
-## :red_circle: funcionalidades no deseadas
+## :red_circle: Características no deseables
 
 - **Arbitrary limitations**: Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720
 
