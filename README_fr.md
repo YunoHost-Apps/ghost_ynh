@@ -5,7 +5,7 @@ Il NE doit PAS être modifié à la main.
 
 # Ghost pour YunoHost
 
-[![Niveau d’intégration](https://dash.yunohost.org/integration/ghost.svg)](https://dash.yunohost.org/appci/app/ghost) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
+[![Niveau d’intégration](https://dash.yunohost.org/integration/ghost.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
 
 [![Installer Ghost avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
@@ -21,7 +21,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Version incluse :** 5.86.2~ynh1
+**Version incluse :** 5.87.1~ynh1
 
 ## Captures d’écran
 
