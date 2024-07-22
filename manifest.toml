@@ -20,7 +20,7 @@ fund = "https://opencollective.com/ghost"
 arbitrary-limitations.en = "Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720"
 
 [integration]
-yunohost = ">= 11.2"
+yunohost = ">= 11.2.20"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -64,7 +64,7 @@ ram.runtime = "1G"
     [resources.ports]
 
     [resources.apt]
-    packages = "mailutils mariadb-server"
+    packages = "mailutils, mariadb-server"
 
     [resources.database]
     type = "mysql"
