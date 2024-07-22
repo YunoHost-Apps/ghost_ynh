@@ -40,7 +40,7 @@ ynh_script_progression --message="Restoring system configurations related to $ap
 ynh_restore_file --origin_path="/etc/nginx/conf.d/$domain.d/$app.conf"
 
 # Install Nodejs
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 ynh_restore_file --origin_path="/etc/systemd/system/$app.service"
 systemctl enable $app.service --quiet
