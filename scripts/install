@@ -12,26 +12,20 @@ source /usr/share/yunohost/helpers
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS dependencies..."
+ynh_script_progression --message="Installing NodeJS..." --weight=3
 
-# Install Nodejs
-ynh_install_nodejs --nodejs_version=$NODEJS_VERSION
-
-# Upgrade NPM
-ynh_npm install --global npm@latest
-
-# Install Yarn
-ynh_npm install --global yarn
+ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
 
 # Install Ghost-CLI
-
 mkdir -p $install_dir/ghost
 chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
 chown -R $app:$app "$install_dir"
 
 pushd $install_dir
-	ynh_script_progression --message="Installing and configuring Ghost..."
+	ynh_script_progression --message="Installing and configuring $app..."
+	ynh_use_nodejs
+	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install npm@latest
 	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
 	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
@@ -65,7 +59,7 @@ fi
 #=================================================
 ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
 
-# Create a dedicated nginx config
+# Create a dedicated NGINX config
 ynh_add_nginx_config
 
 # Create a dedicated systemd config
