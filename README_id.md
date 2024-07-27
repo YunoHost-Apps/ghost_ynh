@@ -35,7 +35,7 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 - Website aplikasi resmi: <https://ghost.org/>
 - Dokumentasi admin resmi: <https://ghost.org/help/>
-- Repositori kode aplikasi hulu: <https://github.com/TryGhost/Ghost>
+- Depot kode aplikasi hulu: <https://github.com/TryGhost/Ghost>
 - Gudang YunoHost: <https://apps.yunohost.org/app/ghost>
 - Laporkan bug: <https://github.com/YunoHost-Apps/ghost_ynh/issues>
 
