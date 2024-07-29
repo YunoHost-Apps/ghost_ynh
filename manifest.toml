@@ -6,6 +6,7 @@ description.en = "Publishing, memberships, subscriptions and newsletters platfor
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
 version = "5.88.2~ynh1"
+
 maintainers = []
 
 [upstream]
@@ -53,7 +54,7 @@ ram.runtime = "1G"
 
     [resources.system_user]
     allow_email = true
-    mail_user = "noreply"
+    #mail_user = "noreply"
 
     [resources.install_dir]
 
