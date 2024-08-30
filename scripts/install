@@ -1,33 +1,26 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Installing NodeJS..." --weight=3
+ynh_script_progression "Installing NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version=$nodejs_version
+ynh_nodejs_install
 
 # Install Ghost-CLI
 mkdir -p $install_dir/ghost
-chmod 750 "$install_dir"
-chmod -R o-rwx "$install_dir"
-chown -R $app:$app "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 750 "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:$app "$install_dir"
 pushd $install_dir
-	ynh_script_progression --message="Installing and configuring $app..."
-	ynh_use_nodejs
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install npm@latest
-	ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
-	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
+	ynh_script_progression "Installing and configuring $app..."
+
+	ynh_exec_as_app node_load_PATH npm install npm@latest
+	ynh_exec_as_app node_load_PATH npm install ghost-cli@latest
+	ynh_exec_as_app node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
@@ -35,12 +28,12 @@ pushd $install_dir
 		--mail SMTP --mailhost 127.0.0.1 --mailport 465
 
 	# Cleanup cache
-	ynh_secure_remove --file=".cache/yarn"
+	ynh_safe_rm ".cache/yarn"
 popd
 
 # Make sure the configuration is correct
 pushd $install_dir/ghost
-        ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
+        ynh_exec_as_app node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
                 --port $port --process local \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
@@ -51,35 +44,35 @@ cat <<< $(jq -r '.mail.options.host = "127.0.0.1"' $config_file) > $config_file
 cat <<< $(jq -r '.mail.options.ignoreTLS = true' $config_file) > $config_file
 
 if [ ! -s "$config_file" ]; then
-    ynh_die --message="Something went wrong while setting up the configuration file: it ended up empty."
+    ynh_die "Something went wrong while setting up the configuration file: it ended up empty."
 fi
 
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 
 # Use logrotate to manage application logfile(s)
-ynh_use_logrotate --logfile="$install_dir/ghost/content/logs"
+ynh_config_add_logrotate "$install_dir/ghost/content/logs"
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Starting $app's systemd service..."
 
 # Start a systemd service
-ynh_systemd_action --service_name=$app --action="start" --log_path="systemd" --line_match="Ghost booted" --timeout=60
+ynh_systemctl --service=$app --action="start" --log_path="systemd" --wait_until="Ghost booted" --timeout=60
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed"
+ynh_script_progression "Installation of $app completed"
