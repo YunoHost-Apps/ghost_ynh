@@ -21,7 +21,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Versión actual:** 5.91.0~ynh1
+**Versión actual:** 5.95.0~ynh1
 
 ## Capturas
 
@@ -41,7 +41,7 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 ## Información para desarrolladores
 
-Por favor enviar sus correcciones a la [`branch testing`](https://github.com/YunoHost-Apps/ghost_ynh/tree/testing
+Por favor enviar sus correcciones a la [rama `testing`](https://github.com/YunoHost-Apps/ghost_ynh/tree/testing).
 
 Para probar la rama `testing`, sigue asÍ:
 
