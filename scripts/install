@@ -12,15 +12,17 @@ ynh_nodejs_install
 
 # Install Ghost-CLI
 mkdir -p $install_dir/ghost
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 750 "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
-#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:$app "$install_dir"
+
+#chmod 750 "$install_dir"
+#chmod -R o-rwx "$install_dir"
+#chown -R $app:$app "$install_dir"
+
 pushd $install_dir
 	ynh_script_progression "Installing and configuring $app..."
 
-	ynh_exec_as_app node_load_PATH npm install npm@latest
-	ynh_exec_as_app node_load_PATH npm install ghost-cli@latest
-	ynh_exec_as_app node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
+	ynh_exec_as_app npm install npm@latest
+	ynh_exec_as_app npm install ghost-cli@latest
+	ynh_exec_as_app $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
@@ -33,7 +35,7 @@ popd
 
 # Make sure the configuration is correct
 pushd $install_dir/ghost
-        ynh_exec_as_app node_load_PATH $install_dir/node_modules/ghost-cli/bin/ghost config \
+        ynh_exec_as_app $install_dir/node_modules/ghost-cli/bin/ghost config \
                 --port $port --process local \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
@@ -52,13 +54,10 @@ fi
 #=================================================
 ynh_script_progression "Adding system configurations related to $app..."
 
-# Create a dedicated NGINX config
 ynh_config_add_nginx
 
-# Create a dedicated systemd config
 ynh_config_add_systemd
 
-# Use logrotate to manage application logfile(s)
 ynh_config_add_logrotate "$install_dir/ghost/content/logs"
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
@@ -68,7 +67,6 @@ yunohost service add $app --description="$app daemon for Ghost" --log="$install_
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-# Start a systemd service
 ynh_systemctl --service=$app --action="start" --log_path="systemd" --wait_until="Ghost booted" --timeout=60
 
 #=================================================
