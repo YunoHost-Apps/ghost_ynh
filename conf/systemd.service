@@ -7,9 +7,9 @@ Type=simple
 User=__APP__
 Group=__APP__
 WorkingDirectory=__INSTALL_DIR__/ghost
-Environment="__YNH_NODE_LOAD_PATH__:__INSTALL_DIR__/node_modules/ghost-cli/bin"
+Environment="PATH=__PATH_WITH_NODEJS__:__INSTALL_DIR__/node_modules/ghost-cli/bin"
 Environment="NODE_ENV=production"
-ExecStart=__YNH_NODE__ __INSTALL_DIR__/node_modules/ghost-cli/bin/ghost run
+ExecStart=__NODEJS_DIR__/node __INSTALL_DIR__/node_modules/ghost-cli/bin/ghost run
 Restart=always
 
 # Sandboxing options to harden security
