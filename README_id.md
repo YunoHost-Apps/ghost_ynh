@@ -5,7 +5,9 @@ Ini TIDAK boleh diedit dengan tangan.
 
 # Ghost untuk YunoHost
 
-[![Tingkat integrasi](https://dash.yunohost.org/integration/ghost.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/) ![Status kerja](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Status pemeliharaan](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
+[![Tingkat integrasi](https://apps.yunohost.org/badge/integration/ghost)](https://ci-apps.yunohost.org/ci/apps/ghost/)
+![Status kerja](https://apps.yunohost.org/badge/state/ghost)
+![Status pemeliharaan](https://apps.yunohost.org/badge/maintained/ghost)
 
 [![Pasang Ghost dengan YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
@@ -21,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Versi terkirim:** 5.96.0~ynh1
+**Versi terkirim:** 5.101.5~ynh1
 
 ## Tangkapan Layar
 
