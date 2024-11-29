@@ -5,7 +5,9 @@ Hij mag NIET handmatig aangepast worden.
 
 # Ghost voor Yunohost
 
-[![Integratieniveau](https://dash.yunohost.org/integration/ghost.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/) ![Mate van functioneren](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![Onderhoudsstatus](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
+[![Integratieniveau](https://apps.yunohost.org/badge/integration/ghost)](https://ci-apps.yunohost.org/ci/apps/ghost/)
+![Mate van functioneren](https://apps.yunohost.org/badge/state/ghost)
+![Onderhoudsstatus](https://apps.yunohost.org/badge/maintained/ghost)
 
 [![Ghost met Yunohost installeren](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
@@ -21,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Geleverde versie:** 5.96.0~ynh1
+**Geleverde versie:** 5.101.6~ynh1
 
 ## Schermafdrukken
 
