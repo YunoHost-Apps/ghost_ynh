@@ -56,7 +56,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="$install_
 #=================================================
 ynh_script_progression --message="Reloading NGINX web server and $app's service..." --weight=1
 
-ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted" --timeout=120
+ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted"
 
 ynh_systemd_action --service_name=nginx --action=reload
 

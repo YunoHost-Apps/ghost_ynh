@@ -21,7 +21,7 @@ fi
 #=================================================
 ynh_script_progression --message="Stopping a systemd service..." --time --weight=1
 
-ynh_systemd_action --service_name=$app --action=stop --log_path="systemd" --line_match="Ghost has shut down" --timeout=120
+ynh_systemd_action --service_name=$app --action=stop --log_path="systemd" --line_match="Ghost has shut down"
 
 #=================================================
 # MODIFY URL IN NGINX CONF
@@ -46,7 +46,7 @@ echo "$(jq -r --arg YNH_APP_NEW_DOMAIN $YNH_APP_NEW_DOMAIN --arg YNH_APP_NEW_PAT
 #=================================================
 ynh_script_progression --message="Starting a systemd service..." --time --weight=1
 
-ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted" --timeout=120
+ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted"
 
 #=================================================
 # END OF SCRIPT
