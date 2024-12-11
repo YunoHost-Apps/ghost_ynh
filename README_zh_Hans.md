@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Ghost
 
-[![集成程度](https://dash.yunohost.org/integration/ghost.svg)](https://ci-apps.yunohost.org/ci/apps/ghost/) ![工作状态](https://ci-apps.yunohost.org/ci/badges/ghost.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/ghost.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/ghost)](https://ci-apps.yunohost.org/ci/apps/ghost/)
+![工作状态](https://apps.yunohost.org/badge/state/ghost)
+![维护状态](https://apps.yunohost.org/badge/maintained/ghost)
 
 [![使用 YunoHost 安装 Ghost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=ghost)
 
@@ -21,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**分发版本：** 5.96.0~ynh1
+**分发版本：** 5.104.2~ynh1
 
 ## 截图
 
