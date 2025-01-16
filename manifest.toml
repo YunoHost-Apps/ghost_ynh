@@ -5,7 +5,7 @@ name = "Ghost"
 description.en = "Publishing, memberships, subscriptions and newsletters platform"
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
-version = "5.89.3~ynh1"
+version = "5.106.1~ynh1"
 maintainers = []
 
 [upstream]
@@ -20,11 +20,13 @@ fund = "https://opencollective.com/ghost"
 arbitrary-limitations.en = "Ghost developers have chosen to only support MySQL. YunoHost relying on MariaDB, incompatibilities may arise. For more information: https://github.com/TryGhost/Ghost/issues/15729#issuecomment-1299297720"
 
 [integration]
-yunohost = ">= 11.2.20"
+yunohost = ">= 11.2.30"
 architectures = "all"
 multi_instance = true
 ldap = false
+
 sso = false
+
 disk = "500M"
 ram.build = "1G"
 ram.runtime = "1G"
@@ -47,8 +49,8 @@ ram.runtime = "1G"
     [resources.sources.main]
     # Unused source, only to trigger the autoupdater
     prefetch = false
-    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v5.89.3.tar.gz"
-    sha256 = "12f4fd115a161b06db53a48c85f77308a74b7fc1ddd1ce56bd8c6668ddaadb77"
+    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v5.106.1.tar.gz"
+    sha256 = "9753657295c0e8ea888f84c71d709105a20a181cfab4e78a12a35cd83073b303"
     autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
