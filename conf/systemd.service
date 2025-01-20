@@ -1,5 +1,5 @@
 [Unit]
-Description=__APP__ systemd service
+Description=Ghost: Publishing platform
 Documentation=https://ghost.org/docs/
 
 [Service]
