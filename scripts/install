@@ -19,10 +19,9 @@ mkdir -p $install_dir/ghost
 
 pushd $install_dir
 	ynh_script_progression "Installing and configuring $app..."
-
 	ynh_exec_as_app npm install npm@latest
 	ynh_exec_as_app npm install ghost-cli@latest
-	ynh_exec_as_app $install_dir/node_modules/ghost-cli/bin/ghost install $(ynh_app_upstream_version) \
+	ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
@@ -35,7 +34,7 @@ popd
 
 # Make sure the configuration is correct
 pushd $install_dir/ghost
-        ynh_exec_as_app $install_dir/node_modules/ghost-cli/bin/ghost config \
+        ynh_exec_as_app $install_dir/node_modules/.bin/ghost config \
                 --port $port --process local \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
 popd
