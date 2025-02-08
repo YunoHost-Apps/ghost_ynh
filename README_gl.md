@@ -23,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Versión proporcionada:** 5.109.2~ynh1
+**Versión proporcionada:** 5.109.3~ynh1
 
 ## Capturas de pantalla
 
