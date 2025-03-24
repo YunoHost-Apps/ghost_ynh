@@ -3,7 +3,7 @@ Este archivo README esta generado automaticamente<https://github.com/YunoHost/ap
 No se debe editar a mano.
 -->
 
-# Ghost para Yunohost
+# Ghost para YunoHost
 
 [![Nivel de integración](https://apps.yunohost.org/badge/integration/ghost)](https://ci-apps.yunohost.org/ci/apps/ghost/)
 ![Estado funcional](https://apps.yunohost.org/badge/state/ghost)
@@ -23,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Versión actual:** 5.114.0~ynh1
+**Versión actual:** 5.114.1~ynh1
 
 ## Capturas
 

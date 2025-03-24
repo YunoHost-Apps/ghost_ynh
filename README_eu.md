@@ -23,7 +23,7 @@ Ghost is a powerful app for new-media creators to publish, share, and grow a bus
 It comes with modern tools to build a website, publish content, send newsletters & offer paid subscriptions to members.
 
 
-**Paketatutako bertsioa:** 5.114.0~ynh1
+**Paketatutako bertsioa:** 5.114.1~ynh1
 
 ## Pantaila-argazkiak
 
@@ -45,7 +45,7 @@ It comes with modern tools to build a website, publish content, send newsletters
 
 Bidali `pull request`a [`testing` abarrera](https://github.com/YunoHost-Apps/ghost_ynh/tree/testing).
 
-`testing` abarra probatzeko, ondorengoa egin:
+`testing` abarra probatzeko, honakoa egin:
 
 ```bash
 sudo yunohost app install https://github.com/YunoHost-Apps/ghost_ynh/tree/testing --debug
