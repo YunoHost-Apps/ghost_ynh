@@ -66,9 +66,9 @@ then
 	# Recreate it
 	mkdir -p $install_dir
 
-	#chmod 750 "$install_dir"
-	#chmod -R o-rwx "$install_dir"
-	#chown -R $app:www-data "$install_dir"
+	chmod 750 "$install_dir"
+	chmod -R o-rwx "$install_dir"
+	chown -R $app:$app "$install_dir"
 
 	pushd $install_dir
 		ynh_exec_as_app npm install npm@latest
