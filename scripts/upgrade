@@ -71,9 +71,9 @@ then
 	chown -R $app:$app "$install_dir"
 
 	pushd $install_dir
-		ynh_exec_as_app npm install npm@latest
-		ynh_exec_as_app npm install ghost-cli@latest
-		ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
+		ynh_hide_warnings ynh_exec_as_app npm install npm@latest
+		ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
 			--no-prompt --no-setup-systemd --no-start \
 			--dir ghost --no-setup-linux-user \
 			--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
@@ -91,16 +91,15 @@ else
 
 	# Upgrade Ghost CLI
 	pushd $install_dir
-
-		ynh_exec_as_app npm install npm@latest
-		ynh_exec_as_app npm install ghost-cli@latest
+		ynh_hide_warnings ynh_exec_as_app npm install npm@latest
+		ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
 	popd
 
 	pushd $install_dir/ghost
 		# Make sure the app does not expect to manage its own process
-		ynh_exec_as_app $install_dir/node_modules/.bin/ghost config --process local
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost config --process local
 		# Upgrade Ghost itself
-		ynh_exec_as_app $install_dir/node_modules/.bin/ghost update $(ynh_app_upstream_version) \
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost update $(ynh_app_upstream_version) \
 			--no-prompt --no-auto-rollback --no-restart --force
 	popd
 
@@ -108,7 +107,7 @@ fi
 
 # Make sure the configuration is correct
 pushd $install_dir/ghost
-	ynh_exec_as_app $install_dir/node_modules/.bin/ghost config \
+	ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost config \
 		--port $port --process local \
 		--url https://$domain$path \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
