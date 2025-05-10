@@ -13,9 +13,9 @@ ynh_nodejs_install
 # Install Ghost-CLI
 mkdir -p $install_dir/ghost
 
-#chmod 750 "$install_dir"
-#chmod -R o-rwx "$install_dir"
-#chown -R $app:$app "$install_dir"
+chmod 750 "$install_dir"
+chmod -R o-rwx "$install_dir"
+chown -R $app:$app "$install_dir"
 
 pushd $install_dir
 	ynh_script_progression "Installing and configuring $app..."
