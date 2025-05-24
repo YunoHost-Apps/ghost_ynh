@@ -1,27 +1,17 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
-upgrade_type=$(ynh_check_app_version_changed)
-
-#=================================================
-# STANDARD UPGRADE STEPS
 #=================================================
 # ENSURE DOWNWARD COMPATIBILITY
 #=================================================
-ynh_script_progression --message="Ensuring downward compatibility..."
+ynh_script_progression "Ensuring downward compatibility..."
 
 # If db_name doesn't exist, create it
 if [ -z "$db_name" ]; then
 	db_name=$(ynh_sanitize_dbid --db_name=$app)
-	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+	ynh_app_setting_set --key=db_name --value=$db_name
 fi
 
 # Make sure the .config directory belongs to $app:$app
@@ -35,17 +25,16 @@ fi
 #=================================================
 # STOP SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Stopping a systemd service..."
+ynh_script_progression "Stopping $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action=stop --log_path="systemd" --line_match="Ghost has shut down" --timeout=60
-
+ynh_systemctl --service=$app --action=stop --log_path="systemd" --wait_until="Ghost has shut down" --timeout=60
 
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression --message="Updating NodeJS..." --weight=1
+ynh_script_progression "Updating NodeJS..."
 
-ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
+ynh_nodejs_install
 
 #=================================================
 # UPGRADE
@@ -53,10 +42,10 @@ ynh_exec_warn_less ynh_install_nodejs --nodejs_version="$nodejs_version"
 
 # Up to v5.26.4~ynh1, we were downloading the source code and building the app by ourselves
 # that was a mess to maintain, let's move away from that
-if ynh_compare_current_package_version --comparison le --version 5.26.4~ynh1
+if ynh_app_upgrading_from_version_before_or_equal_to 5.26.4~ynh1
 then
 
-	ynh_script_progression --message="Upgrading from older packaging of $app..."
+	ynh_script_progression "Upgrading from older packaging of $app..."
 
 	# Create a temporary directory
 	tmpdir="$(mktemp -d)"
@@ -72,20 +61,19 @@ then
 	fi
 
 	# Remove the app directory securely
-	ynh_secure_remove --file=$install_dir
+	ynh_safe_rm $install_dir
 
 	# Recreate it
 	mkdir -p $install_dir
 
 	chmod 750 "$install_dir"
 	chmod -R o-rwx "$install_dir"
-	chown -R $app:www-data "$install_dir"
+	chown -R $app:$app "$install_dir"
 
 	pushd $install_dir
-		ynh_use_nodejs
-		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install npm@latest
-		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
-		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
+		ynh_hide_warnings ynh_exec_as_app npm install npm@latest
+		ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
 			--no-prompt --no-setup-systemd --no-start \
 			--dir ghost --no-setup-linux-user \
 			--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
@@ -97,22 +85,21 @@ then
 	cp -ar "$tmpdir/content" "${install_dir}/ghost/content"
 
 	# Remove the tmp directory securely
-	ynh_secure_remove --file="$tmpdir"
+	ynh_safe_rm "$tmpdir"
 
 else
 
 	# Upgrade Ghost CLI
 	pushd $install_dir
-		ynh_use_nodejs
-		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install npm@latest
-		ynh_exec_as $app $ynh_node_load_PATH $ynh_npm install ghost-cli@latest
+		ynh_hide_warnings ynh_exec_as_app npm install npm@latest
+		ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
 	popd
 
 	pushd $install_dir/ghost
 		# Make sure the app does not expect to manage its own process
-		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/.bin/ghost config --process local
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost config --process local
 		# Upgrade Ghost itself
-		ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/.bin/ghost update $(ynh_app_upstream_version) \
+		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost update $(ynh_app_upstream_version) \
 			--no-prompt --no-auto-rollback --no-restart --force
 	popd
 
@@ -120,7 +107,7 @@ fi
 
 # Make sure the configuration is correct
 pushd $install_dir/ghost
-	ynh_exec_as $app $ynh_node_load_PATH $install_dir/node_modules/.bin/ghost config \
+	ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost config \
 		--port $port --process local \
 		--url https://$domain$path \
                 --mail SMTP --mailuser noreply@$domain --mailpass $mail_pwd --mailhost 127.0.0.1 --mailport 25
@@ -132,37 +119,34 @@ cat <<< $(jq -r '.mail.options.host = "127.0.0.1"' $config_file) > $config_file
 cat <<< $(jq -r '.mail.options.ignoreTLS = true' $config_file) > $config_file
 
 if [ ! -s "$config_file" ]; then
-    ynh_die --message="Something went wrong while setting up the configuration file: it ended up empty."
+    ynh_die "Something went wrong while setting up the configuration file: it ended up empty."
 fi
 
 # Cleanup cache
-ynh_secure_remove --file="$install_dir/.cache/yarn"
+ynh_safe_rm "$install_dir/.cache/yarn"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+ynh_script_progression "Upgrading system configurations related to $app..."
 
-# Create a dedicated nginx config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
-# Create a dedicated systemd config
-ynh_add_systemd_config
+ynh_config_add_systemd
 
-# Use logrotate to manage app-specific logfile(s)
-ynh_use_logrotate --logfile="$install_dir/ghost/content/logs" --non-append
+ynh_config_add_logrotate "$install_dir/ghost/content/logs"
 
 yunohost service add $app --description="$app daemon for Ghost" --log="$install_dir/ghost/contents/logs"
 
 #=================================================
 # START SYSTEMD SERVICE
 #=================================================
-ynh_script_progression --message="Starting a systemd service..."
+ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemd_action --service_name=$app --action=start --log_path="systemd" --line_match="Ghost booted" --timeout=60
+ynh_systemctl --service=$app --action=start --log_path="systemd" --wait_until="Ghost booted" --timeout=60
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed"
+ynh_script_progression "Upgrade of $app completed"
