@@ -19,4 +19,5 @@ test_format = 1.0
     # -------------------------------
 
     # test_upgrade_from.01d5ebd928c1e43d73c0220098fc767afafdcb80.name = "Upgrade from 5.44.0"
-    test_upgrade_from.d0549053f3de35b2b233a72a1ac7c5a28caa7f92.name = "Upgrade from 5.109.4~ynh1"
+    #test_upgrade_from.d0549053f3de35b2b233a72a1ac7c5a28caa7f92.name = "Upgrade from 5.109.4~ynh1"
+    test_upgrade_from.dbc9d5b8e0cbc34a410a31f3682ead2136a4d683.name = "Upgrade from 5.130.4~ynh1 (latest v5)"
