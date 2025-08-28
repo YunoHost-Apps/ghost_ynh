@@ -6,7 +6,6 @@ description.en = "Publishing, memberships, subscriptions and newsletters platfor
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
 version = "6.0.5~ynh1"
-
 maintainers = []
 
 [upstream]
