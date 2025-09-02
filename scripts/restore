@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../settings/scripts/_common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -24,7 +24,7 @@ ynh_script_progression "Restoring system configurations related to $app..."
 
 ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
-ynh_nodejs_install
+#REMOVEME? ynh_nodejs_install
 
 ynh_restore "/etc/systemd/system/$app.service"
 systemctl enable $app.service --quiet

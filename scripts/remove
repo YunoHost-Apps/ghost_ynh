@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source _common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -14,7 +14,7 @@ fi
 
 ynh_config_remove_systemd
 
-ynh_nodejs_remove
+#REMOVEME? ynh_nodejs_remove
 
 ynh_config_remove_nginx
 

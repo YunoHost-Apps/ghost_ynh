@@ -1,14 +1,14 @@
 #!/bin/bash
 
-source _common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
 # INSTALL DEPENDENCIES
 #=================================================
-ynh_script_progression "Installing NodeJS..."
+#REMOVEME? ynh_script_progression "Installing NodeJS..."
 
-ynh_nodejs_install
+#REMOVEME? ynh_nodejs_install
 
 # Install Ghost-CLI
 mkdir -p $install_dir/ghost

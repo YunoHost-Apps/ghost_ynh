@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source _common.sh
+
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -39,9 +39,9 @@ ynh_systemctl --service=$app --action=stop --log_path="systemd" --wait_until="Gh
 #=================================================
 # UPGRADE DEPENDENCIES
 #=================================================
-ynh_script_progression "Updating NodeJS..."
+#REMOVEME? ynh_script_progression "Updating NodeJS..."
 
-ynh_nodejs_install
+#REMOVEME? ynh_nodejs_install
 
 #=================================================
 # UPGRADE
