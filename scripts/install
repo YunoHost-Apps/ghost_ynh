@@ -66,7 +66,7 @@ yunohost service add $app --description="$app daemon for Ghost" --log="$install_
 #=================================================
 ynh_script_progression "Starting $app's systemd service..."
 
-ynh_systemctl --service=$app --action="start" --log_path="systemd" --wait_until="Ghost booted" --timeout=60
+ynh_systemctl --service=$app --action="start" --log_path="systemd" --wait_until="Ghost booted"
 
 #=================================================
 # END OF SCRIPT
