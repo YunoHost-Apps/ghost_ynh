@@ -6,6 +6,7 @@ description.en = "Publishing, memberships, subscriptions and newsletters platfor
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
 version = "6.0.7~ynh1"
+
 maintainers = []
 
 [upstream]
@@ -52,6 +53,7 @@ ram.runtime = "1G"
     prefetch = false
     url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v6.0.7.tar.gz"
     sha256 = "adbb783675bba5a5fc1832ddc55d13feb39205ea25d8fe4d77c49d2719f9f993"
+
     autoupdate.strategy = "latest_github_release"
 
     [resources.system_user]
