@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 source /usr/share/yunohost/helpers
 
 #=================================================
@@ -35,13 +34,6 @@ fi
 ynh_script_progression "Stopping $app's systemd service..."
 
 ynh_systemctl --service=$app --action=stop --log_path="systemd" --wait_until="Ghost has shut down" --timeout=60
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-#REMOVEME? ynh_script_progression "Updating NodeJS..."
-
-#REMOVEME? ynh_nodejs_install
 
 #=================================================
 # UPGRADE
