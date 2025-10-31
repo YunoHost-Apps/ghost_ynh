@@ -5,7 +5,7 @@ name = "Ghost"
 description.en = "Publishing, memberships, subscriptions and newsletters platform"
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
-version = "6.5.3~ynh1"
+version = "6.6.0~ynh1"
 
 maintainers = []
 
@@ -51,8 +51,8 @@ ram.runtime = "1G"
     [resources.sources.main]
     # Unused source, only to trigger the autoupdater
     prefetch = false
-    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v6.5.3.tar.gz"
-    sha256 = "636a8c4471391a51af6d61e1349708e752106dd5e101d5180850cb37567bb4c6"
+    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v6.6.0.tar.gz"
+    sha256 = "f9828be238f9e9a6cdb347b04dde82db234565bd57ca0656bac2751ea8f0ecb3"
 
     autoupdate.strategy = "latest_github_release"
 
