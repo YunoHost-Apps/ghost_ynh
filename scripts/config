@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC STARTING
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS
+#=================================================
+
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+
+#=================================================
+# OVERWRITING VALIDATE STEP
+#=================================================
+ynh_app_config_apply() {
+	_ynh_app_config_apply
+
+    if [ -f $install_dir/apple-developer-merchantid-domain-association ]
+    then
+        ynh_add_config --template="apple_pay.conf" --destination="/etc/nginx/conf.d/$domain.d/apple_pay.$app.conf"
+        if ! ynh_permission_exists --permission="apple_pay"; then
+            ynh_permission_create --permission="apple_pay" --url="$domain/.well-known/apple-developer-merchantid-domain-association" --allowed=visitors --protected --auth_header=false
+        fi
+    else
+        ynh_secure_remove --file="/etc/nginx/conf.d/$domain.d/apple_pay.$app.conf"
+        if ynh_permission_exists --permission="apple_pay"; then
+            ynh_permission_delete --permission="apple_pay"
+        fi
+    fi
+    
+    ynh_systemd_action --service_name=nginx --action=reload
+}
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+ynh_app_config_run "$1"

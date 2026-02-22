@@ -1,0 +1,13 @@
+version = "1.0"
+
+[main]
+name = "Ghost configuration"
+
+    [main.stripe]
+    name = "Stripe integration"	
+
+        [main.stripe.apple_pay]
+        ask = "Upload the apple-developer-merchantid-domain-association file"
+        type = "file"
+        help = "It is provided by Stripe"
+        bind = "__INSTALL_DIR__/apple-developer-merchantid-domain-association"
