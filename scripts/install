@@ -25,9 +25,6 @@ pushd $install_dir
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
 		--db mysql --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
 		--mail SMTP --mailhost 127.0.0.1 --mailport 465
-
-	# Cleanup cache
-	ynh_safe_rm ".cache/yarn"
 popd
 
 # Make sure the configuration is correct
