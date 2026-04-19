@@ -70,6 +70,7 @@ then
 	chown -R $app:$app "$install_dir"
 
 	pushd $install_dir
+		ynh_hide_warnings ynh_exec_as_app corepack enable pnpm
 		ynh_hide_warnings ynh_exec_as_app npm install npm@latest
 		ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
 		ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
