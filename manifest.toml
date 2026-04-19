@@ -5,7 +5,7 @@ name = "Ghost"
 description.en = "Publishing, memberships, subscriptions and newsletters platform"
 description.fr = "Plateforme d'édition, d'adhésions, d'abonnements et de newsletters"
 
-version = "6.28.0~ynh1"
+version = "6.30.0~ynh1"
 
 maintainers = []
 
@@ -51,8 +51,8 @@ ram.runtime = "1G"
     [resources.sources.main]
     # Unused source, only to trigger the autoupdater
     prefetch = false
-    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v6.28.0.tar.gz"
-    sha256 = "6148b9960bc447a80e384eba0031f29fbae1935b0d6a40f95f6e5f19ce50021a"
+    url = "https://github.com/TryGhost/Ghost/archive/refs/tags/v6.30.0.tar.gz"
+    sha256 = "29ee3082ab75786cd1d7f098e6b5aaf9cca3d06933bb907f7857e1c32b9c7884"
 
     autoupdate.strategy = "latest_github_release"
 
@@ -71,11 +71,6 @@ ram.runtime = "1G"
     [resources.apt]
     packages = "mailutils, mariadb-server"
 
-    [resources.apt.extras.yarn]
-    repo = "deb https://dl.yarnpkg.com/debian/ stable main"
-    key = "https://dl.yarnpkg.com/debian/pubkey.gpg"
-    packages = ["yarn"]
-    
     [resources.database]
     type = "mysql"
 

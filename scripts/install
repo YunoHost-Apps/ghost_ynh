@@ -16,6 +16,7 @@ chown -R $app:$app "$install_dir"
 
 pushd $install_dir
 	ynh_script_progression "Installing and configuring $app..."
+	ynh_hide_warnings corepack enable && corepack prepare pnpm@latest --activate
 	ynh_hide_warnings ynh_exec_as_app npm install npm@latest
 	ynh_hide_warnings ynh_exec_as_app npm install ghost-cli@latest
 	ynh_hide_warnings ynh_exec_as_app $install_dir/node_modules/.bin/ghost install $(ynh_app_upstream_version) \
@@ -24,9 +25,6 @@ pushd $install_dir
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
 		--db mysql --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
 		--mail SMTP --mailhost 127.0.0.1 --mailport 465
-
-	# Cleanup cache
-	ynh_safe_rm ".cache/yarn"
 popd
 
 # Make sure the configuration is correct
