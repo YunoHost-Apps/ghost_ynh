@@ -24,7 +24,7 @@ pushd $install_dir
 		--no-prompt --no-setup-systemd --no-start \
 		--dir ghost --no-setup-linux-user \
 		--no-setup-nginx --no-setup-ssl --url https://$domain$path --port $port \
-		--db mysql --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
+		--db mariadb --dbhost 127.0.0.1 --dbuser $db_user --dbpass $db_pwd --dbname $db_name \
 		--mail SMTP --mailhost 127.0.0.1 --mailport 465
 popd
 
